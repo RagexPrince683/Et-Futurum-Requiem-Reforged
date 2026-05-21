@@ -9,5 +9,5 @@ on:
 
 jobs:
   build-and-test:
-    uses: Roadhog360/Hog-Actions-Workflows/.github/workflows/build-and-test.yml@extra-inputs
+    uses: Roadhog360/Hog-Actions-Workflows/.github/workflows/build-and-test.yml@extra-inputs-batch-test
     secrets: inherit
