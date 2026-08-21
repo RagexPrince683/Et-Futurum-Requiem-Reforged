@@ -36,22 +36,28 @@ public class FallingDripstoneRenderer extends Render {
 
 		if (block != null && block != world.getBlock(i, j, k)) {
 			GL11.glPushMatrix();
-			GL11.glTranslatef((float) p_76986_2_, (float) p_76986_4_, (float) p_76986_6_);
-			this.bindEntityTexture(p_76986_1_);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			Tessellator tessellator;
+			boolean lightingDisabled = false;
+			try {
+				GL11.glTranslatef((float) p_76986_2_, (float) p_76986_4_, (float) p_76986_6_);
+				this.bindEntityTexture(p_76986_1_);
+				GL11.glDisable(GL11.GL_LIGHTING);
+				lightingDisabled = true;
 
-			this.field_147920_a.blockAccess = world;
-			tessellator = Tessellator.instance;
-			tessellator.startDrawingQuads();
-			tessellator.setTranslation((float) (-i) - 0.5F, (float) (-j) - 0.5F, (float) (-k) - 0.5F);
-			field_147920_a.setRenderBoundsFromBlock(block);
-			field_147920_a.drawCrossedSquares(ModBlocks.POINTED_DRIPSTONE.get().getIcon(0, p_76986_1_.field_145814_a), i, j, k, 1.0F);
-			tessellator.setTranslation(0.0D, 0.0D, 0.0D);
-			tessellator.draw();
-
-			GL11.glEnable(GL11.GL_LIGHTING);
-			GL11.glPopMatrix();
+				this.field_147920_a.blockAccess = world;
+				Tessellator tessellator = Tessellator.instance;
+				tessellator.startDrawingQuads();
+				tessellator.setTranslation((float) (-i) - 0.5F, (float) (-j) - 0.5F, (float) (-k) - 0.5F);
+				field_147920_a.setRenderBoundsFromBlock(block);
+				field_147920_a.drawCrossedSquares(ModBlocks.POINTED_DRIPSTONE.get().getIcon(0, p_76986_1_.field_145814_a), i, j, k, 1.0F);
+				tessellator.setTranslation(0.0D, 0.0D, 0.0D);
+				tessellator.draw();
+			} finally {
+				this.field_147920_a.blockAccess = null;
+				if (lightingDisabled) {
+					GL11.glEnable(GL11.GL_LIGHTING);
+				}
+				GL11.glPopMatrix();
+			}
 		}
 	}
 

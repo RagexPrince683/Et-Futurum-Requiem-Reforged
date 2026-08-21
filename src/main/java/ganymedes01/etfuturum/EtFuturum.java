@@ -23,6 +23,7 @@ import ganymedes01.etfuturum.compat.*;
 import ganymedes01.etfuturum.configuration.ConfigBase;
 import ganymedes01.etfuturum.configuration.configs.*;
 import ganymedes01.etfuturum.core.handlers.RegistryIterateEventHandler;
+import ganymedes01.etfuturum.core.handlers.ServerEventHandler;
 import ganymedes01.etfuturum.core.handlers.WorldEventHandler;
 import ganymedes01.etfuturum.core.proxy.CommonProxy;
 import ganymedes01.etfuturum.core.utils.IInitAction;
@@ -88,6 +89,11 @@ public class EtFuturum {
 	public static CommonProxy proxy;
 
 	public static SimpleNetworkWrapper networkWrapper;
+
+	@EventHandler
+	public void serverStopped(FMLServerStoppedEvent event) {
+		ServerEventHandler.INSTANCE.onServerStopped();
+	}
 
 	public static CreativeTabs creativeTabItems = new CreativeTabs(Tags.MOD_ID + ".items") {
 		@Override
