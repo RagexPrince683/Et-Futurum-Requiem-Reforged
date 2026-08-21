@@ -48,7 +48,9 @@ public class EntityNewBoatSeat extends Entity {
 	}
 
 	public void sitEntity(Entity entity) {
-		entity.mountEntity(this);
+		if (boat != null && boat.canAcceptPassenger(entity)) {
+			entity.mountEntity(this);
+		}
 	}
 
 	@Override
@@ -65,6 +67,14 @@ public class EntityNewBoatSeat extends Entity {
 
 		if (riddenByEntity != null && !riddenByEntity.isEntityAlive()) {
 			riddenByEntity = null;
+		}
+
+		if (!worldObj.isRemote && boat != null && boat.isProtectedCustomNpc(riddenByEntity)) {
+			Entity passenger = riddenByEntity;
+			if (passenger instanceof EntityLivingBase) {
+				((EntityLivingBase) passenger).dismountEntity(this);
+			}
+			passenger.mountEntity(null);
 		}
 
 		int boatID = dataWatcher.getWatchableObjectInt(17);

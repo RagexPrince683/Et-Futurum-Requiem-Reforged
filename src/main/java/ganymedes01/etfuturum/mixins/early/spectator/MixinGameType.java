@@ -30,6 +30,13 @@ public abstract class MixinGameType {
 		}
 	}
 
+	@Inject(method = "configurePlayerCapabilities", at = @At("RETURN"))
+	private void etfuturum$clearInvalidFlight(PlayerCapabilities caps, CallbackInfo ci) {
+		if (!caps.allowFlying) {
+			caps.isFlying = false;
+		}
+	}
+
 	@Shadow
 	public abstract String getName();
 

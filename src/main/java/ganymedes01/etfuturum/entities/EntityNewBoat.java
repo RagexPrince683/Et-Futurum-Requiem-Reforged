@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import ganymedes01.etfuturum.EtFuturum;
 import ganymedes01.etfuturum.ModItems;
 import ganymedes01.etfuturum.Tags;
+import ganymedes01.etfuturum.compat.CompatCustomNPCs;
 import ganymedes01.etfuturum.configuration.configs.ConfigBlocksItems;
 import ganymedes01.etfuturum.configuration.configs.ConfigFunctions;
 import ganymedes01.etfuturum.items.ItemNewBoat;
@@ -195,7 +196,9 @@ public class EntityNewBoat extends Entity {
 	}
 
 	public void sitEntity(Entity entity) {
-		entity.mountEntity(this);
+		if (canAcceptPassenger(entity)) {
+			entity.mountEntity(this);
+		}
 	}
 
 	private void addToSeat(Entity entity) {
@@ -203,7 +206,7 @@ public class EntityNewBoat extends Entity {
 	}
 
 	public void addToBoat(Entity entity) {
-		if (!(entity instanceof EntityLivingBase)) return;
+		if (!canAcceptPassenger(entity)) return;
 		EntityLivingBase oldDriver = (EntityLivingBase) getControllingPassenger();
 		if (getPassengers().isEmpty()) {
 			sitEntity(entity);
@@ -211,13 +214,30 @@ public class EntityNewBoat extends Entity {
 			if (seat == null) return;
 			if (entity instanceof EntityPlayer && !(oldDriver instanceof EntityPlayer)) {
 				addToSeat(oldDriver);
-				entity.mountEntity(this);
+				sitEntity(entity);
 			} else {
 				addToSeat(entity);
 			}
 		}
 		entity.prevRotationYaw = this.rotationYaw;
 		entity.rotationYaw = this.rotationYaw;
+	}
+
+	public boolean canAcceptPassenger(Entity entity) {
+		return entity instanceof EntityLivingBase && !isProtectedCustomNpc(entity);
+	}
+
+	public boolean isProtectedCustomNpc(Entity entity) {
+		return ConfigFunctions.preventCustomNpcsInBoats && CompatCustomNPCs.isCustomNpc(entity);
+	}
+
+	private void ejectProtectedPassenger(Entity passenger, Entity mount) {
+		if (!worldObj.isRemote && isProtectedCustomNpc(passenger)) {
+			if (passenger instanceof EntityLivingBase) {
+				((EntityLivingBase) passenger).dismountEntity(mount);
+			}
+			passenger.mountEntity(null);
+		}
 	}
 
 	@Override
@@ -302,6 +322,9 @@ public class EntityNewBoat extends Entity {
 	 */
 	@Override
 	public void applyEntityCollision(Entity entityIn) {
+		if (isProtectedCustomNpc(entityIn)) {
+			return;
+		}
 		if (entityIn instanceof EntityNewBoat) {
 			if (entityIn.boundingBox.minY < this.boundingBox.maxY) {
 				super.applyEntityCollision(entityIn);
@@ -366,6 +389,13 @@ public class EntityNewBoat extends Entity {
 	@Override
 	public void onEntityUpdate() {
 		super.onEntityUpdate();
+
+		if (!worldObj.isRemote) {
+			ejectProtectedPassenger(riddenByEntity, this);
+			if (seat != null) {
+				ejectProtectedPassenger(seat.riddenByEntity, seat);
+			}
+		}
 
 		//TODO add option for no passenger seat and don't run this code
 
