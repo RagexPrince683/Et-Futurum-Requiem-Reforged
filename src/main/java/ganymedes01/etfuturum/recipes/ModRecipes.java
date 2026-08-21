@@ -1591,27 +1591,8 @@ public class ModRecipes {
 		}
 
 		if (ConfigWorld.tileReplacementMode == -1) {
-			//We keep the original enabled checks inside of the booleans and use the original addShapedRecipe function because we need to check it anyways for recipe removal
-			if (ModBlocks.ANVIL.isEnabled()) {
-				GameRegistry.addShapedRecipe(ModBlocks.ANVIL.newItemStack(), "BBB", " I ", "III", 'I', new ItemStack(Items.iron_ingot), 'B', new ItemStack(Blocks.iron_block));
-				RecipeHelper.removeFirstRecipeWithOutput(Blocks.anvil, 0, false);
-			}
-
-			if (ModBlocks.BREWING_STAND.isEnabled()) {
-				GameRegistry.addShapedRecipe(ModBlocks.BREWING_STAND.newItemStack(), " B ", "CCC", 'C', new ItemStack(Blocks.cobblestone), 'B', new ItemStack(Items.blaze_rod));
-				RecipeHelper.removeFirstRecipeWithOutput(Blocks.brewing_stand, 0, false);
-			}
-
-			if (ModBlocks.BEACON.isEnabled()) {
-				GameRegistry.addShapedRecipe(ModBlocks.BEACON.newItemStack(), "GGG", "GNG", "OOO", 'G', new ItemStack(Blocks.glass), 'N', new ItemStack(Items.nether_star), 'O', new ItemStack(Blocks.obsidian));
-				RecipeHelper.removeFirstRecipeWithOutput(Blocks.beacon, 0, false);
-			}
-
-			if (ModBlocks.ENCHANTMENT_TABLE.isEnabled()) {
-				GameRegistry.addRecipe(new ShapedOreRecipe(ModBlocks.ENCHANTMENT_TABLE.newItemStack(), " B ", "D#D", "###", '#', Blocks.obsidian, 'B', Items.book, 'D', "gemDiamond"));
-				RecipeHelper.removeFirstRecipeWithOutput(Blocks.enchanting_table, 0, false);
-			}
-
+			// Functional-block backports augment the vanilla recipe outputs. Legacy replacement blocks remain
+			// registered for saves and explicit migration, but are no longer introduced through normal recipes.
 			if (ModBlocks.SPONGE.isEnabled()) {
 				ItemStack output6 = ModBlocks.SPONGE.newItemStack();
 				RecipeHelper.addShapelessRecipe(RecipeHelper.Priority.HIGH, output6, Blocks.sponge);

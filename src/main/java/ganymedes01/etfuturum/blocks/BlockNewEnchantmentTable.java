@@ -1,8 +1,6 @@
 package ganymedes01.etfuturum.blocks;
 
 import ganymedes01.etfuturum.EtFuturum;
-import ganymedes01.etfuturum.ModBlocks;
-import ganymedes01.etfuturum.configuration.configs.ConfigWorld;
 import ganymedes01.etfuturum.lib.GUIIDs;
 import net.minecraft.block.BlockEnchantmentTable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,20 +17,16 @@ public class BlockNewEnchantmentTable extends BlockEnchantmentTable {
 		setResistance(2000.0F);
 		setBlockTextureName("enchanting_table");
 		setBlockName("enchantmentTable");
-		setCreativeTab(ConfigWorld.tileReplacementMode == -1 ? EtFuturum.creativeTabBlocks : null);
+		setCreativeTab(null);
 	}
 
 	@Override
 	public Item getItemDropped(int meta, Random rand, int fortune) {
-		if (ConfigWorld.tileReplacementMode == -1)
-			return Item.getItemFromBlock(ModBlocks.ENCHANTMENT_TABLE.get());
 		return Item.getItemFromBlock(Blocks.enchanting_table);
 	}
 
 	@Override
 	public Item getItem(World world, int x, int y, int z) {
-		if (ConfigWorld.tileReplacementMode == -1)
-			return Item.getItemFromBlock(ModBlocks.ENCHANTMENT_TABLE.get());
 		return Item.getItemFromBlock(Blocks.enchanting_table);
 	}
 

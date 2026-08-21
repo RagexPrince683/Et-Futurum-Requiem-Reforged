@@ -11,7 +11,6 @@ import ganymedes01.etfuturum.compat.nei.BannerPatternHandler;
 import ganymedes01.etfuturum.compat.nei.BlastFurnaceRecipeHandler;
 import ganymedes01.etfuturum.compat.nei.ComposterHandler;
 import ganymedes01.etfuturum.compat.nei.SmokerRecipeHandler;
-import ganymedes01.etfuturum.configuration.configs.ConfigWorld;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -25,7 +24,7 @@ public class NEIEtFuturumConfig implements IConfigureNEI {
 
 	@Override
 	public void loadConfig() {
-		if (ConfigWorld.tileReplacementMode != -1) {
+		{
 			if (ModBlocks.BREWING_STAND.isEnabled()) {
 				API.hideItem(ModBlocks.BREWING_STAND.newItemStack());
 			}

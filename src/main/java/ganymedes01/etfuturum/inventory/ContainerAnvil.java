@@ -5,6 +5,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ContainerRepair;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -32,7 +33,8 @@ public class ContainerAnvil extends ContainerRepair {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer _player) {
-		return world.getBlock(x, y, z) == ModBlocks.ANVIL.get() && _player.getDistanceSq(x + 0.5D, y + 0.5D, z + 0.5D) <= 64.0D;
+		return (world.getBlock(x, y, z) == Blocks.anvil || world.getBlock(x, y, z) == ModBlocks.ANVIL.get())
+				&& _player.getDistanceSq(x + 0.5D, y + 0.5D, z + 0.5D) <= 64.0D;
 	}
 
 	@Override

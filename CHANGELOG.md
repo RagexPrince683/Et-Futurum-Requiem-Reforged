@@ -1,5 +1,13 @@
 # Changelog
 
+## Preserve vanilla functional-block identities (Roadhog360/Et-Futurum-Requiem#311)
+
+- Augment vanilla enchanting tables and anvils with EFR's modern containers through narrowly gated block Mixins.
+- Keep vanilla brewing-stand and beacon blocks while creating EFR's `TileEntityBrewingStand` and `TileEntityBeacon` subclasses for fuel and coloured-beam state.
+- Retain every legacy replacement registration for old saves and make replacement blocks migration-only, hidden from creative tabs, NEI, and normal recipes.
+- Make `tileReplacementMode` a legacy migration control, default new configurations to `-1`, and preserve the existing `-1`, `0`, and `1` directions.
+- Preserve tile NBT while migrating and keep replacement maps server-local so worlds cannot leak migration directions into one another.
+
 ## Fix config toggle authority (Roadhog360/Et-Futurum-Requiem#643)
 
 - Require bamboo content as well as new boats before registering bamboo raft items, and skip recipes for every disabled boat item.
