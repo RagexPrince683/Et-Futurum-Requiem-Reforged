@@ -1,5 +1,10 @@
 # Changelog
 
+## [Memory-opti:fix leak] Fix two world leaks (#63)
+
+- Release event-handler references to worlds, players, entities, and chunks during logout, world unload, and server shutdown.
+- Stop the falling dripstone renderer from retaining its most recently rendered world.
+
 ## Fix copper door oxidation duplication (GTNewHorizons/Et-Futurum-Requiem#42)
 
 - Synchronize copper door oxidation and wax-state changes with the correct opposite half, whether the changed block is the upper or lower half.

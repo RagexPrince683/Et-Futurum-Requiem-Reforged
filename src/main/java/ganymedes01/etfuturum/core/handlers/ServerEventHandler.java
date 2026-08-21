@@ -7,6 +7,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -117,12 +118,41 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ServerEventHandler {
 
 	public static final ServerEventHandler INSTANCE = new ServerEventHandler();
-	public static HashSet<EntityPlayerMP> playersClosedContainers = new HashSet<>();
-	private static final Map<EntityPlayer, List<ItemStack>> armorTracker = new WeakHashMap<>();
-	private static final Set<EntityFallingBlock> fallingConcreteBlocks = new HashSet<>();
-	public static final Cache<EntityItem, EntityPlayer> droppedEntityItems = CacheBuilder.newBuilder().weakKeys().maximumSize(1000).build();
+	public final Set<EntityPlayerMP> playersClosedContainers = new HashSet<>();
+	private final Map<EntityPlayer, List<ItemStack>> armorTracker = new WeakHashMap<>();
+	private final Set<EntityFallingBlock> fallingConcreteBlocks = new HashSet<>();
+	public final Cache<EntityItem, EntityPlayer> droppedEntityItems = CacheBuilder.newBuilder().weakKeys().maximumSize(1000).build();
 
 	private ServerEventHandler() {
+	}
+
+	public void onServerStopped() {
+		playersClosedContainers.clear();
+		armorTracker.clear();
+		fallingConcreteBlocks.clear();
+		droppedEntityItems.invalidateAll();
+		loadedChunks.clear();
+		lastAttackedAtYaw.clear();
+	}
+
+	@SubscribeEvent
+	public void onWorldUnload(WorldEvent.Unload event) {
+		if (!event.world.isRemote) {
+			playersClosedContainers.removeIf(player -> player.worldObj == event.world);
+			armorTracker.entrySet().removeIf(entry -> entry.getKey().worldObj == event.world);
+			fallingConcreteBlocks.removeIf(entity -> entity.worldObj == event.world);
+			lastAttackedAtYaw.entrySet().removeIf(entry -> entry.getKey().worldObj == event.world);
+		}
+
+		droppedEntityItems.asMap().entrySet().removeIf(entry -> entry.getKey().worldObj == event.world);
+	}
+
+	@SubscribeEvent
+	public void onPlayerLoggedOut(PlayerLoggedOutEvent event) {
+		playersClosedContainers.remove(event.player);
+		armorTracker.remove(event.player);
+		lastAttackedAtYaw.remove(event.player);
+		droppedEntityItems.asMap().entrySet().removeIf(entry -> entry.getValue() == event.player);
 	}
 
 	@SubscribeEvent
@@ -256,11 +286,13 @@ public class ServerEventHandler {
 
 	@SubscribeEvent
 	public void chunkLoad(ChunkEvent.Load event) {
+		if (event.world.isRemote) return;
 		loadedChunks.add(event.getChunk());
 	}
 
 	@SubscribeEvent
 	public void chunkUnload(ChunkEvent.Unload event) {
+		if (event.world.isRemote) return;
 		loadedChunks.remove(event.getChunk());
 	}
 
