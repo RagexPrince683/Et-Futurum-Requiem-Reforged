@@ -136,7 +136,7 @@ public class EtFuturum {
 			while (iterator.hasNext()) {
 				ItemStack stack = iterator.next();
 				for (ModItems sign : ModItems.OLD_SIGN_ITEMS) {
-					if (stack.getItem() == sign.get()) {
+					if (sign.isEnabled() && stack.getItem() == sign.get()) {
 						iterator.remove();
 					}
 				}
@@ -145,6 +145,7 @@ public class EtFuturum {
 			//Add the sign items back but in a way so they are sorted by their block ID instead of their item ID.
 			//This allows them to be in the correct place instead of always at the bottom of the block ID list, since item IDs are always above block IDs
 			for (ModItems sign : ModItems.OLD_SIGN_ITEMS) {
+				if (!sign.isEnabled()) continue;
 				for (ItemStack stack : list) {
 					if (Item.getIdFromItem(stack.getItem()) > Block.getIdFromBlock(((ItemWoodSign) sign.get()).getSignBlock())) {
 						list.add(list.indexOf(stack), sign.newItemStack());

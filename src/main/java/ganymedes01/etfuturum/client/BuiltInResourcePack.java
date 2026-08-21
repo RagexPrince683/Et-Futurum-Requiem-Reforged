@@ -41,7 +41,7 @@ public abstract class BuiltInResourcePack extends AbstractResourcePack {
 	 * @param id The name of the resource pack.
 	 */
 	public static BuiltInResourcePack register(String id) {
-		BuiltInResourcePack rp = BuiltInResourcePack.of(Loader.instance().activeModContainer().getSource(), Loader.instance().activeModContainer().getModId(), id);
+		BuiltInResourcePack rp = BuiltInResourcePack.of(Loader.instance().activeModContainer().getSource(), Loader.instance().activeModContainer().getModId(), id).setResourcesEnabled();
 		if (rp.isAllEnabled()) {
 			inject(rp);
 		}
@@ -96,7 +96,50 @@ public abstract class BuiltInResourcePack extends AbstractResourcePack {
 	}
 
 	private boolean isAllEnabled() {
-		return resourcesEnabled && langEnabled;
+		return resourcesEnabled || langEnabled;
+	}
+
+	protected boolean isResourceEnabled(String name) {
+		return name.endsWith(".lang") ? langEnabled : resourcesEnabled;
+	}
+
+	protected InputStream filterLang(InputStream input) throws IOException {
+		List<String> ignoredKeys = Lists.newArrayList();
+		if (!ConfigBlocksItems.enableDyedBeds) {
+			ignoredKeys.add("item.bed.name");
+			ignoredKeys.add("tile.bed.name");
+		}
+		if (!ConfigBlocksItems.enableVanillaSigns) {
+			ignoredKeys.add("item.sign.name");
+			ignoredKeys.add("tile.sign.name");
+		}
+		if (!ConfigBlocksItems.enableVanillaDoors) {
+			ignoredKeys.add("item.doorWood.name");
+			ignoredKeys.add("tile.doorWood.name");
+		}
+		if (!ConfigBlocksItems.enableVanillaTrapdoors) ignoredKeys.add("tile.trapdoor.name");
+		if (!ConfigBlocksItems.enableVanillaFences) {
+			ignoredKeys.add("tile.fence.name");
+			ignoredKeys.add("tile.fenceGate.name");
+		}
+
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		String line;
+		while ((line = reader.readLine()) != null) {
+			line = line.trim();
+			if (line.startsWith("#") || line.length() == 0) continue;
+			boolean ignored = false;
+			for (String key : ignoredKeys) {
+				if (line.startsWith(key)) {
+					ignored = true;
+					break;
+				}
+			}
+			if (!ignored) output.write((line + "\n").getBytes());
+		}
+		reader.close();
+		return new ByteArrayInputStream(output.toByteArray());
 	}
 
 	private static void inject(IResourcePack resourcePack) {
@@ -140,12 +183,13 @@ public abstract class BuiltInResourcePack extends AbstractResourcePack {
 
 		@Override
 		protected InputStream getInputStreamByName(String name) throws IOException {
-			return zipFile.getInputStream(zipFile.getEntry(getRootPath() + name));
+			InputStream input = zipFile.getInputStream(zipFile.getEntry(getRootPath() + name));
+			return name.endsWith(".lang") ? filterLang(input) : input;
 		}
 
 		@Override
 		protected boolean hasResourceName(String name) {
-			return resourcesEnabled && zipFile.getEntry(getRootPath() + name) != null;
+			return isResourceEnabled(name) && zipFile.getEntry(getRootPath() + name) != null;
 		}
 
 	}
@@ -173,72 +217,13 @@ public abstract class BuiltInResourcePack extends AbstractResourcePack {
 
 		@Override
 		protected InputStream getInputStreamByName(String name) throws IOException {
-			if (name.endsWith("lang")) {
-				List<String> langFile = Lists.newArrayList();
-
-				//Reads the lang file, strips unneeded lines and adds it to a list to be compared against the ignore list
-				String currentLine;
-				File file = new File(this.resourcePackFile, getRootPath() + "/" + name);
-				BufferedReader reader = new BufferedReader(new FileReader(file));
-				while ((currentLine = reader.readLine()) != null) {
-					if (currentLine.startsWith("#") || currentLine.length() == 0) {
-						continue;
-					}
-					langFile.add(currentLine.trim());
-				}
-				reader.close();
-
-
-				List<String> ignoredKeys = Lists.newArrayList(); //Ignore these keys under certain conditions
-				if (!ConfigBlocksItems.enableDyedBeds) {
-					ignoredKeys.add("item.bed.name");
-					ignoredKeys.add("tile.bed.name");
-				}
-				if (!ConfigBlocksItems.enableVanillaSigns) {
-					ignoredKeys.add("item.sign.name");
-					ignoredKeys.add("tile.sign.name");
-				}
-				if (!ConfigBlocksItems.enableVanillaDoors) {
-					ignoredKeys.add("item.doorWood.name");
-					ignoredKeys.add("tile.doorWood.name");
-				}
-				if (!ConfigBlocksItems.enableVanillaTrapdoors) {
-					ignoredKeys.add("tile.trapdoor.name");
-				}
-				if (!ConfigBlocksItems.enableVanillaFences) {
-					ignoredKeys.add("tile.fence.name");
-					ignoredKeys.add("tile.fenceGate.name");
-				}
-
-				Iterator<String> iterator = langFile.listIterator();
-				while (iterator.hasNext()) {
-					String translation = iterator.next();
-					for (String removalCheck : ignoredKeys) {
-						if (translation.startsWith(removalCheck)) {
-							iterator.remove();
-						}
-					}
-				}
-				//Strips ignored entries
-
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-				for (String line : langFile) {
-					baos.write((line + "\n").getBytes()); //Add a new line since otherwise the byte array output stream will not have any line breaks and everything goes into the first key
-				}
-				//Add the new lang file to a byte array output stream for the game to read
-
-				byte[] bytes = baos.toByteArray();
-
-				return new ByteArrayInputStream(bytes); //Ding fries are done
-			}
-			return new BufferedInputStream(Files.newInputStream(new File(this.resourcePackFile, getRootPath() + "/" + name).toPath()));
+			InputStream input = new BufferedInputStream(Files.newInputStream(new File(this.resourcePackFile, getRootPath() + "/" + name).toPath()));
+			return name.endsWith(".lang") ? filterLang(input) : input;
 		}
 
 		@Override
 		protected boolean hasResourceName(String name) {
-			if (!langEnabled && name.endsWith("lang")) return false;
-			return resourcesEnabled && new File(this.resourcePackFile, getRootPath() + "/" + name).isFile();
+			return isResourceEnabled(name) && new File(this.resourcePackFile, getRootPath() + "/" + name).isFile();
 		}
 
 	}

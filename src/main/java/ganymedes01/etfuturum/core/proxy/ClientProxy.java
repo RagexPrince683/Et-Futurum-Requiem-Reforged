@@ -70,8 +70,12 @@ public class ClientProxy extends CommonProxy {
 
 	private void registerItemRenderers() {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.BANNER.get()), new ItemBannerRenderer());
-		MinecraftForgeClient.registerItemRenderer(Items.skull, new ItemSkullRenderer());
-		MinecraftForgeClient.registerItemRenderer(Items.bow, new ItemBowRenderer());
+		if (ConfigFunctions.enableFancySkulls) {
+			MinecraftForgeClient.registerItemRenderer(Items.skull, new ItemSkullRenderer());
+		}
+		if (ConfigFunctions.enableBowRendering) {
+			MinecraftForgeClient.registerItemRenderer(Items.bow, new ItemBowRenderer());
+		}
 		if (ModItems.GOAT_HORN.isEnabled()) {
 			MinecraftForgeClient.registerItemRenderer(ModItems.GOAT_HORN.get(), new ItemGoatHornRenderer());
 		}

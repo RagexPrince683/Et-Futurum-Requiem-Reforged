@@ -1,5 +1,12 @@
 # Changelog
 
+## Fix config toggle authority (Roadhog360/Et-Futurum-Requiem#643)
+
+- Require bamboo content as well as new boats before registering bamboo raft items, and skip recipes for every disabled boat item.
+- Keep disabled sign and dyed-bed content out of recipes, creative-tab sorting, and OreDictionary registration.
+- Register the fancy inventory skull and inventory bow renderers only when their respective client options are enabled.
+- Allow built-in texture and language overrides to be enabled independently, with identical language filtering in development folders and packaged JARs.
+
 ## Fix armor stand duplication (#699)
 
 - Reject repeated server-side damage after an armor stand has died so its stand item and equipment cannot be dropped more than once.

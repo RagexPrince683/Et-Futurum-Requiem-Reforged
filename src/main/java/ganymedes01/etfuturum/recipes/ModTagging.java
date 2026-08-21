@@ -222,7 +222,7 @@ public class ModTagging {
 		OreDictionary.registerOre("soulSand", Blocks.soul_sand);
 
 		for (ModBlocks bed : ModBlocks.BEDS) {
-			RecipeHelper.registerOre("bedWood", bed.get());
+			if (bed.isEnabled()) RecipeHelper.registerOre("bedWood", bed.get());
 		}
 
 		ItemStack ore36 = ModBlocks.LEAVES.newItemStack(1, OreDictionary.WILDCARD_VALUE);
@@ -274,17 +274,13 @@ public class ModTagging {
 		}
 
 		RecipeHelper.registerOre("signWood", Items.sign);
-		RecipeHelper.registerOre("signWood", ModItems.ITEM_SIGN_SPRUCE.get());
-		RecipeHelper.registerOre("signWood", ModItems.ITEM_SIGN_BIRCH.get());
-		RecipeHelper.registerOre("signWood", ModItems.ITEM_SIGN_JUNGLE.get());
-		RecipeHelper.registerOre("signWood", ModItems.ITEM_SIGN_ACACIA.get());
-		RecipeHelper.registerOre("signWood", ModItems.ITEM_SIGN_DARK_OAK.get());
-
-		RecipeHelper.registerOre("signWood", ModBlocks.CRIMSON_SIGN.get());
-		RecipeHelper.registerOre("signWood", ModBlocks.WARPED_SIGN.get());
-		RecipeHelper.registerOre("signWood", ModBlocks.MANGROVE_SIGN.get());
-		RecipeHelper.registerOre("signWood", ModBlocks.CHERRY_SIGN.get());
-		RecipeHelper.registerOre("signWood", ModBlocks.BAMBOO_SIGN.get());
+		for (ModItems sign : ModItems.OLD_SIGN_ITEMS) {
+			if (sign.isEnabled()) RecipeHelper.registerOre("signWood", sign.get());
+		}
+		ModBlocks[] newSigns = {ModBlocks.CRIMSON_SIGN, ModBlocks.WARPED_SIGN, ModBlocks.MANGROVE_SIGN, ModBlocks.CHERRY_SIGN, ModBlocks.BAMBOO_SIGN};
+		for (ModBlocks sign : newSigns) {
+			if (sign.isEnabled()) RecipeHelper.registerOre("signWood", sign.get());
+		}
 
 		if (ConfigExperiments.enableMangroveBlocks) {
 			ItemStack ore = ModBlocks.SAPLING.newItemStack(1, 0);
