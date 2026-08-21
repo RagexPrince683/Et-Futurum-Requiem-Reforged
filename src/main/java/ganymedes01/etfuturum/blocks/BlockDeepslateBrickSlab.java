@@ -5,7 +5,7 @@ import ganymedes01.etfuturum.configuration.configs.ConfigFunctions;
 import lombok.NonNull;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
-import roadhog360.hogutils.api.blocksanditems.block.IMultiBlockSound;
+import ganymedes01.etfuturum.api.blocksanditems.block.IMultiBlockSound;
 
 public class BlockDeepslateBrickSlab extends BaseSlab implements IMultiBlockSound {
 	public BlockDeepslateBrickSlab(boolean isDouble) {

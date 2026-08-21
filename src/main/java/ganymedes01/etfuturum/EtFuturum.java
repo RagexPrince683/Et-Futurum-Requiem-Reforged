@@ -14,6 +14,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import ganymedes01.etfuturum.api.*;
+import ganymedes01.etfuturum.api.event.BlockItemIterateEvent;
+import ganymedes01.etfuturum.api.utils.RecipeHelper;
 import ganymedes01.etfuturum.client.BuiltInResourcePack;
 import ganymedes01.etfuturum.client.DynamicSoundsResourcePack;
 import ganymedes01.etfuturum.client.GrayscaleWaterResourcePack;
@@ -180,7 +182,7 @@ public class EtFuturum {
 		FMLCommonHandler.instance().bus().register(RegistryIterateEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(RegistryIterateEventHandler.INSTANCE);
 
-		ModTagging.registerEarlyHogTags();
+		ModTagging.registerEarlyTags();
 	}
 
 	static final String NETHER_FORTRESS = "netherFortress";
@@ -189,6 +191,7 @@ public class EtFuturum {
 	@EventHandler
 	@SuppressWarnings("unchecked")
 	public void preInit(FMLPreInitializationEvent event) {
+		RecipeHelper.init();
 		if(ModsList.IRON_CHEST.isLoaded()) {
 			CompatIronChests.init();
 		}
@@ -267,6 +270,15 @@ public class EtFuturum {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		// Iterate after every mod has completed pre-init, matching the former utility lifecycle.
+		for (Object entryObject : Block.blockRegistry.getKeys()) {
+			String id = entryObject.toString();
+			MinecraftForge.EVENT_BUS.post(new BlockItemIterateEvent.BlockRegister.Init((Block) Block.blockRegistry.getObject(id), id));
+		}
+		for (Object entryObject : Item.itemRegistry.getKeys()) {
+			String id = entryObject.toString();
+			MinecraftForge.EVENT_BUS.post(new BlockItemIterateEvent.ItemRegister.Init((Item) Item.itemRegistry.getObject(id), id));
+		}
 		for (ModBlocks block : ModBlocks.values()) {
 			if (block.isEnabled() && block.get() instanceof IInitAction) {
 				((IInitAction) block.get()).initAction();

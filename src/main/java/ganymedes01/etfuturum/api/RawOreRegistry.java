@@ -10,7 +10,7 @@ import ganymedes01.etfuturum.items.rawore.modded.ItemGeneralModdedRawOre;
 import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
-import roadhog360.hogutils.api.utils.RecipeHelper;
+import ganymedes01.etfuturum.api.utils.RecipeHelper;
 
 import java.util.Collections;
 import java.util.HashMap;

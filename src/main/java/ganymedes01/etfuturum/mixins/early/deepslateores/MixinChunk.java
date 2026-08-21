@@ -14,9 +14,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import roadhog360.hogutils.api.blocksanditems.utils.BlockMetaPair;
-import roadhog360.hogutils.api.hogtags.helpers.BlockTags;
-import roadhog360.hogutils.api.world.IGeneratingCheck;
+import ganymedes01.etfuturum.api.blocksanditems.utils.BlockMetaPair;
+import ganymedes01.etfuturum.api.tags.helpers.BlockTags;
+import ganymedes01.etfuturum.api.world.IGeneratingCheck;
 
 @Mixin(Chunk.class)
 public class MixinChunk {
@@ -27,7 +27,7 @@ public class MixinChunk {
 	private void overrideSetBlockForDeepslate(int p_150807_1_, int y, int p_150807_3_, Block p_150807_4_, int p_150807_5_, CallbackInfoReturnable<Boolean> cir,
 											  @Local(argsOnly = true) LocalRef<Block> passedBlock, @Local(argsOnly = true, ordinal = 3) LocalIntRef passedMeta,
 											  @Local(ordinal = 1) Block currentBlock, @Local(ordinal = 6) int currentMeta) {
-		if(!worldObj.isRemote && worldObj.getChunkProvider() instanceof IGeneratingCheck check && check.hu$isGenerating()) {
+		if(!worldObj.isRemote && worldObj.getChunkProvider() instanceof IGeneratingCheck check && check.etfuturum$isGenerating()) {
 			if (currentBlock.getMaterial() != Material.air && DeepslateOreRegistry.getDeepslateHeight(worldObj) >= y) {
 				if (!BlockTags.hasTag(passedBlock.get(), passedMeta.get(), "minecraft:deepslate_ore_replaceables")
 						&& BlockTags.hasTag(currentBlock, currentMeta, "minecraft:deepslate_ore_replaceables")) {

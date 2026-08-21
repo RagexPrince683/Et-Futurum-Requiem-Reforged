@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.ArrayUtils;
-import roadhog360.hogutils.api.blocksanditems.block.IMultiBlockSound;
+import ganymedes01.etfuturum.api.blocksanditems.block.IMultiBlockSound;
 
 import java.util.*;
 

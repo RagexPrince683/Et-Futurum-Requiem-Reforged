@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.spongepowered.asm.mixin.*;
-import roadhog360.hogutils.api.hogtags.helpers.BlockTags;
+import ganymedes01.etfuturum.api.tags.helpers.BlockTags;
 
 import java.util.List;
 

@@ -15,7 +15,7 @@ import net.minecraft.world.WorldSettings;
 import net.minecraftforge.common.util.FakePlayer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import roadhog360.hogutils.api.hogtags.helpers.BlockTags;
+import ganymedes01.etfuturum.api.tags.helpers.BlockTags;
 
 @ApiStatus.AvailableSince("3.0.0")
 public class SpectatorUtils {

@@ -5,13 +5,13 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.ApiStatus;
-import roadhog360.hogutils.api.hogtags.helpers.BlockTags;
-import roadhog360.hogutils.api.utils.GenericUtils;
+import ganymedes01.etfuturum.api.tags.helpers.BlockTags;
+import ganymedes01.etfuturum.api.utils.GenericUtils;
 
 /// This class is deprecated and its functions are all now stubs that redirect to the new tag system.
 @Deprecated
 public class PistonBehaviorRegistry {
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Block Tags: `etfuturum:piston_slick_blocks`, `etfuturum:piston_slime_blocks`, `etfuturum:piston_honey_blocks`
 	/// @param action {@link PistonAction#NON_STICKY}, {@link PistonAction#BOUNCES_ENTITIES}, {@link PistonAction#PULLS_ENTITIES}
@@ -21,7 +21,7 @@ public class PistonBehaviorRegistry {
 		addPistonBehavior(block, OreDictionary.WILDCARD_VALUE, action);
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Block Tags: `etfuturum:piston_slick_blocks`, `etfuturum:piston_slime_blocks`, `etfuturum:piston_honey_blocks`
 	/// @param action {@link PistonAction#NON_STICKY}, {@link PistonAction#BOUNCES_ENTITIES}, {@link PistonAction#PULLS_ENTITIES}
@@ -42,7 +42,7 @@ public class PistonBehaviorRegistry {
 		}
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Block Tags: `etfuturum:piston_slick_blocks`, `etfuturum:piston_slime_blocks`, `etfuturum:piston_honey_blocks`
 	/// @param action `NON_STICKY`, `BOUNCES_ENTITIES`, `PULLS_ENTITIES` will be converted to the above tags, respectively.
@@ -51,7 +51,7 @@ public class PistonBehaviorRegistry {
 		addPistonBehavior(block, OreDictionary.WILDCARD_VALUE, PistonAction.valueOf(action));
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Block Tags: `etfuturum:piston_slick_blocks`, `etfuturum:piston_slime_blocks`, `etfuturum:piston_honey_blocks`
 	/// @param action `NON_STICKY`, `BOUNCES_ENTITIES`, `PULLS_ENTITIES` will be converted to the above tags, respectively.
@@ -63,7 +63,7 @@ public class PistonBehaviorRegistry {
 		addPistonBehavior(block, meta, PistonAction.valueOf(action));
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Block Tags: `etfuturum:piston_slick_blocks`, `etfuturum:piston_slime_blocks`, `etfuturum:piston_honey_blocks`
 	///
@@ -73,7 +73,7 @@ public class PistonBehaviorRegistry {
 		BlockTags.removeTags(block, meta, Tags.MOD_ID + ":piston_slick_blocks", Tags.MOD_ID + ":piston_honey_blocks", Tags.MOD_ID + ":piston_slime_blocks");
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Block Tags: `etfuturum:piston_slick_blocks`
 	@Deprecated
@@ -81,7 +81,7 @@ public class PistonBehaviorRegistry {
 		return BlockTags.hasTag(block, meta, Tags.MOD_ID + ":piston_slick_blocks");
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Block Tags: `etfuturum:piston_slime_blocks`, `etfuturum:piston_honey_blocks`
 	@Deprecated
@@ -90,7 +90,7 @@ public class PistonBehaviorRegistry {
 		return BlockTags.hasTag(block, meta, Tags.MOD_ID + ":piston_slime_blocks");
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Block Tags: `etfuturum:piston_honey_blocks`
 	@Deprecated
@@ -98,7 +98,7 @@ public class PistonBehaviorRegistry {
 		return BlockTags.hasTag(block, meta, Tags.MOD_ID + ":piston_honey_blocks");
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Block Tags: `etfuturum:piston_slime_blocks`
 	@Deprecated

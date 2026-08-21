@@ -31,7 +31,7 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.ArrayUtils;
-import roadhog360.hogutils.api.hogtags.helpers.BiomeTags;
+import ganymedes01.etfuturum.api.tags.helpers.BiomeTags;
 
 import java.util.LinkedList;
 import java.util.List;

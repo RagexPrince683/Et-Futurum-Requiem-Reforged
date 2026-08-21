@@ -15,7 +15,7 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
-import roadhog360.hogutils.api.hogtags.helpers.ItemTags;
+import ganymedes01.etfuturum.api.tags.helpers.ItemTags;
 
 import java.util.List;
 

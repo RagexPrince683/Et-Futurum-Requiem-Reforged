@@ -35,7 +35,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import roadhog360.hogutils.api.hogtags.helpers.BlockTags;
+import ganymedes01.etfuturum.api.tags.helpers.BlockTags;
 
 import java.util.List;
 

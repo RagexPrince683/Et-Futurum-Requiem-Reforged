@@ -6,7 +6,6 @@ import net.minecraft.launchwrapper.Launch;
 public class Reference {
 	public static final String DEPENDENCIES =
 			"required-after:Forge@[10.13.4.1614,);" +
-					"required-after:hogutils;" +
 					"after:gtnhlib@[0.10.3,);" +
 					"after:Thaumcraft@[4.2.3.5,);" +
 					"after:TwilightForest;" +

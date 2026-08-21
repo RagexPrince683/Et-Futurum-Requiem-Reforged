@@ -17,8 +17,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import roadhog360.hogutils.api.hogtags.helpers.BlockTags;
-import roadhog360.hogutils.api.utils.RecipeHelper;
+import ganymedes01.etfuturum.api.tags.helpers.BlockTags;
+import ganymedes01.etfuturum.api.utils.RecipeHelper;
 
 import java.util.Random;
 

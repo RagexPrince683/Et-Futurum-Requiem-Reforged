@@ -9,7 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import roadhog360.hogutils.api.blocksanditems.block.IMultiBlockSound;
+import ganymedes01.etfuturum.api.blocksanditems.block.IMultiBlockSound;
 
 @Mixin({BlockSlab.class, BlockSponge.class})
 public class MixinBlockStepSounds extends Block implements IMultiBlockSound {

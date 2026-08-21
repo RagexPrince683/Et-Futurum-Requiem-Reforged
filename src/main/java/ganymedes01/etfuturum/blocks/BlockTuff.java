@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import roadhog360.hogutils.api.blocksanditems.block.IMultiBlockSound;
+import ganymedes01.etfuturum.api.blocksanditems.block.IMultiBlockSound;
 
 public class BlockTuff extends BaseSubtypesBlock implements IMultiBlockSound {
 

@@ -62,7 +62,6 @@ dependencies {
     compileOnly "com.falsepattern:rple-mc1.7.10:1.1.0"
 
     //My core mod
-    api files("libs/hogutils-0.0.0-nightly-5782dbbe51-dev.jar")
 
 
     implementation("com.github.GTNewHorizons:GTNHLib:0.11.4")

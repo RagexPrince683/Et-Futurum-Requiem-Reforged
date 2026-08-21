@@ -5,7 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import roadhog360.hogutils.api.hogtags.helpers.ItemTags;
+import ganymedes01.etfuturum.api.tags.helpers.ItemTags;
 
 import java.util.List;
 

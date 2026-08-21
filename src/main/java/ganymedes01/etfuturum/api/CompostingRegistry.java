@@ -14,7 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.ApiStatus;
-import roadhog360.hogutils.api.utils.RecipeHelper;
+import ganymedes01.etfuturum.api.utils.RecipeHelper;
 
 import java.util.Collections;
 import java.util.List;

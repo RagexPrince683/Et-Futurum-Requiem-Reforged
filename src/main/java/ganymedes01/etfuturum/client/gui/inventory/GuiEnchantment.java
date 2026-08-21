@@ -18,8 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import org.lwjgl.util.glu.Project;
-import roadhog360.hogutils.api.blocksanditems.utils.ItemMetaPair;
-import roadhog360.hogutils.api.hogtags.helpers.ItemTags;
+import ganymedes01.etfuturum.api.blocksanditems.utils.ItemMetaPair;
+import ganymedes01.etfuturum.api.tags.helpers.ItemTags;
 
 import java.util.ArrayList;
 import java.util.List;

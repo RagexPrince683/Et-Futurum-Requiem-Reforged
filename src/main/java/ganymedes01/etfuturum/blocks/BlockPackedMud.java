@@ -5,7 +5,7 @@ import ganymedes01.etfuturum.client.sound.ModSounds;
 import lombok.NonNull;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
-import roadhog360.hogutils.api.blocksanditems.block.IMultiBlockSound;
+import ganymedes01.etfuturum.api.blocksanditems.block.IMultiBlockSound;
 
 public class BlockPackedMud extends BaseSubtypesBlock implements IMultiBlockSound {
 

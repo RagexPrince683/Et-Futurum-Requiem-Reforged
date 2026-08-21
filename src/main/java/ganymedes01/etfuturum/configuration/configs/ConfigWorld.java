@@ -7,7 +7,7 @@ import ganymedes01.etfuturum.compat.ModsList;
 import ganymedes01.etfuturum.configuration.ConfigBase;
 import ganymedes01.etfuturum.core.utils.Logger;
 import net.minecraftforge.common.config.Property;
-import roadhog360.hogutils.api.blocksanditems.utils.BlockMetaPair;
+import ganymedes01.etfuturum.api.blocksanditems.utils.BlockMetaPair;
 
 import java.io.File;
 

@@ -33,8 +33,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 import org.apache.commons.lang3.ArrayUtils;
-import roadhog360.hogutils.api.blocksanditems.utils.BlockMetaPair;
-import roadhog360.hogutils.api.hogtags.helpers.BlockTags;
+import ganymedes01.etfuturum.api.blocksanditems.utils.BlockMetaPair;
+import ganymedes01.etfuturum.api.tags.helpers.BlockTags;
 
 import java.lang.reflect.Constructor;
 import java.util.Map;

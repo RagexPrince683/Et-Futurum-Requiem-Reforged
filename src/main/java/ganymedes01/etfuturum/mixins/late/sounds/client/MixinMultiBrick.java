@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import roadhog360.hogutils.api.blocksanditems.block.IMultiBlockSound;
+import ganymedes01.etfuturum.api.blocksanditems.block.IMultiBlockSound;
 import tconstruct.tools.blocks.MultiBrick;
 import tconstruct.tools.blocks.MultiBrickFancy;
 import tconstruct.world.TinkerWorld;

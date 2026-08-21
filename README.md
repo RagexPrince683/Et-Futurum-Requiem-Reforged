@@ -29,8 +29,6 @@ https://www.ej-technologies.com/jprofiler
 
 - [UniMixins](https://modrinth.com/mod/unimixins)
   - Specifically, the GTNH module.
-- [HogUtils](https://github.com/Roadhog360/HogUtils)
-  - Currently EFR is in a transitional period as I get ready to use my new API. If you intend on using nightlies of EFR you will also need to download HogUtils in the same way.
 
 ## Contributing
 

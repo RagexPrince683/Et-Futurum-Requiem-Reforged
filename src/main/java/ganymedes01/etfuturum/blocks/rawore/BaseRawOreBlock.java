@@ -6,8 +6,8 @@ import ganymedes01.etfuturum.core.utils.IInitAction;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
-import roadhog360.hogutils.api.blocksanditems.utils.BlockMetaPair;
-import roadhog360.hogutils.api.world.DummyWorld;
+import ganymedes01.etfuturum.api.blocksanditems.utils.BlockMetaPair;
+import ganymedes01.etfuturum.api.world.DummyWorld;
 
 public abstract class BaseRawOreBlock extends BaseBlock implements IInitAction {
 	public BaseRawOreBlock(Material materialIn) {

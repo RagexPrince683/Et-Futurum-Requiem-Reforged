@@ -2,7 +2,7 @@ package ganymedes01.etfuturum.client.particle;
 
 import net.minecraft.client.particle.EntityAuraFX;
 import net.minecraft.world.World;
-import roadhog360.hogutils.api.utils.FastRandom;
+import ganymedes01.etfuturum.api.utils.FastRandom;
 
 public class BiomeFX extends EntityAuraFX {
 	public BiomeFX(World world, double x, double y, double z, double vX, double vY, double vZ, float size) {

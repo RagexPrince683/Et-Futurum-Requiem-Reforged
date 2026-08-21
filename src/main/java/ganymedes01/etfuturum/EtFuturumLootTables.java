@@ -4,7 +4,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-import roadhog360.hogutils.api.utils.RecipeHelper;
+import ganymedes01.etfuturum.api.utils.RecipeHelper;
 
 public class EtFuturumLootTables {
 

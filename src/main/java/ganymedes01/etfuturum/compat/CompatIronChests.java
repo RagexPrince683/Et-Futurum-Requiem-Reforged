@@ -14,7 +14,7 @@ import me.mrnavastar.r.R;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
-import roadhog360.hogutils.api.utils.RecipeHelper;
+import ganymedes01.etfuturum.api.utils.RecipeHelper;
 
 import java.util.Map;
 

@@ -7,7 +7,7 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import roadhog360.hogutils.api.utils.FastRandom;
+import ganymedes01.etfuturum.api.utils.FastRandom;
 
 import java.util.Random;
 
