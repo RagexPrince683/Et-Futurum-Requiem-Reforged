@@ -3,6 +3,7 @@ package ganymedes01.etfuturum.blocks.compat;
 import ganymedes01.etfuturum.EtFuturum;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRotatedPillar;
+import net.minecraft.block.material.Material;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -15,6 +16,8 @@ public class BlockExternalWoodLog extends BlockRotatedPillar {
 	private final boolean allSides;
 
 	public BlockExternalWoodLog(Block source, int sourceMeta, boolean allSides) {
+		super(Material.wood);
+
 		this.source = source;
 		this.sourceMeta = sourceMeta;
 		this.allSides = allSides;
