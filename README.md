@@ -55,3 +55,8 @@ From versions 2.4.1 to 2.6.0, the mod came in two flavors:
 
 From those versions, mixin code will also not work if you do not
 add `--tweakClass org.spongepowered.asm.launch.MixinTweaker --mixin mixins.etfuturum.json` to your program arguments.
+# Vanilla functional-block compatibility
+
+EFR augments the Minecraft 1.7.10 enchanting table, brewing stand, beacon, and anvil when their corresponding feature toggles are enabled. Normal recipes and placement therefore retain the vanilla block identity expected by legacy mods. The historical EFR replacement blocks and tile entities remain registered and functional for save compatibility.
+
+`tileReplacementMode` is only a legacy migration control: `-1` performs no conversion, `0` converts vanilla blocks to legacy EFR replacements, and `1` converts legacy replacements back to vanilla blocks. Modern behavior does not require conversion. The optional old base daylight sensor remains on its existing one-way compatibility migration because its inverted-sensor pairing is separate from the functional-container backports.

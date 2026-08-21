@@ -67,6 +67,12 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 
 		List<String> mixins = new ObjectArrayList<>();
 
+		// These hooks add modern behavior without changing the identity of the placed vanilla block.
+		if (ConfigBlocksItems.enableEnchantingTable) mixins.add("functionalblocks.MixinBlockEnchantmentTable");
+		if (ConfigBlocksItems.enableBrewingStands) mixins.add("functionalblocks.MixinBlockBrewingStand");
+		if (ConfigBlocksItems.enableColourfulBeacons) mixins.add("functionalblocks.MixinBlockBeacon");
+		if (ConfigBlocksItems.enableAnvil) mixins.add("functionalblocks.MixinBlockAnvil");
+
 		if (ConfigMixins.endPortalFix) {
 			mixins.add("endportal.MixinBlockEndPortal");
 		}

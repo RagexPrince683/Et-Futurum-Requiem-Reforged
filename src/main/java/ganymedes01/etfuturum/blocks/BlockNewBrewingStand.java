@@ -1,8 +1,6 @@
 package ganymedes01.etfuturum.blocks;
 
 import ganymedes01.etfuturum.EtFuturum;
-import ganymedes01.etfuturum.ModBlocks;
-import ganymedes01.etfuturum.configuration.configs.ConfigWorld;
 import ganymedes01.etfuturum.lib.GUIIDs;
 import ganymedes01.etfuturum.tileentities.TileEntityNewBrewingStand;
 import net.minecraft.block.BlockBrewingStand;
@@ -21,7 +19,7 @@ public class BlockNewBrewingStand extends BlockBrewingStand {
 		setHardness(0.5F);
 		setLightLevel(0.125F);
 		setBlockTextureName("brewing_stand");
-		setCreativeTab(ConfigWorld.tileReplacementMode == -1 ? EtFuturum.creativeTabBlocks : null);
+		setCreativeTab(null);
 	}
 
 	@Override
@@ -43,15 +41,11 @@ public class BlockNewBrewingStand extends BlockBrewingStand {
 
 	@Override
 	public Item getItemDropped(int meta, Random rand, int fortune) {
-		if (ConfigWorld.tileReplacementMode == -1)
-			return Item.getItemFromBlock(ModBlocks.BREWING_STAND.get());
 		return Items.brewing_stand;
 	}
 
 	@Override
 	public Item getItem(World world, int x, int y, int z) {
-		if (ConfigWorld.tileReplacementMode == -1)
-			return Item.getItemFromBlock(ModBlocks.BREWING_STAND.get());
 		return Items.brewing_stand;
 	}
 

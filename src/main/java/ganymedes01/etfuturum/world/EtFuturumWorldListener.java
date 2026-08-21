@@ -27,63 +27,64 @@ import java.util.Map;
 public class EtFuturumWorldListener implements IWorldAccess {
 
 	private final World world;
-	private static final Map<Block, Block> REPLACEMENTS = new Reference2ObjectOpenHashMap<>();
+	private final Map<Block, Block> replacements = new Reference2ObjectOpenHashMap<>();
 
 	public EtFuturumWorldListener(World theWorld) {
 		world = theWorld;
+		if (world.isRemote) return;
 		if (ModBlocks.BREWING_STAND.isEnabled()) {
 			if (ConfigWorld.tileReplacementMode == 0) {
-				REPLACEMENTS.put(Blocks.brewing_stand, ModBlocks.BREWING_STAND.get());
+				replacements.put(Blocks.brewing_stand, ModBlocks.BREWING_STAND.get());
 			} else if (ConfigWorld.tileReplacementMode == 1) {
-				REPLACEMENTS.put(ModBlocks.BREWING_STAND.get(), Blocks.brewing_stand);
+				replacements.put(ModBlocks.BREWING_STAND.get(), Blocks.brewing_stand);
 			}
 		}
 
 
 		if (ModBlocks.BEACON.isEnabled()) {
 			if (ConfigWorld.tileReplacementMode == 0) {
-				REPLACEMENTS.put(Blocks.beacon, ModBlocks.BEACON.get());
+				replacements.put(Blocks.beacon, ModBlocks.BEACON.get());
 			} else if (ConfigWorld.tileReplacementMode == 1) {
-				REPLACEMENTS.put(ModBlocks.BEACON.get(), Blocks.beacon);
+				replacements.put(ModBlocks.BEACON.get(), Blocks.beacon);
 			}
 		}
 
 		if (ModBlocks.ENCHANTMENT_TABLE.isEnabled()) {
 			if (ConfigWorld.tileReplacementMode == 0) {
-				REPLACEMENTS.put(Blocks.enchanting_table, ModBlocks.ENCHANTMENT_TABLE.get());
+				replacements.put(Blocks.enchanting_table, ModBlocks.ENCHANTMENT_TABLE.get());
 			} else if (ConfigWorld.tileReplacementMode == 1) {
-				REPLACEMENTS.put(ModBlocks.ENCHANTMENT_TABLE.get(), Blocks.enchanting_table);
+				replacements.put(ModBlocks.ENCHANTMENT_TABLE.get(), Blocks.enchanting_table);
 			}
 		}
 
 		if (ModBlocks.ANVIL.isEnabled()) {
 			if (ConfigWorld.tileReplacementMode == 0) {
-				REPLACEMENTS.put(Blocks.anvil, ModBlocks.ANVIL.get());
+				replacements.put(Blocks.anvil, ModBlocks.ANVIL.get());
 			} else if (ConfigWorld.tileReplacementMode == 1) {
-				REPLACEMENTS.put(ModBlocks.ANVIL.get(), Blocks.anvil);
+				replacements.put(ModBlocks.ANVIL.get(), Blocks.anvil);
 			}
 		}
 
 		if (ModBlocks.SPONGE.isEnabled()) {
 			if (ConfigWorld.tileReplacementMode == 0) {
-				REPLACEMENTS.put(Blocks.sponge, ModBlocks.SPONGE.get());
+				replacements.put(Blocks.sponge, ModBlocks.SPONGE.get());
 			} else if (ConfigWorld.tileReplacementMode == 1) {
-				REPLACEMENTS.put(ModBlocks.SPONGE.get(), Blocks.sponge);
+				replacements.put(ModBlocks.SPONGE.get(), Blocks.sponge);
 			}
 		}
 
 		if (ModBlocks.DAYLIGHT_DETECTOR.isEnabled()) {
 			if (ConfigWorld.tileReplacementMode != -1) {
-				REPLACEMENTS.put(ModBlocks.DAYLIGHT_DETECTOR.get(), Blocks.daylight_detector);
+				replacements.put(ModBlocks.DAYLIGHT_DETECTOR.get(), Blocks.daylight_detector);
 			}
 		}
 
 		if (ModsList.BACK_IN_SLIME.isLoaded() && ConfigMixins.betterPistons) {
-			REPLACEMENTS.put(GameRegistry.findBlock("bis", "SlimePistonBase"), Blocks.piston);
-			REPLACEMENTS.put(GameRegistry.findBlock("bis", "StickySlimePistonBase"), Blocks.sticky_piston);
-			REPLACEMENTS.put(GameRegistry.findBlock("bis", "SlimePistonHead"), Blocks.piston_head);
+			replacements.put(GameRegistry.findBlock("bis", "SlimePistonBase"), Blocks.piston);
+			replacements.put(GameRegistry.findBlock("bis", "StickySlimePistonBase"), Blocks.sticky_piston);
+			replacements.put(GameRegistry.findBlock("bis", "SlimePistonHead"), Blocks.piston_head);
 			if (ModBlocks.SLIME.isEnabled()) {
-				REPLACEMENTS.put(GameRegistry.findBlock("bis", "SlimeBlock"), ModBlocks.SLIME.get());
+				replacements.put(GameRegistry.findBlock("bis", "SlimeBlock"), ModBlocks.SLIME.get());
 			}
 		}
 
@@ -100,7 +101,7 @@ public class EtFuturumWorldListener implements IWorldAccess {
 		Block replacement;
 		TileEntity tile;
 
-		if (REPLACEMENTS.isEmpty() || (replacement = REPLACEMENTS.get(currentBlock)) == null)
+		if (world.isRemote || replacements.isEmpty() || (replacement = replacements.get(currentBlock)) == null)
 			return;
 
 		tile = world.getTileEntity(x, y, z);
@@ -116,7 +117,11 @@ public class EtFuturumWorldListener implements IWorldAccess {
 
 		int replacementMeta = world.getBlockMetadata(x, y, z);
 
-		world.setBlock(x, y, z, replacement, replacementMeta, 2);
+		if (!world.setBlock(x, y, z, replacement, replacementMeta, 2)) {
+			// A cancelled/failed replacement must not consume the captured inventory.
+			if (tile != null) tile.readFromNBT(nbt);
+			return;
+		}
 		TileEntity newTile = world.getTileEntity(x, y, z);
 		if (newTile != null) {
 			newTile.readFromNBT(nbt);

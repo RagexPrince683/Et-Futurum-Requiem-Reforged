@@ -286,7 +286,7 @@ public class ConfigBlocksItems extends ConfigBase {
 		enableLoom = getBoolean("enableLoom", catBlockFunc, true, "Currently DOES NOT HAVE ANY FUNCTIONALITY. Decoration ONLY!");
 		enableDyedBeds = getBoolean("enableDyedBeds", catBlockFunc, true, "Ability to craft differently colored beds out of wool. Mixed wool colors = red bed");
 
-		enableEnchantingTable = getBoolean("enableNewEnchantingTable", catBlockFunc, true, "Uses lapis as payment and has enchant previews and adjusted level costs. Requires tile entity replacement to be enabled in \"function.cfg\". It is compatible with CraftTweaker for adding and removing fuels." +
+		enableEnchantingTable = getBoolean("enableNewEnchantingTable", catBlockFunc, true, "Adds lapis payment, enchant previews and adjusted level costs to the vanilla enchanting table. It is compatible with CraftTweaker for adding and removing fuels." +
 				"\nThe mod prefix is \"mods.etfuturum.enchantingFuel\", and the function is \"addFuel\" and an ItemStack or OreDictionary tag. You can remove fuels using the \"remove\" function and an ItemStack or an OreDictionary tag." +
 				"\nExamples:" +
 				"\nmods.etfuturum.enchantingFuel.addFuel(<etfuturum:amethyst_shard>); //(Adds amethyst shards as an enchanting fuel)" +
