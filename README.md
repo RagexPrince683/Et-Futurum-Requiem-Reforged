@@ -64,3 +64,7 @@ add `--tweakClass org.spongepowered.asm.launch.MixinTweaker --mixin mixins.etfut
 EFR augments the Minecraft 1.7.10 enchanting table, brewing stand, beacon, and anvil when their corresponding feature toggles are enabled. Normal recipes and placement therefore retain the vanilla block identity expected by legacy mods. The historical EFR replacement blocks and tile entities remain registered and functional for save compatibility.
 
 `tileReplacementMode` is only a legacy migration control: `-1` performs no conversion, `0` converts vanilla blocks to legacy EFR replacements, and `1` converts legacy replacements back to vanilla blocks. Modern behavior does not require conversion. The optional old base daylight sensor remains on its existing one-way compatibility migration because its inverted-sensor pairing is separate from the functional-container backports.
+
+### Optional legacy wood-family compatibility
+
+When Biomes O' Plenty or Witchery is installed, EFR resolves its known 1.7.10 plank and log registry entries during pre-initialization and adds enabled modern derivatives. Missing optional registry entries are warned about and skipped rather than becoming hard dependencies. Compatibility follows the equivalent `enableNew*`, `enableStrippedLogs`, and `enableBarkLogs` feature switches; modded buttons and pressure plates use `enableNewWoodRedstone`.
