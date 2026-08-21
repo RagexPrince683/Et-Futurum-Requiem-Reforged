@@ -1,5 +1,9 @@
 # Changelog
 
+## Fix Iron Chest compatibility after HogUtils removal
+
+- Replace the last HogUtils-shaded reflection helper usage with self-contained Java reflection while retaining optional Iron Chest variant fallbacks.
+
 ## Remove the HogUtils hard dependency
 
 - Internalize the metadata-aware block, item, and biome tag APIs, including wildcard matching, inheritance, reverse lookup, registry-ID helpers, and early Mixins on vanilla registry objects.

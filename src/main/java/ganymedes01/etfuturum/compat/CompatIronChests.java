@@ -10,12 +10,13 @@ import ganymedes01.etfuturum.items.ItemShulkerBoxUpgrade;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
-import me.mrnavastar.r.R;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import ganymedes01.etfuturum.api.utils.RecipeHelper;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 public class CompatIronChests {
@@ -26,20 +27,17 @@ public class CompatIronChests {
 	private static double renderDistance;
 	static {
 		// Collects all enabled chest upgrade typee
-		R icInvoker = R.of(IronChest.class);
-		renderDistance = getOrDefaultR(icInvoker, "TRANSPARENT_RENDER_INSIDE", Boolean.class, true)
-				? getOrDefaultR(icInvoker, "TRANSPARENT_RENDER_DISTANCE", Double.class, 128D) : 0F;
+		renderDistance = getFieldOrDefault(IronChest.class, null, "TRANSPARENT_RENDER_INSIDE", Boolean.class, true)
+				? getFieldOrDefault(IronChest.class, null, "TRANSPARENT_RENDER_DISTANCE", Double.class, 128D) : 0F;
 		for(IronChestType type : IronChestType.values()) {
-			R typeInvoker = R.of(type);
-			if(callWithDefaultR(typeInvoker, "isEnabled", Boolean.class, true)) {
+			if(callOrDefault(type, "isEnabled", Boolean.class, true)) {
 				tiers.put(type.name(), type);
 			}
 		}
 		for(ChestChangerType type : ChestChangerType.values()) {
-			R ccInvoker = R.of(type);
-			IronChestType source = ccInvoker.get("source", IronChestType.class);
-			IronChestType target = ccInvoker.get("target", IronChestType.class);
-			boolean isEnabled = getOrDefaultR(ccInvoker, "isAllowed", Boolean.class, true) && tierExists(source.name()) && tierExists(target.name());
+			IronChestType source = getRequiredField(type, "source", IronChestType.class);
+			IronChestType target = getRequiredField(type, "target", IronChestType.class);
+			boolean isEnabled = isAllowed(type) && tierExists(source.name()) && tierExists(target.name());
 			if(isEnabled) {
 				upgradeTypes.put(type.name(), type);
 				upgradeMappings.put(type, Pair.of(source, target));
@@ -57,11 +55,10 @@ public class CompatIronChests {
 
 	public static void init() {
 		for(ChestChangerType type : upgradeTypes.values()) {
-			R ccInvoker = R.of(type);
-			Item item = ccInvoker.get("item", ItemChestChanger.class);
+			ItemChestChanger item = getRequiredField(type, "item", ItemChestChanger.class);
 			boolean isEnabled = item != null && item.delegate.name() != null;
 			if(isEnabled) {
-				upgradeItems.put(type.name(), ccInvoker.get("item", ItemChestChanger.class));
+				upgradeItems.put(type.name(), item);
 			}
 		}
 	}
@@ -126,19 +123,65 @@ public class CompatIronChests {
 		return renderDistance;
 	}
 
-	private static <T> T callWithDefaultR(R r, String name, Class<T> cast, T def) {
+	private static boolean isAllowed(ChestChangerType type) {
 		try {
-			return r.call(name, cast);
+			Method method = findMethod(type.getClass(), "isAllowed");
+			method.setAccessible(true);
+			return Boolean.class.cast(method.invoke(type));
+		} catch (NoSuchMethodException e) {
+			return getFieldOrDefault(type.getClass(), type, "isAllowed", Boolean.class, true);
+		} catch (Exception e) {
+			return true;
+		}
+	}
+
+	private static <T> T callOrDefault(Object receiver, String name, Class<T> cast, T def) {
+		try {
+			Method method = findMethod(receiver.getClass(), name);
+			method.setAccessible(true);
+			return cast.cast(method.invoke(receiver));
 		} catch (Exception e) {
 			return def;
 		}
 	}
 
-	private static <T> T getOrDefaultR(R r, String name, Class<T> cast, T def) {
+	private static <T> T getFieldOrDefault(Class<?> owner, Object receiver, String name, Class<T> cast, T def) {
 		try {
-			return r.get(name, cast);
+			return getField(owner, receiver, name, cast);
 		} catch (Exception e) {
 			return def;
 		}
+	}
+
+	private static <T> T getRequiredField(Object receiver, String name, Class<T> cast) {
+		try {
+			return getField(receiver.getClass(), receiver, name, cast);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static <T> T getField(Class<?> owner, Object receiver, String name, Class<T> cast) throws ReflectiveOperationException {
+		Field field = findField(owner, name);
+		field.setAccessible(true);
+		return cast.cast(field.get(receiver));
+	}
+
+	private static Field findField(Class<?> owner, String name) throws NoSuchFieldException {
+		for(Class<?> type = owner; type != null; type = type.getSuperclass()) {
+			try {
+				return type.getDeclaredField(name);
+			} catch (NoSuchFieldException ignored) { }
+		}
+		throw new NoSuchFieldException(name);
+	}
+
+	private static Method findMethod(Class<?> owner, String name) throws NoSuchMethodException {
+		for(Class<?> type = owner; type != null; type = type.getSuperclass()) {
+			try {
+				return type.getDeclaredMethod(name);
+			} catch (NoSuchMethodException ignored) { }
+		}
+		throw new NoSuchMethodException(name);
 	}
 }
