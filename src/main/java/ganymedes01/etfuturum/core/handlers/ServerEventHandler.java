@@ -131,13 +131,14 @@ public class ServerEventHandler {
 		armorTracker.clear();
 		fallingConcreteBlocks.clear();
 		droppedEntityItems.invalidateAll();
-		loadedChunks.clear();
+		clearLoadedChunks();
 		lastAttackedAtYaw.clear();
 	}
 
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event) {
 		if (!event.world.isRemote) {
+			removeLoadedChunks(event.world.provider.dimensionId);
 			playersClosedContainers.removeIf(player -> player.worldObj == event.world);
 			armorTracker.entrySet().removeIf(entry -> entry.getKey().worldObj == event.world);
 			fallingConcreteBlocks.removeIf(entity -> entity.worldObj == event.world);
@@ -237,7 +238,7 @@ public class ServerEventHandler {
 
 	@SubscribeEvent
 	public void entityAdded(EntityJoinWorldEvent event) {
-		if (event.world.isRemote) return;
+		if (event.world.isRemote || event.isCanceled() || event.entity.isDead) return;
 
 		String sound = "";
 		if (ConfigSounds.paintingItemFramePlacing && event.entity instanceof EntityItemFrame) {
@@ -282,34 +283,86 @@ public class ServerEventHandler {
 		}
 	}
 
-	private final Set<Chunk> loadedChunks = Collections.newSetFromMap(new WeakHashMap<>());
+	/** Server chunk lifecycle state. Synchronized for compatibility with off-thread WorldServer chunk events. */
+	private final Map<Integer, Set<Long>> loadedChunks = new HashMap<>();
+
+	private static long toLongCoords(int chunkX, int chunkZ) {
+		return ChunkCoordIntPair.chunkXZ2Int(chunkX, chunkZ);
+	}
+
+	private synchronized void addLoadedChunk(int dimension, int chunkX, int chunkZ) {
+		loadedChunks.computeIfAbsent(dimension, ignored -> new HashSet<>()).add(toLongCoords(chunkX, chunkZ));
+	}
+
+	private synchronized void removeLoadedChunk(int dimension, int chunkX, int chunkZ) {
+		Set<Long> chunks = loadedChunks.get(dimension);
+		if (chunks == null) return;
+		chunks.remove(toLongCoords(chunkX, chunkZ));
+		if (chunks.isEmpty()) loadedChunks.remove(dimension);
+	}
+
+	private synchronized void removeLoadedChunks(int dimension) {
+		loadedChunks.remove(dimension);
+	}
+
+	private synchronized void clearLoadedChunks() {
+		loadedChunks.clear();
+	}
+
+	private synchronized boolean isChunkLoaded(int dimension, int chunkX, int chunkZ) {
+		Set<Long> chunks = loadedChunks.get(dimension);
+		return chunks != null && chunks.contains(toLongCoords(chunkX, chunkZ));
+	}
 
 	@SubscribeEvent
 	public void chunkLoad(ChunkEvent.Load event) {
 		if (event.world.isRemote) return;
-		loadedChunks.add(event.getChunk());
+		addLoadedChunk(event.world.provider.dimensionId, event.getChunk().xPosition, event.getChunk().zPosition);
 	}
 
 	@SubscribeEvent
 	public void chunkUnload(ChunkEvent.Unload event) {
 		if (event.world.isRemote) return;
-		loadedChunks.remove(event.getChunk());
+		removeLoadedChunk(event.world.provider.dimensionId, event.getChunk().xPosition, event.getChunk().zPosition);
 	}
 
 	private boolean replaceEntity(Entity oldEntity, Entity newEntity, World world) {
-		int chunkX = MathHelper.floor_double(oldEntity.posX) >> 4;
-		int chunkZ = MathHelper.floor_double(oldEntity.posZ) >> 4;
-		IChunkProvider chunkProvider = world.getChunkProvider();
-		// EntityJoinWorldEvent can run while chunks load. An unconditional lookup here can recursively
-		// force-load neighboring chunks (Roadhog360/Et-Futurum-Requiem#701).
-		if (!chunkProvider.chunkExists(chunkX, chunkZ)) return false;
+		if (oldEntity.isDead) return false;
+		int chunkX = oldEntity.chunkCoordX;
+		int chunkZ = oldEntity.chunkCoordZ;
+		if (!oldEntity.addedToChunk) {
+			chunkX = MathHelper.floor_double(oldEntity.posX) >> 4;
+			chunkZ = MathHelper.floor_double(oldEntity.posZ) >> 4;
+		}
 
-		return replaceEntity(oldEntity, newEntity, world, world.getChunkFromChunkCoords(chunkX, chunkZ));
+		newEntity.copyDataFrom(oldEntity, true);
+		if (isChunkLoaded(world.provider.dimensionId, chunkX, chunkZ)) {
+			if (!world.spawnEntityInWorld(newEntity)) return false;
+			oldEntity.setDead();
+			return true;
+		}
+
+		IChunkProvider chunkProvider = world.getChunkProvider();
+		if (!(chunkProvider instanceof ChunkProviderServer)) return false;
+
+		// Consult only the provider's in-memory table. A provide/load/world chunk lookup here can recursively load the
+		// chunk whose saved entities are currently firing EntityJoinWorldEvent (#701).
+		Chunk chunk;
+		synchronized (chunkProvider) {
+			chunk = (Chunk) ((ChunkProviderServer) chunkProvider).loadedChunkHashMap.getValueByKey(toLongCoords(chunkX, chunkZ));
+		}
+		if (chunk == null) return false;
+
+		chunk.addEntity(newEntity);
+		chunk.removeEntity(oldEntity);
+		oldEntity.setDead();
+		return true;
 	}
 
 	private boolean replaceEntity(Entity oldEntity, Entity newEntity, World world, Chunk chunk) {
+		if (oldEntity.isDead) return false;
 		newEntity.copyDataFrom(oldEntity, true);
-		if (loadedChunks.contains(chunk)) { // Use this list because somehow chunk.isChunkLoaded is always true here...
+		if (isChunkLoaded(world.provider.dimensionId, chunk.xPosition, chunk.zPosition)) {
 			// World#addLoadedEntities has already run for the chunk, we don't have to worry about conflicting with it
 			if (!world.spawnEntityInWorld(newEntity)) return false;
 		} else {
