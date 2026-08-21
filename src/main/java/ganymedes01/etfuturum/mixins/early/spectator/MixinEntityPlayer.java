@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.inventory.IInvBasic;
@@ -74,11 +75,12 @@ public abstract class MixinEntityPlayer extends EntityLivingBase implements ISpe
 		if (!worldObj.isRemote) {
 			dataWatcher.updateObject(ETFU_SPECTATOR_WATCHER, (byte) (etfu$isServerSpectator() ? 1 : 0));
 		}
-		if (etfu$checkDismountFollowing()) {
+		etfu$spectatorThisTick = SpectatorUtils.isSpectator((EntityPlayer) (Object) this);
+		if (etfu$checkDismountFollowing(etfu$spectatorThisTick)) {
 			etfu$followEntity = null;
 		}
 
-		if (etfu$isSpectator()) {
+		if (etfu$spectatorThisTick) {
 			//Manage these states while in spectator since we want these states to be forced to specific values in spectator.
 			noClip = true;
 			onGround = false;
@@ -95,21 +97,25 @@ public abstract class MixinEntityPlayer extends EntityLivingBase implements ISpe
 
 			if (etfu$followEntity != null) {
 				etfu$followEntity((EntityPlayer) (Object) this, etfu$followEntity);
-				capabilities.allowFlying = capabilities.isFlying = false;
-				flyToggleTimer = 7;
-			} else {
-				capabilities.allowFlying = capabilities.isFlying = true;
-				flyToggleTimer = 0;
 			}
 
-			sendPlayerAbilities();
+			if (!worldObj.isRemote) {
+				if (etfu$followEntity != null) {
+					capabilities.allowFlying = capabilities.isFlying = false;
+					flyToggleTimer = 7;
+				} else {
+					capabilities.allowFlying = capabilities.isFlying = true;
+					flyToggleTimer = 0;
+				}
+				sendPlayerAbilities();
+			}
 		}
 	}
 
 	@Unique
-    private boolean etfu$checkDismountFollowing() {
+    private boolean etfu$checkDismountFollowing(boolean spectator) {
 		// Is this player able to continue following the entity? (Not sneaking and is still a spectator)
-		if(isSneaking() || !etfu$isSpectator()) {
+		if(isSneaking() || !spectator) {
 			return true;
 		}
 		// Is the following entity dead and if it isn't, is it not a spectator?
@@ -118,7 +124,7 @@ public abstract class MixinEntityPlayer extends EntityLivingBase implements ISpe
 
 	@Inject(method = "onLivingUpdate", at = @At(value = "TAIL"))
 	private void updateWasSpectating(CallbackInfo ci) {
-		if(etfu$prevSpectator && !etfu$isSpectator()) {
+		if(etfu$prevSpectator && !etfu$spectatorThisTick) {
 			// Do it this way so we don't manage these states for non-spectators, so mods can change it freely.
 			// We only need to hold down the fort when the player is actually a spectator.
 			noClip = false;
@@ -126,10 +132,13 @@ public abstract class MixinEntityPlayer extends EntityLivingBase implements ISpe
 			if (!worldObj.isRemote) {
 				etfu$removeOwnedSpectatorEffect(Potion.nightVision);
 				etfu$removeOwnedSpectatorEffect(Potion.invisibility);
+				EntityPlayerMP player = (EntityPlayerMP) (Object) this;
+				player.theItemInWorldManager.getGameType().configurePlayerCapabilities(capabilities);
+				if (!capabilities.allowFlying) capabilities.isFlying = false;
+				sendPlayerAbilities();
 			}
-			sendPlayerAbilities();
 		}
-		etfu$prevSpectator = etfu$isSpectator();
+		etfu$prevSpectator = etfu$spectatorThisTick;
 	}
 
 	@Unique
@@ -212,6 +221,8 @@ public abstract class MixinEntityPlayer extends EntityLivingBase implements ISpe
 
 	@Unique
 	private boolean etfu$prevSpectator = false;
+	@Unique
+	private boolean etfu$spectatorThisTick = false;
 	@Unique
 	private Entity etfu$followEntity = null;
 	@Unique private PotionEffect etfu$ownedNightVision;
