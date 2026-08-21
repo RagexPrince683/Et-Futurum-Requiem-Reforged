@@ -268,6 +268,10 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 			mixins.add("liquidphysics.MixinBlockLiquid");
 		}
 
+		if (ConfigMixins.riddenHorsesInWater) {
+			mixins.add("horsewater.MixinEntityHorse");
+		}
+
 		if (ConfigMixins.liquidItemFloat) {
 			mixins.add("liquidphysics.MixinEntityItem");
 		}

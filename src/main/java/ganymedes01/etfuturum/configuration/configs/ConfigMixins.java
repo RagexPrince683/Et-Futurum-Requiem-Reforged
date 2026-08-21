@@ -49,6 +49,7 @@ public class ConfigMixins extends ConfigBase {
 	public static boolean enablePlayersSleepingPecentageGamerule;
   public static boolean enableJumpClimbing;
 	public static boolean adjustedLiquidPhysics;
+	public static boolean riddenHorsesInWater;
 	public static boolean liquidItemFloat;
 	public static boolean worldSaveThumbnails;
 	public static boolean modernLoadingScreen;
@@ -121,6 +122,7 @@ public class ConfigMixins extends ConfigBase {
 		colorGrassBlockItemSides = getBoolean("colorGrassBlockItemSides", catBackport, true, "Grass block sides are colored in the player's inventory" +
 				"\nModified Client Classes: net.minecraft.client.renderer.RenderBlocks");
 		adjustedLiquidPhysics = getBoolean("adjustedLiquidPhysics", catBackport, true, "Moves entities in lava, speeds up items in all liquids, floats items in liquids, changes some other liquid to entity interactions.\nModified Classes: net.minecraft.world.World net.minecraft.entity.Entity net.minecraft.block.BlockLiquid");
+		riddenHorsesInWater = getBoolean("riddenHorsesInWater", catBackport, true, "Allows ridden horses to float upward in water like modern Minecraft versions.\nModified Classes: net.minecraft.entity.passive.EntityHorse");
 		liquidItemFloat = getBoolean("liquidItemFloat", catBackport, true, "Floats items upwards in liquids.\nModified Classes: net.minecraft.entity.item.EntityItem");
 
 		stepHeightFix = getBoolean("stepHeightFix", catFixes, true, "Makes the player able to step up even if a block would be above their head at the destination.\nModified classes: net.minecraft.entity.Entity");
