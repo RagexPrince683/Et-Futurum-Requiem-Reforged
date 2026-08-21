@@ -41,6 +41,8 @@ public class ContainerSmoker extends Container {
 		p_75132_1_.sendProgressBarUpdate(this, 0, this.tileFurnace.furnaceCookTime);
 		p_75132_1_.sendProgressBarUpdate(this, 1, this.tileFurnace.furnaceBurnTime);
 		p_75132_1_.sendProgressBarUpdate(this, 2, this.tileFurnace.currentItemBurnTime);
+		p_75132_1_.sendProgressBarUpdate(this, 3, this.tileFurnace.furnaceBurnTime >>> 16);
+		p_75132_1_.sendProgressBarUpdate(this, 4, this.tileFurnace.currentItemBurnTime >>> 16);
 	}
 
 	/**
@@ -59,10 +61,12 @@ public class ContainerSmoker extends Container {
 
 			if (this.lastBurnTime != this.tileFurnace.furnaceBurnTime) {
 				icrafting.sendProgressBarUpdate(this, 1, this.tileFurnace.furnaceBurnTime);
+				icrafting.sendProgressBarUpdate(this, 3, this.tileFurnace.furnaceBurnTime >>> 16);
 			}
 
 			if (this.lastItemBurnTime != this.tileFurnace.currentItemBurnTime) {
 				icrafting.sendProgressBarUpdate(this, 2, this.tileFurnace.currentItemBurnTime);
+				icrafting.sendProgressBarUpdate(this, 4, this.tileFurnace.currentItemBurnTime >>> 16);
 			}
 		}
 
@@ -78,11 +82,19 @@ public class ContainerSmoker extends Container {
 		}
 
 		if (p_75137_1_ == 1) {
-			this.tileFurnace.furnaceBurnTime = p_75137_2_;
+			this.tileFurnace.furnaceBurnTime = this.tileFurnace.furnaceBurnTime & 0xFFFF0000 | p_75137_2_ & 0xFFFF;
 		}
 
 		if (p_75137_1_ == 2) {
-			this.tileFurnace.currentItemBurnTime = p_75137_2_;
+			this.tileFurnace.currentItemBurnTime = this.tileFurnace.currentItemBurnTime & 0xFFFF0000 | p_75137_2_ & 0xFFFF;
+		}
+
+		if (p_75137_1_ == 3) {
+			this.tileFurnace.furnaceBurnTime = (p_75137_2_ & 0xFFFF) << 16 | this.tileFurnace.furnaceBurnTime & 0xFFFF;
+		}
+
+		if (p_75137_1_ == 4) {
+			this.tileFurnace.currentItemBurnTime = (p_75137_2_ & 0xFFFF) << 16 | this.tileFurnace.currentItemBurnTime & 0xFFFF;
 		}
 	}
 
