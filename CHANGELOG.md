@@ -1,5 +1,9 @@
 # Changelog
 
+## Fix armor stand duplication (#699)
+
+- Reject repeated server-side damage after an armor stand has died so its stand item and equipment cannot be dropped more than once.
+
 ## Fix spectator renderer state
 
 - Restore the reusable player model as soon as the client changes from Spectator Mode to Survival, Creative, or Adventure.
