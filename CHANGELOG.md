@@ -1,5 +1,11 @@
 # Changelog
 
+## Fix spectator flight capability authority
+
+- Resolve the local player's spectator state from its actual client or server game mode instead of the potentially delayed spectator DataWatcher.
+- Keep spectator flight capability maintenance and ability synchronization server-authoritative, and explicitly restore the authoritative target game mode's capabilities on spectator exit.
+- Preserve the DataWatcher for remote spectator state, entity-following behavior, and spectator-owned visual-effect cleanup.
+
 ## Protect game-mode flight and CustomNPC boat passengers
 
 - Clear stale flying state whenever a newly configured game mode does not permit flight, while preserving Spectator and Creative flight.
