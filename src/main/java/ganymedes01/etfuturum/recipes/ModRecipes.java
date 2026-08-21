@@ -722,37 +722,49 @@ public class ModRecipes {
 			Object[] objects10 = new Object[]{"xx", 'x', ModBlocks.WOOD_PLANKS.newItemStack(1, 4)};
 			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output12, objects10);
 
-			ItemStack output11 = ModItems.ITEM_SIGN_SPRUCE.newItemStack(3);
-			Object[] objects9 = new Object[]{"xxx", "xxx", " y ", 'x', new ItemStack(Blocks.planks, 1, 1), 'y', "stickWood"};
-			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output11, objects9);
-			ItemStack output10 = ModItems.ITEM_SIGN_BIRCH.newItemStack(3);
-			Object[] objects8 = new Object[]{"xxx", "xxx", " y ", 'x', new ItemStack(Blocks.planks, 1, 2), 'y', "stickWood"};
-			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output10, objects8);
-			ItemStack output9 = ModItems.ITEM_SIGN_JUNGLE.newItemStack(3);
-			Object[] objects7 = new Object[]{"xxx", "xxx", " y ", 'x', new ItemStack(Blocks.planks, 1, 3), 'y', "stickWood"};
-			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output9, objects7);
-			ItemStack output8 = ModItems.ITEM_SIGN_ACACIA.newItemStack(3);
-			Object[] objects6 = new Object[]{"xxx", "xxx", " y ", 'x', new ItemStack(Blocks.planks, 1, 4), 'y', "stickWood"};
-			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output8, objects6);
-			ItemStack output7 = ModItems.ITEM_SIGN_DARK_OAK.newItemStack(3);
-			Object[] objects5 = new Object[]{"xxx", "xxx", " y ", 'x', new ItemStack(Blocks.planks, 1, 5), 'y', "stickWood"};
-			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output7, objects5);
+			if (ConfigBlocksItems.enableVanillaSigns) {
+				ItemStack output11 = ModItems.ITEM_SIGN_SPRUCE.newItemStack(3);
+				Object[] objects9 = new Object[]{"xxx", "xxx", " y ", 'x', new ItemStack(Blocks.planks, 1, 1), 'y', "stickWood"};
+				RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output11, objects9);
+				ItemStack output10 = ModItems.ITEM_SIGN_BIRCH.newItemStack(3);
+				Object[] objects8 = new Object[]{"xxx", "xxx", " y ", 'x', new ItemStack(Blocks.planks, 1, 2), 'y', "stickWood"};
+				RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output10, objects8);
+				ItemStack output9 = ModItems.ITEM_SIGN_JUNGLE.newItemStack(3);
+				Object[] objects7 = new Object[]{"xxx", "xxx", " y ", 'x', new ItemStack(Blocks.planks, 1, 3), 'y', "stickWood"};
+				RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output9, objects7);
+				ItemStack output8 = ModItems.ITEM_SIGN_ACACIA.newItemStack(3);
+				Object[] objects6 = new Object[]{"xxx", "xxx", " y ", 'x', new ItemStack(Blocks.planks, 1, 4), 'y', "stickWood"};
+				RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output8, objects6);
+				ItemStack output7 = ModItems.ITEM_SIGN_DARK_OAK.newItemStack(3);
+				Object[] objects5 = new Object[]{"xxx", "xxx", " y ", 'x', new ItemStack(Blocks.planks, 1, 5), 'y', "stickWood"};
+				RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output7, objects5);
+			}
 
-			ItemStack output6 = ModBlocks.CRIMSON_SIGN.newItemStack(3);
-			Object[] objects4 = new Object[]{"xxx", "xxx", " y ", 'x', ModBlocks.WOOD_PLANKS.newItemStack(1), 'y', "stickWood"};
-			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output6, objects4);
-			ItemStack output5 = ModBlocks.WARPED_SIGN.newItemStack(3);
-			Object[] objects3 = new Object[]{"xxx", "xxx", " y ", 'x', ModBlocks.WOOD_PLANKS.newItemStack(1, 1), 'y', "stickWood"};
-			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output5, objects3);
-			ItemStack output4 = ModBlocks.MANGROVE_SIGN.newItemStack(3);
-			Object[] objects2 = new Object[]{"xxx", "xxx", " y ", 'x', ModBlocks.WOOD_PLANKS.newItemStack(1, 2), 'y', "stickWood"};
-			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output4, objects2);
-			ItemStack output3 = ModBlocks.CHERRY_SIGN.newItemStack(3);
-			Object[] objects1 = new Object[]{"xxx", "xxx", " y ", 'x', ModBlocks.WOOD_PLANKS.newItemStack(1, 3), 'y', "stickWood"};
-			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output3, objects1);
-			ItemStack output1 = ModBlocks.BAMBOO_SIGN.newItemStack(3);
-			Object[] objects = new Object[]{"xxx", "xxx", " y ", 'x', ModBlocks.WOOD_PLANKS.newItemStack(1, 4), 'y', "stickWood"};
-			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output1, objects);
+			if (ModBlocks.CRIMSON_SIGN.isEnabled()) {
+				ItemStack output6 = ModBlocks.CRIMSON_SIGN.newItemStack(3);
+				Object[] objects4 = new Object[]{"xxx", "xxx", " y ", 'x', ModBlocks.WOOD_PLANKS.newItemStack(1), 'y', "stickWood"};
+				RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output6, objects4);
+			}
+			if (ModBlocks.WARPED_SIGN.isEnabled()) {
+				ItemStack output5 = ModBlocks.WARPED_SIGN.newItemStack(3);
+				Object[] objects3 = new Object[]{"xxx", "xxx", " y ", 'x', ModBlocks.WOOD_PLANKS.newItemStack(1, 1), 'y', "stickWood"};
+				RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output5, objects3);
+			}
+			if (ModBlocks.MANGROVE_SIGN.isEnabled()) {
+				ItemStack output4 = ModBlocks.MANGROVE_SIGN.newItemStack(3);
+				Object[] objects2 = new Object[]{"xxx", "xxx", " y ", 'x', ModBlocks.WOOD_PLANKS.newItemStack(1, 2), 'y', "stickWood"};
+				RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output4, objects2);
+			}
+			if (ModBlocks.CHERRY_SIGN.isEnabled()) {
+				ItemStack output3 = ModBlocks.CHERRY_SIGN.newItemStack(3);
+				Object[] objects1 = new Object[]{"xxx", "xxx", " y ", 'x', ModBlocks.WOOD_PLANKS.newItemStack(1, 3), 'y', "stickWood"};
+				RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output3, objects1);
+			}
+			if (ModBlocks.BAMBOO_SIGN.isEnabled()) {
+				ItemStack output1 = ModBlocks.BAMBOO_SIGN.newItemStack(3);
+				Object[] objects = new Object[]{"xxx", "xxx", " y ", 'x', ModBlocks.WOOD_PLANKS.newItemStack(1, 4), 'y', "stickWood"};
+				RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output1, objects);
+			}
 		}
 
 		if (!ModsList.GTNH.isLoaded()) {
@@ -869,6 +881,7 @@ public class ModRecipes {
 
 		if (!ModsList.GTNH.isLoaded()) {
 			for (int i = 0; i < ModBlocks.BEDS.length; i++) {
+				if (!ModBlocks.BEDS[i].isEnabled()) continue;
 				int j = i == 14 ? 15 : i;
 				ItemStack output3 = ModBlocks.BEDS[i].newItemStack(1);
 				Object[] objects = new Object[]{"###", "XXX", '#', new ItemStack(Blocks.wool, 1, j), 'X', "plankWood"};
@@ -879,8 +892,10 @@ public class ModRecipes {
 					RecipeHelper.addShapelessRecipe(RecipeHelper.Priority.HIGH, output4, objects1);
 				}
 			}
-			Object[] objects = new Object[]{ModBlocks.BEDS[0].newItemStack(), ore_dyes[1]};
-			RecipeHelper.addShapelessRecipe(RecipeHelper.Priority.HIGH, new ItemStack(Items.bed, 1), objects);
+			if (ModBlocks.BEDS[0].isEnabled()) {
+				Object[] objects = new Object[]{ModBlocks.BEDS[0].newItemStack(), ore_dyes[1]};
+				RecipeHelper.addShapelessRecipe(RecipeHelper.Priority.HIGH, new ItemStack(Items.bed, 1), objects);
+			}
 
 			ItemStack output3 = ModBlocks.MAGMA.newItemStack();
 			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output3, "xx", "xx", 'x', new ItemStack(Items.magma_cream));
@@ -1541,6 +1556,7 @@ public class ModRecipes {
 			for (Map.Entry<String, ItemNewBoat.BoatInfo> entry : ItemNewBoat.BOAT_INFO.entrySet()) {
 				String key = entry.getKey();
 				if (key == null) continue;
+				if (GameRegistry.findUniqueIdentifierFor(entry.getValue().getBoatItem().getItem()) == null) continue;
 				boolean isOak = entry.getKey().equals("minecraft:oak");
 				ItemStack boat = (isOak && ConfigBlocksItems.replaceOldBoats ? new ItemStack(Items.boat) : entry.getValue().getBoatItem());
 				if (key.endsWith("_chest")) {
@@ -1839,7 +1855,7 @@ public class ModRecipes {
 				//For now just restart your game to clear entries that would no longer get a tag.
 				for (int j = 0; j < 1; j++) { //If it's mythril, we'll run this once more, changing the spelling to mithril to account for both tags.
 					if (Utils.listGeneralModdedDeepslateOre(type)) { //Make sure an ore is present.
-//						registerOre(type, ModBlocks.MODDED_DEEPSLATE_ORE.newItemStack(1, i));
+//                      registerOre(type, ModBlocks.MODDED_DEEPSLATE_ORE.newItemStack(1, i));
 						DeepslateOreRegistry.addOreByOreDict(type, ModBlocks.MODDED_DEEPSLATE_ORE.get(), i);
 						ItemStack ore1 = ModBlocks.MODDED_DEEPSLATE_ORE.newItemStack(1, i);
 						RecipeHelper.registerOre(type, ore1);
