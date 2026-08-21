@@ -9,6 +9,8 @@ import ganymedes01.etfuturum.api.spectator.SpectatorUtils;
 import ganymedes01.etfuturum.configuration.configs.ConfigMixins;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -105,6 +107,12 @@ public abstract class SpectatorEventHandlerClient {
         biped.bipedLeftLeg.showModel = visible;
     }
 
+    public static void restorePlayerModel(EntityPlayer player) {
+        if (RenderManager.instance.getEntityRenderObject(player) instanceof RenderPlayer renderer) {
+            toggleVisibility(renderer.modelBipedMain, true);
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
         if(SpectatorUtils.isSpectator(event.entityPlayer)) {
@@ -118,7 +126,7 @@ public abstract class SpectatorEventHandlerClient {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
-        if(SpectatorUtils.wasSpectator(event.entityPlayer)) {
+        if(SpectatorUtils.isSpectator(event.entityPlayer)) {
             toggleVisibility(event.renderer.modelBipedMain, true);
         }
     }

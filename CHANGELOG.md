@@ -1,5 +1,10 @@
 # Changelog
 
+## Fix spectator renderer state
+
+- Restore the reusable player model as soon as the client changes from Spectator Mode to Survival, Creative, or Adventure.
+- Balance spectator-only model hiding during rendering so repeated game mode transitions cannot leave body parts hidden.
+
 ## Add reusable devmods development loading
 
 - Add drag-and-drop support for RFG-remapped production mod jars and already-deobfuscated development jars.
