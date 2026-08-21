@@ -1556,11 +1556,19 @@ public class ModRecipes {
 			for (Map.Entry<String, ItemNewBoat.BoatInfo> entry : ItemNewBoat.BOAT_INFO.entrySet()) {
 				String key = entry.getKey();
 				if (key == null) continue;
-				if (GameRegistry.findUniqueIdentifierFor(entry.getValue().getBoatItem().getItem()) == null) continue;
-				boolean isOak = entry.getKey().equals("minecraft:oak");
-				ItemStack boat = (isOak && ConfigBlocksItems.replaceOldBoats ? new ItemStack(Items.boat) : entry.getValue().getBoatItem());
+				boolean isOak = key.equals("minecraft:oak");
+				ItemStack registeredBoat = entry.getValue().getBoatItem();
+				if (!(isOak && ConfigBlocksItems.replaceOldBoats)
+						&& !ModItems.isModItemEnabled(registeredBoat.getItem())) continue;
+				ItemStack boat = isOak && ConfigBlocksItems.replaceOldBoats ? new ItemStack(Items.boat) : registeredBoat;
 				if (key.endsWith("_chest")) {
-					ItemStack inputBoat = ItemNewBoat.BOAT_INFO.get(key.substring(0, key.indexOf("_chest"))).getBoatItem();
+					if (!ModItems.isModItemEnabled(registeredBoat.getItem())) continue;
+					String baseBoatKey = key.substring(0, key.indexOf("_chest"));
+					ItemNewBoat.BoatInfo baseBoatInfo = ItemNewBoat.BOAT_INFO.get(baseBoatKey);
+					if (baseBoatInfo == null) continue;
+					ItemStack inputBoat = baseBoatKey.equals("minecraft:oak") && ConfigBlocksItems.replaceOldBoats
+							? new ItemStack(Items.boat) : baseBoatInfo.getBoatItem();
+					if (inputBoat.getItem() != Items.boat && !ModItems.isModItemEnabled(inputBoat.getItem())) continue;
 					RecipeHelper.addShapelessRecipe(RecipeHelper.Priority.HIGH, boat, "chestWood", inputBoat);
 				} else {
 					if (isOak) { //We're using the plankWood tag for this, so it needs to be in the vanilla sorter

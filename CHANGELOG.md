@@ -1,5 +1,11 @@
 # Changelog
 
+## Fix disabled boat recipe startup crash (Roadhog360/Et-Futurum-Requiem#590)
+
+- Use EFR's enum-owned enabled state instead of probing Forge registry names for constructed but disabled boat items.
+- Keep disabled boat and chest-boat variants out of recipes while allowing replacement oak recipes to use the vanilla boat item.
+- Use the obtainable vanilla oak boat as the oak chest boat ingredient when old boats are replaced.
+
 ## Preserve vanilla functional-block identities (Roadhog360/Et-Futurum-Requiem#311)
 
 - Augment vanilla enchanting tables and anvils with EFR's modern containers through narrowly gated block Mixins.
