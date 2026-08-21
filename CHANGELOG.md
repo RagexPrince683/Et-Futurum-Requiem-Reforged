@@ -1,5 +1,10 @@
 # Changelog
 
+## Port ridden horse buoyancy and pet death messages (GTNewHorizons/Et-Futurum-Requiem#95, #87)
+
+- Add an independent backport option that gives ridden horses gentle upward buoyancy while they are in water.
+- Notify an online owner with the vanilla CombatTracker death message when their owned mob or horse dies.
+
 ## Port modern lighting and End atmosphere (GTNewHorizons/Et-Futurum-Requiem#91, #104)
 
 - Add independent client options for End flashes, modern End ambience, hue-preserving gamma, warm block light, and modern night vision.
