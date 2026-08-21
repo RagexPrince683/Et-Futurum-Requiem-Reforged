@@ -2,6 +2,8 @@ package ganymedes01.etfuturum.mixinplugin;
 
 import com.gtnewhorizon.gtnhmixins.ILateMixinLoader;
 import com.gtnewhorizon.gtnhmixins.LateMixin;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
 import ganymedes01.etfuturum.Tags;
 import ganymedes01.etfuturum.configuration.configs.ConfigBlocksItems;
 import ganymedes01.etfuturum.configuration.configs.ConfigMixins;
@@ -37,6 +39,10 @@ public class EtFuturumLateMixins implements ILateMixinLoader {
 			if (loadedMods.contains("appliedenergistics2")) {
 				mixins.add("spectator.MixinPacketInventoryAction");
 			}
+			// JourneyMap is client-only; keeping its target in a conditional late mixin avoids loading it on servers.
+			if (side == MixinEnvironment.Side.CLIENT && loadedMods.contains("journeymap") && isCompatibleJourneyMap()) {
+				mixins.add("spectator.journeymap.MixinRadarRenderer");
+			}
 		}
 
 		if(ConfigBlocksItems.enableDeepslateOres && ConfigModCompat.moddedDeepslateOres && !ConfigModCompat.moddedDeepslateOresBlacklist.contains("appliedenergistics2") && loadedMods.contains("appliedenergistics2")) {
@@ -54,5 +60,10 @@ public class EtFuturumLateMixins implements ILateMixinLoader {
 		}
 
 		return mixins;
+	}
+
+	private static boolean isCompatibleJourneyMap() {
+		ModContainer mod = Loader.instance().getIndexedModList().get("journeymap");
+		return mod != null && mod.getVersion().startsWith("5.1.4");
 	}
 }
