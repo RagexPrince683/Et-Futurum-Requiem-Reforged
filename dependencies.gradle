@@ -33,7 +33,31 @@
  *
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
+
+def productionDevMods = fileTree('devmods') {
+    include '*.jar'
+}
+def deobfDevMods = fileTree('devmods/deobf') {
+    include '*.jar'
+}
+def remappedDevModsDirectory = layout.buildDirectory.dir('devmods/remapped')
+
+configurations {
+    remappedDevMods {
+        canBeConsumed = false
+        canBeResolved = true
+        transitive = false
+    }
+}
+
 dependencies {
+    // Local production jars are remapped to MCP names before being added to the development classpath.
+    remappedDevMods(rfg.deobf(productionDevMods))
+    devOnlyNonPublishable(fileTree(dir: remappedDevModsDirectory, include: '*.jar').builtBy('prepareDevMods'))
+
+    // Development jars already using MCP names do not need RFG remapping.
+    devOnlyNonPublishable(deobfDevMods)
+
 //Change to "implementation" to test RPLE in dev; change it back when you're done please!
     compileOnly "com.falsepattern:rple-mc1.7.10:1.1.0"
 
@@ -83,6 +107,21 @@ dependencies {
     shadowImplementation('com.github.makamys:MCLib:0.3.7.7') {
         exclude group: "codechicken"
     }
+}
+
+tasks.register('prepareDevMods', Sync) {
+    group = 'development'
+    description = 'Remaps production devmods into the MCP development namespace.'
+    from(configurations.remappedDevMods)
+    into(remappedDevModsDirectory)
+}
+
+tasks.withType(JavaCompile).configureEach {
+    dependsOn(tasks.named('prepareDevMods'))
+}
+
+tasks.matching { it.name == 'runClient' || it.name == 'runServer' }.configureEach {
+    dependsOn(tasks.named('prepareDevMods'))
 }
 
 configurations.configureEach {
