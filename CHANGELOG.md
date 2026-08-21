@@ -1,5 +1,10 @@
 # Changelog
 
+## Add reusable devmods development loading
+
+- Add drag-and-drop support for RFG-remapped production mod jars and already-deobfuscated development jars.
+- Keep local compatibility-testing mods isolated from release artifacts and publication metadata.
+
 ## Update spectator mode
 
 - Maintain ambient Night Vision and Invisibility potion effects while a player is in Et Futurum spectator mode without replacing pre-existing effects.
