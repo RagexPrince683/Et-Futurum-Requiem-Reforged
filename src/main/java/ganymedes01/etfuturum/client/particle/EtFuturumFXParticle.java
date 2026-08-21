@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
-import roadhog360.hogutils.api.utils.FastRandom;
+import ganymedes01.etfuturum.api.utils.FastRandom;
 
 import java.util.Random;
 

@@ -4,8 +4,8 @@ import ganymedes01.etfuturum.api.mappings.BasicMultiBlockSound;
 import ganymedes01.etfuturum.api.mappings.MultiBlockSoundContainer;
 import ganymedes01.etfuturum.core.utils.Utils;
 import net.minecraft.block.Block;
-import roadhog360.hogutils.api.blocksanditems.block.IMultiBlockSound;
-import roadhog360.hogutils.api.utils.RecipeHelper;
+import ganymedes01.etfuturum.api.blocksanditems.block.IMultiBlockSound;
+import ganymedes01.etfuturum.api.utils.RecipeHelper;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -8,9 +8,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.init.Blocks;
 import org.jetbrains.annotations.ApiStatus;
-import roadhog360.hogutils.api.blocksanditems.utils.BlockMeta2ObjectOpenHashMap;
-import roadhog360.hogutils.api.blocksanditems.utils.BlockMetaPair;
-import roadhog360.hogutils.api.utils.GenericUtils;
+import ganymedes01.etfuturum.api.blocksanditems.utils.BlockMeta2ObjectOpenHashMap;
+import ganymedes01.etfuturum.api.blocksanditems.utils.BlockMetaPair;
+import ganymedes01.etfuturum.api.utils.GenericUtils;
 
 import java.util.Collections;
 import java.util.Map;

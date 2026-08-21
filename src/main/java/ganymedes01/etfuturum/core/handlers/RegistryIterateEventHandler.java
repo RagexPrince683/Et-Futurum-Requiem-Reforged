@@ -4,7 +4,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import ganymedes01.etfuturum.client.sound.BlockSoundRegisterHelper;
 import ganymedes01.etfuturum.configuration.configs.ConfigSounds;
 import ganymedes01.etfuturum.recipes.ModTagging;
-import roadhog360.hogutils.api.event.BlockItemIterateEvent;
+import ganymedes01.etfuturum.api.event.BlockItemIterateEvent;
 
 public class RegistryIterateEventHandler {
 	private RegistryIterateEventHandler() {};

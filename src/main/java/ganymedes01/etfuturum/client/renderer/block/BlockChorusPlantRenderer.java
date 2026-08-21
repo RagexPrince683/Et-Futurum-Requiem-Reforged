@@ -7,7 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
-import roadhog360.hogutils.api.utils.FastRandom;
+import ganymedes01.etfuturum.api.utils.FastRandom;
 
 import java.util.Random;
 

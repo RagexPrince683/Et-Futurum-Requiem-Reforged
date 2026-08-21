@@ -7,13 +7,13 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.ApiStatus;
-import roadhog360.hogutils.api.hogtags.helpers.BlockTags;
-import roadhog360.hogutils.api.hogtags.helpers.ItemTags;
+import ganymedes01.etfuturum.api.tags.helpers.BlockTags;
+import ganymedes01.etfuturum.api.tags.helpers.ItemTags;
 
 /// This class is deprecated and its functions are all now stubs that redirect to the new tag system.
 @Deprecated
 public class BeePlantRegistry {
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Tags: `minecraft:bee_food` (item) and `minecraft:bee_attractive` (block)
 	@Deprecated
@@ -25,7 +25,7 @@ public class BeePlantRegistry {
 		}
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Tags: `minecraft:bee_growables` (block)
 	@Deprecated
@@ -36,7 +36,7 @@ public class BeePlantRegistry {
 		BlockTags.addTags(block, OreDictionary.WILDCARD_VALUE, "minecraft:bee_growables");
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Tags: `minecraft:bee_food` (item) and `minecraft:bee_attractive` (block)
 	@Deprecated
@@ -48,7 +48,7 @@ public class BeePlantRegistry {
 		}
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	///
 	/// Tags: `minecraft:bee_growables` (block)
 	@Deprecated
@@ -56,7 +56,7 @@ public class BeePlantRegistry {
 		BlockTags.removeTags(block, OreDictionary.WILDCARD_VALUE, "minecraft:bee_growables");
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	/// Returns `TRUE` if this is either a bee food OR bee flower.
 	/// This is because the previous registry did not have separate lists for bee breedables, and pollinateable flowers.
 	///
@@ -70,7 +70,7 @@ public class BeePlantRegistry {
 		return BlockTags.hasTag(block, meta, "minecraft:bee_attractive");
 	}
 
-	/// Deprecated; Use HogUtils tagging
+	/// Deprecated; Use Et Futurum tagging
 	@Deprecated
 	public static boolean isCrop(Block block) {
 		return BlockTags.hasTag(block, OreDictionary.WILDCARD_VALUE, "minecraft:bee_growables");

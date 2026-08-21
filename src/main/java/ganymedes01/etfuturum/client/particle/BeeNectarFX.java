@@ -2,7 +2,7 @@ package ganymedes01.etfuturum.client.particle;
 
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.world.World;
-import roadhog360.hogutils.api.utils.FastRandom;
+import ganymedes01.etfuturum.api.utils.FastRandom;
 
 public class BeeNectarFX extends EntityFX {
 

@@ -67,6 +67,12 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 
 		List<String> mixins = new ObjectArrayList<>();
 
+		// Core APIs owned by Et Futurum: metadata-aware tags and nested generation tracking.
+		mixins.add("tags.MixinBlock");
+		mixins.add("tags.MixinItem");
+		mixins.add("tags.MixinBiomeGenBase");
+		mixins.add("deepslateores.MixinChunkProviderServer");
+
 		if (side == MixinEnvironment.Side.CLIENT) {
 			if (ConfigWorld.endFlashes || ConfigWorld.modernEndAmbientColor || ConfigWorld.modernBlockLightTint) {
 				mixins.add("endflashes.client.MixinEntityRenderer");

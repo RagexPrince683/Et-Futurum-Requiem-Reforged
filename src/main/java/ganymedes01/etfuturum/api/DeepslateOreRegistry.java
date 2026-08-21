@@ -18,11 +18,11 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.ApiStatus;
-import roadhog360.hogutils.api.blocksanditems.utils.BlockMeta2ObjectOpenHashMap;
-import roadhog360.hogutils.api.blocksanditems.utils.BlockMetaPair;
-import roadhog360.hogutils.api.hogtags.helpers.BlockTags;
-import roadhog360.hogutils.api.utils.GenericUtils;
-import roadhog360.hogutils.api.utils.RecipeHelper;
+import ganymedes01.etfuturum.api.blocksanditems.utils.BlockMeta2ObjectOpenHashMap;
+import ganymedes01.etfuturum.api.blocksanditems.utils.BlockMetaPair;
+import ganymedes01.etfuturum.api.tags.helpers.BlockTags;
+import ganymedes01.etfuturum.api.utils.GenericUtils;
+import ganymedes01.etfuturum.api.utils.RecipeHelper;
 
 import java.util.Collections;
 import java.util.Map;

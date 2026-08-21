@@ -1,5 +1,13 @@
 # Changelog
 
+## Remove the HogUtils hard dependency
+
+- Internalize the metadata-aware block, item, and biome tag APIs, including wildcard matching, inheritance, reverse lookup, registry-ID helpers, and early Mixins on vanilla registry objects.
+- Internalize block/metadata pair maps, recipe validation and priority recipes, xoshiro256** random generation, weighted lists, and the dummy world used by ore compatibility.
+- Track nested chunk generation with an Et Futurum-owned thread-local early Mixin and provide action- and metadata-specific multi-block sounds through the existing client event handler.
+- Remove the HogUtils runtime declaration, Gradle dependency, bundled JARs, and nightly-install documentation while retaining GTNHLib and optional integrations.
+- Credit the exact upstream HogUtils reference revision in `THIRD_PARTY_NOTICES.md`.
+
 ## Fix spectator flight capability authority
 
 - Resolve the local player's spectator state from its actual client or server game mode instead of the potentially delayed spectator DataWatcher.

@@ -13,6 +13,7 @@ import ganymedes01.etfuturum.ModBlocks;
 import ganymedes01.etfuturum.ModItems;
 import ganymedes01.etfuturum.Tags;
 import ganymedes01.etfuturum.api.MultiBlockSoundRegistry;
+import ganymedes01.etfuturum.api.blocksanditems.block.IMultiBlockSound;
 import ganymedes01.etfuturum.api.mappings.MultiBlockSoundContainer;
 import ganymedes01.etfuturum.api.spectator.SpectatorUtils;
 import ganymedes01.etfuturum.blocks.BlockShulkerBox;
@@ -93,7 +94,7 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-import roadhog360.hogutils.api.utils.FastRandom;
+import ganymedes01.etfuturum.api.utils.FastRandom;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -448,6 +449,23 @@ public class ClientEventHandler {
 			final boolean breakSound = block.stepSound.getBreakSound().endsWith(event.name);
 			final boolean placeSound = block.stepSound.func_150496_b/*getPlaceSound*/().endsWith(event.name);
 
+			if (block instanceof IMultiBlockSound multiSound && (hitSound || breakSound || placeSound)) {
+				IMultiBlockSound.SoundMode mode = hitSound ? IMultiBlockSound.SoundMode.HIT
+					: placeSound ? IMultiBlockSound.SoundMode.PLACE : IMultiBlockSound.SoundMode.BREAK;
+				Block.SoundType replacement = multiSound.getSoundType(world, x, y, z, mode);
+				if (replacement != block.stepSound) {
+					String name = switch (mode) {
+						case BREAK -> replacement.getBreakSound();
+						case PLACE -> replacement.func_150496_b();
+						default -> replacement.getStepResourcePath();
+					};
+					float volume = event.sound.getVolume() * replacement.getVolume() / block.stepSound.getVolume();
+					float pitch = event.sound.getPitch() * replacement.getPitch() / block.stepSound.getPitch();
+					event.result = new PositionedSoundRecord(new ResourceLocation(name), volume, pitch, soundX, soundY, soundZ);
+					return;
+				}
+			}
+
 			if (MultiBlockSoundRegistry.multiBlockSounds.containsKey(block) && (hitSound || breakSound || placeSound)) {
 				MultiBlockSoundContainer obj = MultiBlockSoundRegistry.multiBlockSounds.get(block);
 				MultiBlockSoundRegistry.BlockSoundType type;
@@ -745,7 +763,15 @@ public class ClientEventHandler {
 		World world = FMLClientHandler.instance().getWorldClient();
 		Block block = world.getBlock(x, y, z);
 
-		if (MultiBlockSoundRegistry.multiBlockSounds.containsKey(block) && block.stepSound.getStepResourcePath().equals(event.name)) {
+		if (block instanceof IMultiBlockSound multiSound && block.stepSound.getStepResourcePath().equals(event.name)) {
+			Block.SoundType replacement = multiSound.getSoundType(world, x, y, z, IMultiBlockSound.SoundMode.WALK);
+			if (replacement != block.stepSound) {
+				entity.playSound(replacement.getStepResourcePath() + ignore_suffix,
+					event.volume * replacement.getVolume() / block.stepSound.getVolume(),
+					event.pitch * replacement.getPitch() / block.stepSound.getPitch());
+				event.setCanceled(true);
+			}
+		} else if (MultiBlockSoundRegistry.multiBlockSounds.containsKey(block) && block.stepSound.getStepResourcePath().equals(event.name)) {
 			MultiBlockSoundContainer obj = MultiBlockSoundRegistry.multiBlockSounds.get(block);
 			String newSoundString = obj.getSound(world, x, y, z, event.name, MultiBlockSoundRegistry.BlockSoundType.WALK);
 			float volume = obj.getVolume(world, x, y, z, event.volume, MultiBlockSoundRegistry.BlockSoundType.WALK);

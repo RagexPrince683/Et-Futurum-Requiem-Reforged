@@ -13,7 +13,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
-import roadhog360.hogutils.api.utils.FastRandom;
+import ganymedes01.etfuturum.api.utils.FastRandom;
 
 public class TileEntityClearChestItemRenderer extends TileEntitySpecialRenderer {
 	private static final FastRandom random = new FastRandom();

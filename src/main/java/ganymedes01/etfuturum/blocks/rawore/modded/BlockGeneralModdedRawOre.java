@@ -15,7 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
-import roadhog360.hogutils.api.world.DummyWorld;
+import ganymedes01.etfuturum.api.world.DummyWorld;
 
 import java.util.List;
 

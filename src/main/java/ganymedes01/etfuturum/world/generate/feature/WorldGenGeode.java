@@ -12,7 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.commons.lang3.tuple.Pair;
-import roadhog360.hogutils.api.blocksanditems.utils.BlockMetaPair;
+import ganymedes01.etfuturum.api.blocksanditems.utils.BlockMetaPair;
 
 import java.util.Iterator;
 import java.util.List;

@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
-import roadhog360.hogutils.api.blocksanditems.utils.BlockMetaPair;
+import ganymedes01.etfuturum.api.blocksanditems.utils.BlockMetaPair;
 
 import java.util.Random;
 

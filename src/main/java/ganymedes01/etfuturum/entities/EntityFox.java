@@ -42,8 +42,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.Constants;
-import roadhog360.hogutils.api.blocksanditems.utils.ItemMetaPair;
-import roadhog360.hogutils.api.utils.WeighedRandomList;
+import ganymedes01.etfuturum.api.blocksanditems.utils.ItemMetaPair;
+import ganymedes01.etfuturum.api.utils.WeighedRandomList;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -15,8 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import roadhog360.hogutils.api.event.BlockItemIterateEvent;
-import roadhog360.hogutils.api.hogtags.helpers.ItemTags;
+import ganymedes01.etfuturum.api.event.BlockItemIterateEvent;
+import ganymedes01.etfuturum.api.tags.helpers.ItemTags;
 
 import java.util.Map;
 import java.util.Set;

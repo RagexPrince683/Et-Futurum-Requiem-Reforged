@@ -4,7 +4,7 @@ import ganymedes01.etfuturum.client.sound.ModSounds;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import roadhog360.hogutils.api.blocksanditems.block.IMultiBlockSound;
+import ganymedes01.etfuturum.api.blocksanditems.block.IMultiBlockSound;
 
 public class BlockTuffWall extends BaseWall implements IMultiBlockSound {
 	public BlockTuffWall() {

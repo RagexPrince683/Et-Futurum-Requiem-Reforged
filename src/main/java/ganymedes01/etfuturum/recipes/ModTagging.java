@@ -21,10 +21,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
-import roadhog360.hogutils.api.hogtags.helpers.BlockTags;
-import roadhog360.hogutils.api.hogtags.helpers.ItemTags;
-import roadhog360.hogutils.api.utils.GenericUtils;
-import roadhog360.hogutils.api.utils.RecipeHelper;
+import ganymedes01.etfuturum.api.tags.helpers.BlockTags;
+import ganymedes01.etfuturum.api.tags.helpers.ItemTags;
+import ganymedes01.etfuturum.api.utils.GenericUtils;
+import ganymedes01.etfuturum.api.utils.RecipeHelper;
 
 import java.util.Map;
 
@@ -71,7 +71,7 @@ public class ModTagging {
 		}
 	}
 
-	public static void registerEarlyHogTags() {
+	public static void registerEarlyTags() {
 		ItemTags.addTags(Items.blaze_powder, "minecraft:brewing_fuel");
 		ItemTags.addTags(Items.dye, 4, Tags.MOD_ID + ":enchantment_fuel");
 

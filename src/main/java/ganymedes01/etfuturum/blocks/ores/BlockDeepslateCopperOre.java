@@ -7,7 +7,7 @@ import ganymedes01.etfuturum.core.utils.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import roadhog360.hogutils.api.world.DummyWorld;
+import ganymedes01.etfuturum.api.world.DummyWorld;
 
 public class BlockDeepslateCopperOre extends BlockDeepslateOre implements IInitAction {
 
