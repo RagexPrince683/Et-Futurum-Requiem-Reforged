@@ -1,5 +1,11 @@
 # Changelog
 
+## Add polar bear realism mode
+
+- Add the `polarBearRealism` neutral entity option and enable it by default.
+- Make adult polar bears target players by default while realism mode is enabled, while preserving cub-defence behavior when it is disabled.
+- Document how to restore modern neutral polar bear behavior.
+
 ## Fix disabled boat recipe startup crash (Roadhog360/Et-Futurum-Requiem#590)
 
 - Use EFR's enum-owned enabled state instead of probing Forge registry names for constructed but disabled boat items.

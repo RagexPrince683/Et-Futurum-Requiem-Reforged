@@ -1,6 +1,7 @@
 package ganymedes01.etfuturum.entities;
 
 import ganymedes01.etfuturum.Tags;
+import ganymedes01.etfuturum.configuration.configs.ConfigEntities;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
@@ -187,6 +188,10 @@ public class EntityPolarBear extends EntityAnimal {
 			}
 
 			if (super.shouldExecute()) {
+				if (ConfigEntities.polarBearRealism) {
+					return true;
+				}
+
 				List<EntityPolarBear> bears = worldObj.getEntitiesWithinAABB(EntityPolarBear.class, boundingBox.expand(8.0D, 4.0D, 8.0D));
 				for (EntityPolarBear bear : bears) {
 					if (bear.isChild()) {
