@@ -1,5 +1,9 @@
 # Changelog
 
+## Fix GenericUtils filename validation overload
+
+- Restore exception-aware filename validation so namespaced tag paths can allow `:` and `/` while retaining the remaining Windows filename restrictions.
+
 ## Fix Iron Chest compatibility after HogUtils removal
 
 - Replace the last HogUtils-shaded reflection helper usage with self-contained Java reflection while retaining optional Iron Chest variant fallbacks.
