@@ -146,6 +146,14 @@ public enum ModItems {
 		return isEnabled;
 	}
 
+	public static boolean isModItemEnabled(Item item) {
+		if (item == null) return false;
+		for (ModItems modItem : VALUES) {
+			if (modItem.get() == item) return modItem.isEnabled();
+		}
+		return false;
+	}
+
 	public Item get() {
 		return theItem;
 	}
