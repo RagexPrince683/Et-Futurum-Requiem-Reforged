@@ -1,5 +1,11 @@
 # Changelog
 
+## BOP and Witchery wood-family compatibility (GTNewHorizons/Et-Futurum-Requiem#35, #80)
+
+- Add optional, fail-safe Biomes O' Plenty and Witchery external wood descriptors and modern log, fence, redstone, door, trapdoor, boat, chest-boat, and bamboo-raft derivatives.
+- Preserve the current orientation-aware `StrippedLogRegistry`, use exact external plank metadata in recipes, and register generated log forms as `logWood`.
+- Keep compatibility registry identities namespaced from EFR's native cherry, mangrove, and bamboo families.
+
 ## Port ridden horse buoyancy and pet death messages (GTNewHorizons/Et-Futurum-Requiem#95, #87)
 
 - Add an independent backport option that gives ridden horses gentle upward buoyancy while they are in water.

@@ -207,6 +207,7 @@ public class EtFuturum {
 
 		ModBlocks.init();
 		ModItems.init();
+		ExternalWoodCompat.initContent();
 		ModEnchantments.init();
 		ModPotions.init();
 		SpectatorMode.init();
@@ -394,6 +395,7 @@ public class EtFuturum {
 			MapGenStructureIO.func_143031_a(EndCityPieces.EndCityPiece.class, "ECP");
 		}
 		ModRecipes.init();
+		ExternalWoodCompat.initRecipesAndStripping();
 		DeepslateOreRegistry.init();
 		StrippedLogRegistry.init();
 		RawOreRegistry.init();

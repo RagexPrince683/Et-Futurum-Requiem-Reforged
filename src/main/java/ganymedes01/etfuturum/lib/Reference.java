@@ -13,7 +13,9 @@ public class Reference {
 					"after:HardcoreEnderExpansion;" +
 					"after:bluepower;after:MineTweaker3;" +
 					"after:TConstruct;" +
-					"after:IronChest;";
+					"after:IronChest;" +
+					"after:BiomesOPlenty;" +
+					"after:witchery;";
 	public static final boolean TESTING = Boolean.getBoolean("etfuturum.testing");
 	public static final boolean DEV_ENVIRONMENT = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 	public static final String VERSION_URL = System.getProperty("etfuturum.versionUrl",
