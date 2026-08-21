@@ -1,5 +1,10 @@
 # Changelog
 
+## Fix copper door oxidation duplication (GTNewHorizons/Et-Futurum-Requiem#42)
+
+- Synchronize copper door oxidation and wax-state changes with the correct opposite half, whether the changed block is the upper or lower half.
+- Preserve each door half's metadata and avoid replacing unrelated blocks beside malformed doors.
+
 ## Fix furnace `BurnTime` overflow (GTNewHorizons/Et-Futurum-Requiem#113)
 
 - Persist Blast Furnace and Smoker remaining burn times as NBT integers so long-burning modded fuels survive world reloads without signed-short truncation.
