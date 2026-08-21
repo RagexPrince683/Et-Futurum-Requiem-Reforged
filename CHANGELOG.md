@@ -1,5 +1,10 @@
 # Changelog
 
+## Fix furnace `BurnTime` overflow (GTNewHorizons/Et-Futurum-Requiem#113)
+
+- Persist Blast Furnace and Smoker remaining burn times as NBT integers so long-burning modded fuels survive world reloads without signed-short truncation.
+- Synchronize both halves of the full burn-time values to furnace GUIs instead of truncating their raw values to a 16-bit progress update.
+
 ## Add polar bear realism mode
 
 - Add the `polarBearRealism` neutral entity option and enable it by default.

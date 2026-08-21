@@ -119,7 +119,7 @@ public class TileEntitySmoker extends TileEntityFurnace implements ISidedInvento
 		this.furnaceItemStacks = new ItemStack[this.getSizeInventory()];
 		Utils.loadItemStacksFromNBT(nbttaglist, this.furnaceItemStacks);
 
-		this.furnaceBurnTime = compound.getShort("BurnTime");
+		this.furnaceBurnTime = compound.getInteger("BurnTime");
 		this.furnaceCookTime = compound.getShort("CookTime");
 		this.currentItemBurnTime = getItemBurnTime(this.furnaceItemStacks[1]);
 
@@ -131,7 +131,7 @@ public class TileEntitySmoker extends TileEntityFurnace implements ISidedInvento
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setShort("BurnTime", (short) this.furnaceBurnTime);
+		compound.setInteger("BurnTime", this.furnaceBurnTime);
 		compound.setShort("CookTime", (short) this.furnaceCookTime);
 
 		compound.setTag("Items", Utils.writeItemStacksToNBT(this.furnaceItemStacks));
