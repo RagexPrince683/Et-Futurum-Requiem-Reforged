@@ -1,5 +1,11 @@
 # Changelog
 
+## Refine entity replacement chunk tracking (#701)
+
+- Track server-loaded chunks by dimension and packed coordinates instead of retaining weak `Chunk` references.
+- Avoid every loading or generating chunk lookup during entity replacement while preserving originals when safe insertion is unavailable.
+- Respect canceled and dead entity joins, prevent duplicate tracker registration during saved-chunk loading, and clean tracking state on chunk, world, and server shutdown.
+
 ## [Memory-opti:fix leak] Fix two world leaks (#63)
 
 - Release event-handler references to worlds, players, entities, and chunks during logout, world unload, and server shutdown.
