@@ -1,5 +1,10 @@
 # Changelog
 
+## Protect game-mode flight and CustomNPC boat passengers
+
+- Clear stale flying state whenever a newly configured game mode does not permit flight, while preserving Spectator and Creative flight.
+- Add a default-enabled server-side option that keeps CustomNPCs and CustomNPC+ NPCs out of EFR boat seats, ejects existing NPC passengers, and prevents boat-hull collision movement.
+
 ## Fix BOP/Witchery compatibility compilation
 
 - Initialize external wood pillars with the required wood material and restore the missing vanilla chunk-coordinate import used by entity replacement tracking.
