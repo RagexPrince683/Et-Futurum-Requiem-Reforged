@@ -82,10 +82,19 @@ public class BlockCopperDoor extends BaseDoor implements IDegradable {
 		return worldMeta;
 	}
 
+	@Override
 	public void setCopperBlock(Block newBlock, int newMeta, World world, int x, int y, int z) {
+		Block previousBlock = world.getBlock(x, y, z);
+		boolean isUpperHalf = world.getBlockMetadata(x, y, z) > 7;
+
 		IDegradable.super.setCopperBlock(newBlock, newMeta, world, x, y, z);
-		if (newBlock != world.getBlock(x, y - 1, z)) {
-			world.setBlock(x, y - 1, z, newBlock, world.getBlockMetadata(x, y - 1, z), 2);
+
+		if (isUpperHalf) {
+			if (previousBlock == world.getBlock(x, y - 1, z)) {
+				world.setBlock(x, y - 1, z, newBlock, world.getBlockMetadata(x, y - 1, z), 2);
+			}
+		} else if (previousBlock == world.getBlock(x, y + 1, z)) {
+			world.setBlock(x, y + 1, z, newBlock, world.getBlockMetadata(x, y + 1, z), 2);
 		}
 	}
 
