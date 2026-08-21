@@ -10,7 +10,7 @@ import ganymedes01.etfuturum.configuration.configs.ConfigModCompat;
 import ganymedes01.etfuturum.core.utils.EtFuturumResources;
 import ganymedes01.etfuturum.core.utils.Utils;
 import ganymedes01.etfuturum.inventory.ContainerChestGeneric;
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import java.util.LinkedHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -555,7 +555,7 @@ public class TileEntityShulkerBox extends TileEntity implements IInventory {
 		private final ResourceLocation[] boxTextures;
 		public static final Map<String, ShulkerBoxType> map;
 		static {
-			Object2ObjectLinkedOpenHashMap<String, ShulkerBoxType> temp = new Object2ObjectLinkedOpenHashMap<>();
+			LinkedHashMap<String, ShulkerBoxType> temp = new LinkedHashMap<>();
 			for(ShulkerBoxType type : values()) {
 				temp.put(type.name(), type);
 			}

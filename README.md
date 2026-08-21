@@ -28,7 +28,11 @@ https://www.ej-technologies.com/jprofiler
 ## Dependencies
 
 - [UniMixins](https://modrinth.com/mod/unimixins)
-  - Specifically, the GTNH module.
+  - Specifically, its GTNH Mixins module supplies the early and late Mixin loader interfaces.
+- [GTNHLib](https://github.com/GTNewHorizons/GTNHLib)
+  - Used directly for event-bus subscribers, the client equipment-change event, and coordinate packing; it is not used as a source of collection classes.
+
+HogUtils is no longer required. Its formerly used tag, metadata-map, recipe, world, and utility functionality is owned by Et Futurum. UniMixins and GTNHLib remain the explicit runtime dependencies described above.
 
 ## Contributing
 

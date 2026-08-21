@@ -1,8 +1,8 @@
 package ganymedes01.etfuturum.api.tags.containers;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import java.util.function.IntFunction;
+import java.util.HashMap;
+import java.util.HashSet;
 import lombok.NonNull;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -27,34 +27,10 @@ public abstract class TagContainerMeta<InputType, ReturnType extends ObjMetaPair
     protected final InheritorContainer<ReturnType> inheritorContainer;
     protected final InputType taggable;
 
-    protected final Int2ObjectOpenHashMap<Set<String>> tagTable = new Int2ObjectOpenHashMap<>();
-    protected final Int2ObjectFunction<Set<String>> lookupContainer = new Int2ObjectFunction<>() {
-        private final Int2ObjectOpenHashMap<Set<String>> lookups = new Int2ObjectOpenHashMap<>();
-        private int lastAccessedMeta = Integer.MAX_VALUE;
-        private Set<String> lastAccessedList;
-        @Override
-        public Set<String> get(int key) {
-            if(key != lastAccessedMeta) {
-                lastAccessedMeta = key;
-                lastAccessedList = lookups.get(key);
-            }
-            return lastAccessedList;
-        }
+    protected final Map<Integer, Set<String>> tagTable = new HashMap<>();
+    private final Map<Integer, Set<String>> lookupContainer = new HashMap<>();
 
-        @Override
-        public Set<String> put(int key, Set<String> value) {
-            return lookups.put(key, value);
-        }
-
-        @Override
-        public void clear() {
-            lastAccessedMeta = Integer.MAX_VALUE;
-            lastAccessedList = null;
-            lookups.clear();
-        }
-    };
-
-    protected final Int2ObjectFunction<ReturnType> internFunction;
+    protected final IntFunction<ReturnType> internFunction;
 
     @SuppressWarnings("unchecked")
     protected TagContainerMeta(@NonNull Map<String, SetPair<ReturnType>> revLookupTable,
@@ -72,11 +48,11 @@ public abstract class TagContainerMeta<InputType, ReturnType extends ObjMetaPair
 
     public synchronized void addTags(int meta, String... tags) {
         MiscHelpers.enforceTagsSpec(tags);
-        Collections.addAll(tagTable.computeIfAbsent(meta, o -> new ObjectOpenHashSet<>()), tags);
+        Collections.addAll(tagTable.computeIfAbsent(meta, o -> new HashSet<>()), tags);
 
         // Maintain reverse lookup table
         for(String tag : tags) {
-            revLookupTable.computeIfAbsent(tag, o -> new SetPair<>(new ObjectOpenHashSet<>())).getUnlocked().add(internFunction.get(meta));
+            revLookupTable.computeIfAbsent(tag, o -> new SetPair<>(new HashSet<>())).getUnlocked().add(internFunction.apply(meta));
         }
 
         clearCaches();
@@ -92,7 +68,7 @@ public abstract class TagContainerMeta<InputType, ReturnType extends ObjMetaPair
 
         for(String tag : tags) {
             SetPair<ReturnType> tagSet = revLookupTable.get(tag);
-            tagSet.getUnlocked().remove(internFunction.get(meta));
+            tagSet.getUnlocked().remove(internFunction.apply(meta));
             if(tagSet.getUnlocked().isEmpty()) {
                 revLookupTable.remove(tag);
             }
@@ -112,7 +88,7 @@ public abstract class TagContainerMeta<InputType, ReturnType extends ObjMetaPair
 
         if(!baseTags.isEmpty() || !extraTags.isEmpty()) {
             if (extraTags != null) {
-                Set<String> finalTags = new ObjectOpenHashSet<>(baseTags);
+                Set<String> finalTags = new HashSet<>(baseTags);
                 finalTags.addAll(extraTags);
 
                 for (String tag : finalTags) {

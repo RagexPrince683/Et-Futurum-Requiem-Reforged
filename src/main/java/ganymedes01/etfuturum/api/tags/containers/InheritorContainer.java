@@ -1,8 +1,8 @@
 package ganymedes01.etfuturum.api.tags.containers;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectFunction;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import java.util.function.Function;
+import java.util.HashMap;
+import java.util.HashSet;
 import lombok.NonNull;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
@@ -17,10 +17,10 @@ import java.util.Set;
 public class InheritorContainer<Type> {
 
     protected final Map<String, SetPair<Type>> revLookupTable;
-    protected final Map<String, SetPair<String>> inheritorTable = new Object2ObjectOpenHashMap<>();
-    protected final Object2ObjectFunction<String, Set<Type>> revLookupSupplier;
+    protected final Map<String, SetPair<String>> inheritorTable = new HashMap<>();
+    protected final Function<String, Set<Type>> revLookupSupplier;
 
-    public InheritorContainer(@NonNull Map<String, SetPair<Type>> revLookupTable, Object2ObjectFunction<String, Set<Type>> revLookupSupplier) {
+    public InheritorContainer(@NonNull Map<String, SetPair<Type>> revLookupTable, Function<String, Set<Type>> revLookupSupplier) {
         this.revLookupTable = revLookupTable;
         this.revLookupSupplier = revLookupSupplier;
     }
@@ -38,8 +38,8 @@ public class InheritorContainer<Type> {
 
     protected void checkInheritorRecursion(Set<String> inheritors, String... toInherit) {
         for(String tagToCheck : toInherit) {
-            Set<String> visited = new ObjectOpenHashSet<>();
-            Set<String> stack = new ObjectOpenHashSet<>();
+            Set<String> visited = new HashSet<>();
+            Set<String> stack = new HashSet<>();
 
             // Check downward recursion (new tag's inheritors)
             if (detectCycle(tagToCheck, inheritors, visited, stack)) {
@@ -52,7 +52,7 @@ public class InheritorContainer<Type> {
     /// Gets the tags that this tag inherits, as well as any tags those inherit, and so on, then adds it to the specified list.
     /// Returns the specified list for ease of use.
     public Set<String> addInheritedRecursive(String inheritor, @Nullable Set<String> addToSet) {
-        Set<String> inheritorsSet = addToSet == null ? new ObjectOpenHashSet<>() : addToSet;
+        Set<String> inheritorsSet = addToSet == null ? new HashSet<>() : addToSet;
         Set<String> inheritedSet = inheritorTable.getOrDefault(inheritor, SetPair.getEmpty()).getUnlocked();
         if(!inheritedSet.isEmpty()) {
             inheritorsSet.addAll(inheritedSet);
@@ -67,18 +67,18 @@ public class InheritorContainer<Type> {
         MiscHelpers.enforceTagsSpec(toInherit);
         MiscHelpers.enforceTagSpec(inheritor);
 
-        Set<Type> parentObjects = revLookupTable.computeIfAbsent(inheritor, o -> new SetPair<>(new ObjectOpenHashSet<>())).getLocked();
+        Set<Type> parentObjects = revLookupTable.computeIfAbsent(inheritor, o -> new SetPair<>(new HashSet<>())).getLocked();
         if (parentObjects != null) {
             for (String inheriting : toInherit) {
                 for (Type object : parentObjects) {
-                    revLookupTable.computeIfAbsent(inheriting, o -> new SetPair<>(new ObjectOpenHashSet<>())).getUnlocked()
+                    revLookupTable.computeIfAbsent(inheriting, o -> new SetPair<>(new HashSet<>())).getUnlocked()
                         .add(object);
                 }
             }
         }
 
         for(String inheriting : toInherit) {
-            inheritorTable.computeIfAbsent(inheritor, o -> new SetPair<>(new ObjectOpenHashSet<>())).getUnlocked().add(inheriting);
+            inheritorTable.computeIfAbsent(inheritor, o -> new SetPair<>(new HashSet<>())).getUnlocked().add(inheriting);
             checkInheritorRecursion(getInherited(inheriting), toInherit);
         }
 
@@ -123,6 +123,6 @@ public class InheritorContainer<Type> {
     }
 
     protected Set<Type> getInTag(String tag) {
-        return revLookupSupplier.get(tag);
+        return revLookupSupplier.apply(tag);
     }
 }

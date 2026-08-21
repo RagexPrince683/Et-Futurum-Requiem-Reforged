@@ -47,7 +47,6 @@ import ganymedes01.etfuturum.network.ChestBoatOpenInventoryMessage;
 import ganymedes01.etfuturum.tileentities.TileEntityShulkerBox;
 import ganymedes01.etfuturum.world.nether.biome.utils.NetherBiomeManager;
 import ganymedes01.etfuturum.world.nether.dimension.WorldProviderEFRNether;
-import it.unimi.dsi.fastutil.floats.FloatIntMutablePair;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -113,7 +112,12 @@ public class ClientEventHandler {
 	 * Left = field_26997 (Seems to be related to pitch)
 	 * Right = lastChimeAge
 	 */
-	private static final Map<Entity, FloatIntMutablePair> AMETHYST_CHIME_CACHE = new WeakHashMap<>();
+	private static final Map<Entity, AmethystChimeState> AMETHYST_CHIME_CACHE = new WeakHashMap<>();
+
+	private static final class AmethystChimeState {
+		private float pitch = 1.0F;
+		private int lastChimeAge;
+	}
 	/**
 	 * Used by sound events to get the unlocalized name for the specific state of a block. This is handled on the item's end of things.
 	 * So I use this "storage" stack to store the block I want the meta-name for, so I don't create new ItemStack instances constantly.
@@ -784,9 +788,9 @@ public class ClientEventHandler {
 				event.setCanceled(true);
 			}
 		} else if (ConfigSounds.newBlockSounds && ModSounds.soundAmethystBlock.getStepResourcePath().equals(event.name)) {
-			FloatIntMutablePair pair = AMETHYST_CHIME_CACHE.computeIfAbsent(entity, o -> new FloatIntMutablePair(1, 0));
-			float field_26997 = pair.leftFloat();
-			int lastChimeAge = pair.rightInt();
+			AmethystChimeState pair = AMETHYST_CHIME_CACHE.computeIfAbsent(entity, o -> new AmethystChimeState());
+			float field_26997 = pair.pitch;
+			int lastChimeAge = pair.lastChimeAge;
 			if (entity.ticksExisted >= lastChimeAge + 20) {
 				field_26997 = (float) ((double) field_26997 * Math.pow(0.996999979019165D, entity.ticksExisted - lastChimeAge));
 				field_26997 = Math.min(1.0F, field_26997 + 0.07F);
@@ -794,8 +798,8 @@ public class ClientEventHandler {
 				float g = 0.1F + field_26997 * 1.2F;
 				entity.playSound(Tags.MC_ASSET_VER + ":block.amethyst_block.chime", g, f);
 				lastChimeAge = entity.ticksExisted;
-				pair.first(field_26997);
-				pair.second(lastChimeAge);
+				pair.pitch = field_26997;
+				pair.lastChimeAge = lastChimeAge;
 			}
 		}
 	}

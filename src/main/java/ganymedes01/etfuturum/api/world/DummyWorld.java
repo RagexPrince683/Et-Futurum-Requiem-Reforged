@@ -1,6 +1,6 @@
 package ganymedes01.etfuturum.api.world;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -41,7 +41,7 @@ public class DummyWorld extends World {
         return GLOBAL_DUMMY_WORLD.get();
     }
     public GT_IteratorRandom mRandom = new GT_IteratorRandom();
-    private final Map<BlockPos, BlockMetaPair> FAKE_WORLD_DATA = new Object2ObjectOpenHashMap<>(); //Stores setblock data for getblock
+    private final Map<BlockPos, BlockMetaPair> FAKE_WORLD_DATA = new HashMap<>(); //Stores setblock data for getblock
     private static final BlockMetaPair AIR = BlockMetaPair.intern(Blocks.air, 0);
 
     DummyWorld(ISaveHandler par1iSaveHandler, String par2Str, WorldProvider par3WorldProvider, WorldSettings par4WorldSettings, Profiler par5Profiler) {

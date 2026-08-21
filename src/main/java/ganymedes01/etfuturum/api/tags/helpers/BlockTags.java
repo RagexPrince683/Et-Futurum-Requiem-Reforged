@@ -1,7 +1,7 @@
 package ganymedes01.etfuturum.api.tags.helpers;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import java.util.HashMap;
 import lombok.NonNull;
 import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
@@ -84,7 +84,7 @@ public final class BlockTags extends TagContainerMeta<Block, BlockMetaPair> {
         return getTags(block, meta).contains(tag);
     }
 
-    private static final Map<String, SetPair<BlockMetaPair>> REVERSE_LOOKUP_TABLE = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, SetPair<BlockMetaPair>> REVERSE_LOOKUP_TABLE = new HashMap<>();
     private static final InheritorContainer<BlockMetaPair> INHERITOR_CONTAINER =
         new InheritorContainer<>(REVERSE_LOOKUP_TABLE, key -> getInTag((String) key));
 

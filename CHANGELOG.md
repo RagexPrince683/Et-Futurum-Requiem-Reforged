@@ -1,5 +1,12 @@
 # Changelog
 
+## Remove accidental fastutil runtime dependency
+
+- Replace every direct fastutil collection, primitive map, function, and pair use with Java 8 collections/functions or the already bundled Apache Commons pair.
+- Keep block and item metadata maps identity-keyed with wildcard fallback and lazy map views, and retain tag inheritance, reverse lookup, and metadata-aware registration.
+- Make both Mixin loaders bootstrap-safe without fastutil while retaining UniMixins integration.
+- Retain GTNHLib for its event bus, client equipment event, and coordinate-packing APIs; HogUtils remains unnecessary.
+
 ## Fix GenericUtils filename validation overload
 
 - Restore exception-aware filename validation so namespaced tag paths can allow `:` and `/` while retaining the remaining Windows filename restrictions.

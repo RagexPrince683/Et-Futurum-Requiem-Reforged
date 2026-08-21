@@ -7,7 +7,7 @@ import ganymedes01.etfuturum.compat.ModsList;
 import ganymedes01.etfuturum.configuration.configs.ConfigMixins;
 import ganymedes01.etfuturum.configuration.configs.ConfigWorld;
 import ganymedes01.etfuturum.core.utils.Utils;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import java.util.IdentityHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class EtFuturumWorldListener implements IWorldAccess {
 
 	private final World world;
-	private final Map<Block, Block> replacements = new Reference2ObjectOpenHashMap<>();
+	private final Map<Block, Block> replacements = new IdentityHashMap<>();
 
 	public EtFuturumWorldListener(World theWorld) {
 		world = theWorld;

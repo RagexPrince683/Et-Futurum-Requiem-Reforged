@@ -6,9 +6,9 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import ganymedes01.etfuturum.ModItems;
 import ganymedes01.etfuturum.Tags;
 import ganymedes01.etfuturum.core.handlers.client.ArmorSoundEventHandler;
-import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import org.apache.commons.lang3.tuple.Pair;
+import java.util.HashMap;
+import java.util.HashSet;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -23,7 +23,7 @@ import java.util.Set;
 
 @EventBusSubscriber(phase = Phase.INIT)
 public class ArmorSoundsRegistry {
-	private static final Object2ObjectOpenHashMap<String, String> TAG_TO_SOUND_MAP = new Object2ObjectOpenHashMap<>();
+	private static final HashMap<String, String> TAG_TO_SOUND_MAP = new HashMap<>();
 
 	public static final String GENERIC_EQUIP_SOUND = Tags.MC_ASSET_VER + ":item.armor.equip_generic";
 
@@ -38,7 +38,7 @@ public class ArmorSoundsRegistry {
 	public static final String DIAMOND_EQUIP_SOUND = Tags.MC_ASSET_VER + ":item.armor.equip_diamond";
 	public static final String NETHERITE_EQUIP_SOUND = Tags.MC_ASSET_VER + ":item.armor.equip_netherite";
 
-	private static final Set<Pair<String[], String>> DEFAULT_CONDITIONS = new ObjectOpenHashSet<>();
+	private static final Set<Pair<String[], String>> DEFAULT_CONDITIONS = new HashSet<>();
 	static {
 		DEFAULT_CONDITIONS.add(Pair.of(new String[]{"leather", "sleeping", "padding", "padded", "wool", "robe"}, Tags.MOD_ID + ":leather_equip_sound"));
 
@@ -122,9 +122,9 @@ public class ArmorSoundsRegistry {
 				|| event.namespaceID.contains("skull") || event.namespaceID.contains("head") || event.namespaceID.contains("pumpkin");
 		if(checkEquip && getEquipSound(event.objToRegister, OreDictionary.WILDCARD_VALUE) == null) {
 			for(Pair<String[], String> condition : DEFAULT_CONDITIONS) {
-				for(String nameCheck : condition.first()) {
+				for(String nameCheck : condition.getLeft()) {
 					if(event.namespaceID.toLowerCase().contains(nameCheck)) {
-						ItemTags.addTags(event.objToRegister, condition.second());
+						ItemTags.addTags(event.objToRegister, condition.getRight());
 						return;
 					}
 				}

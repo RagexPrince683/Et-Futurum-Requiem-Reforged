@@ -1,9 +1,6 @@
 package ganymedes01.etfuturum.api.blocksanditems.utils.base;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectIterator;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import java.util.IdentityHashMap;
 import lombok.NonNull;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -22,7 +19,7 @@ import java.util.*;
 /// {@link OreDictionary#WILDCARD_VALUE} if we can't find the metadata that was passed in.
 public class ObjMeta2ObjectOpenHashMap<Pair, K, V> implements Map<Pair, V> {
     /// The primary map backing this {@link Map} implementation, used to store and retrieve entries at a high speed.
-    private final Map<K, Int2ObjectOpenHashMap<V>> backingMap = new Reference2ObjectOpenHashMap<>();
+    private final Map<K, Map<Integer, V>> backingMap = new IdentityHashMap<>();
     private final boolean wildcardFallback;
     private int size = 0;
 
@@ -52,7 +49,7 @@ public class ObjMeta2ObjectOpenHashMap<Pair, K, V> implements Map<Pair, V> {
     }
 
     public boolean containsKey(K key, int meta) {
-        Int2ObjectOpenHashMap<V> map = backingMap.get(key);
+        Map<Integer, V> map = backingMap.get(key);
         return map != null && map.containsKey(meta);
     }
 
@@ -66,7 +63,7 @@ public class ObjMeta2ObjectOpenHashMap<Pair, K, V> implements Map<Pair, V> {
     /// Only accepts {@link ObjMetaPair} instances. They do not have to be interned.
     public V get(Object key) {
         if(key instanceof ObjMetaPair<?> pair) {
-            get((K) pair.get(), pair.getMeta());
+            return get((K) pair.get(), pair.getMeta());
         }
         throw new IllegalArgumentException("Parameter passed in was not an ObjMetaPair object!");
     }
@@ -75,7 +72,7 @@ public class ObjMeta2ObjectOpenHashMap<Pair, K, V> implements Map<Pair, V> {
     /// Only accepts {@link ObjMetaPair} instances. They do not have to be interned.
     public V getOrDefault(Object key, V defaultValue) {
         if(key instanceof ObjMetaPair<?> pair) {
-            getOrDefault((K) pair.get(), pair.getMeta(), defaultValue);
+            return getOrDefault((K) pair.get(), pair.getMeta(), defaultValue);
         }
         throw new IllegalArgumentException("Parameter passed in was not an ObjMetaPair object!");
     }
@@ -128,7 +125,7 @@ public class ObjMeta2ObjectOpenHashMap<Pair, K, V> implements Map<Pair, V> {
     public boolean remove(K key, int meta, Object value) {
         Object curValue = get(key, meta);
         if (!Objects.equals(curValue, value) ||
-            (curValue == null && !containsKey(key))) {
+            (curValue == null && !containsKey(key, meta))) {
             return false;
         }
         remove(key, meta);
@@ -163,7 +160,7 @@ public class ObjMeta2ObjectOpenHashMap<Pair, K, V> implements Map<Pair, V> {
 
     @Override
     public @NotNull Collection<V> values() {
-        return new AbstractSet<>() {
+        return new AbstractCollection<>() {
             @Override
             public Iterator<V> iterator() {
                 return new ObjMetaValueIterator(entrySet().iterator());
@@ -192,8 +189,10 @@ public class ObjMeta2ObjectOpenHashMap<Pair, K, V> implements Map<Pair, V> {
     }
 
     public V put(K key, int meta, V val) {
-        V ret = backingMap.computeIfAbsent(key, o -> new Int2ObjectOpenHashMap<>()).put(meta, val);
-        if(ret == null) {
+        Map<Integer, V> metadataMap = backingMap.computeIfAbsent(key, o -> new HashMap<>());
+        boolean present = metadataMap.containsKey(meta);
+        V ret = metadataMap.put(meta, val);
+        if(!present) {
             size++;
         }
         return ret;
@@ -209,22 +208,23 @@ public class ObjMeta2ObjectOpenHashMap<Pair, K, V> implements Map<Pair, V> {
     }
 
     public V remove(K key, int meta) {
-        Int2ObjectOpenHashMap<V> map = backingMap.get(key);
+        Map<Integer, V> map = backingMap.get(key);
         if(map == null) {
             return null;
         }
+        boolean present = map.containsKey(meta);
         V val = map.remove(meta);
         if(map.isEmpty()) {
             backingMap.remove(key, map);
         }
-        if(val != null) {
+        if(present) {
             size--;
         }
         return val;
     }
 
     public V get(K key, int meta) {
-        Int2ObjectOpenHashMap<V> map = backingMap.get(key);
+        Map<Integer, V> map = backingMap.get(key);
         if(map == null) {
             return null;
         }
@@ -256,9 +256,9 @@ public class ObjMeta2ObjectOpenHashMap<Pair, K, V> implements Map<Pair, V> {
 
     // A custom iterator class for the entry set
     protected class ObjMetaEntryIterator implements Iterator<Map.Entry<Pair, V>> {
-        private final Iterator<Map.Entry<K, Int2ObjectOpenHashMap<V>>> outerIterator = backingMap.entrySet().iterator();
-        private Map.Entry<K, Int2ObjectOpenHashMap<V>> currentOuterEntry;
-        private ObjectIterator<Int2ObjectMap.Entry<V>> innerIterator;
+        private final Iterator<Map.Entry<K, Map<Integer, V>>> outerIterator = backingMap.entrySet().iterator();
+        private Map.Entry<K, Map<Integer, V>> currentOuterEntry;
+        private Iterator<Map.Entry<Integer, V>> innerIterator;
         private Map.Entry<Integer, V> currentInnerEntry;
         private Map.Entry<Pair, V> nextEntry;
 
@@ -274,7 +274,7 @@ public class ObjMeta2ObjectOpenHashMap<Pair, K, V> implements Map<Pair, V> {
                     return true;
                 }
                 currentOuterEntry = outerIterator.next();
-                innerIterator = currentOuterEntry.getValue().int2ObjectEntrySet().iterator();
+                innerIterator = currentOuterEntry.getValue().entrySet().iterator();
             }
             return false;
         }

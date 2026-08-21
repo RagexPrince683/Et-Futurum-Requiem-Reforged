@@ -7,9 +7,9 @@ import cpw.mods.ironchest.ItemChestChanger;
 import ganymedes01.etfuturum.ModItems;
 import ganymedes01.etfuturum.items.ItemBarrelUpgrade;
 import ganymedes01.etfuturum.items.ItemShulkerBoxUpgrade;
-import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import org.apache.commons.lang3.tuple.Pair;
+import java.util.LinkedHashMap;
+import java.util.IdentityHashMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -20,10 +20,10 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 public class CompatIronChests {
-	private static final Map<String, ItemChestChanger> upgradeItems = new Object2ObjectLinkedOpenHashMap<>();
-	private static final Map<String, ChestChangerType> upgradeTypes = new Object2ObjectLinkedOpenHashMap<>();
-	private static final Map<ChestChangerType, Pair<IronChestType, IronChestType>> upgradeMappings = new Reference2ObjectOpenHashMap<>();
-	private static final Map<String, IronChestType> tiers = new Object2ObjectLinkedOpenHashMap<>();
+	private static final Map<String, ItemChestChanger> upgradeItems = new LinkedHashMap<>();
+	private static final Map<String, ChestChangerType> upgradeTypes = new LinkedHashMap<>();
+	private static final Map<ChestChangerType, Pair<IronChestType, IronChestType>> upgradeMappings = new IdentityHashMap<>();
+	private static final Map<String, IronChestType> tiers = new LinkedHashMap<>();
 	private static double renderDistance;
 	static {
 		// Collects all enabled chest upgrade typee
@@ -86,8 +86,8 @@ public class CompatIronChests {
 	public static String getUpgradeName(String from, Item item) {
 		if(item instanceof ItemChestChanger changer && changer.getType().canUpgrade(tiers.get(from))) {
 			Pair<IronChestType, IronChestType> types = upgradeMappings.get(changer.getType());
-			if(types.first().name().equals(from.toUpperCase())) {
-				return types.second().name();
+			if(types.getLeft().name().equals(from.toUpperCase())) {
+				return types.getRight().name();
 			}
 		}
 		return null;
