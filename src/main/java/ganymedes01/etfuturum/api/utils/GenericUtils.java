@@ -51,8 +51,21 @@ public final class GenericUtils {
     }
 
     public static boolean verifyFilenameIntegrity(String string) {
+        return verifyFilenameIntegrity(string, (char[]) null);
+    }
+
+    public static boolean verifyFilenameIntegrity(String string, char... exceptions) {
         for (char invalid : new char[]{'<', '>', ':', '"', '/', '\\', '|', '?', '*'}) {
-            if (string.indexOf(invalid) >= 0) return false;
+            boolean excepted = false;
+            if (exceptions != null) {
+                for (char exception : exceptions) {
+                    if (exception == invalid) {
+                        excepted = true;
+                        break;
+                    }
+                }
+            }
+            if (!excepted && string.indexOf(invalid) >= 0) return false;
         }
         return true;
     }
