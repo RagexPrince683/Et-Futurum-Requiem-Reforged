@@ -209,8 +209,6 @@ public class ServerEventHandler {
 	public void entityAdded(EntityJoinWorldEvent event) {
 		if (event.world.isRemote) return;
 
-		Chunk chunk = event.world.getChunkFromChunkCoords(MathHelper.floor_double(event.entity.posX) >> 4, MathHelper.floor_double(event.entity.posZ) >> 4);
-
 		String sound = "";
 		if (ConfigSounds.paintingItemFramePlacing && event.entity instanceof EntityItemFrame) {
 			sound = "item_frame";
@@ -229,24 +227,28 @@ public class ServerEventHandler {
 			if (event.entity.getClass() == EntityBoat.class) {
 				EntityNewBoat boat = new EntityNewBoat(event.world);
 				event.entity.rotationYaw += 90;
-				replaceEntity(event.entity, boat, event.world, chunk);
 				boat.setBoatType("minecraft", "oak");
+				if (replaceEntity(event.entity, boat, event.world)) {
+					event.setCanceled(true);
+					return;
+				}
+				event.entity.rotationYaw -= 90;
+			}
+		}
+
+		if (ConfigEntities.enableVillagerZombies && event.entity.getClass() == EntityZombie.class && ((EntityZombie) event.entity).isVillager()) {
+			if (replaceEntity(event.entity, new EntityZombieVillager(event.world), event.world)) {
 				event.setCanceled(true);
 				return;
 			}
 		}
 
-		if (ConfigEntities.enableVillagerZombies && event.entity.getClass() == EntityZombie.class && ((EntityZombie) event.entity).isVillager()) {
-			replaceEntity(event.entity, new EntityZombieVillager(event.world), event.world, chunk);
-			event.setCanceled(true);
-			return;
-		}
-
 		if (ConfigEntities.enableShearableSnowGolems && event.entity.getClass() == EntitySnowman.class) {
 			Entity entity = new EntityNewSnowGolem(event.world);
-			replaceEntity(event.entity, entity, event.world, chunk);
 			entity.getDataWatcher().updateObject(12, (byte) 1);
-			event.setCanceled(true);
+			if (replaceEntity(event.entity, entity, event.world)) {
+				event.setCanceled(true);
+			}
 		}
 	}
 
@@ -262,16 +264,28 @@ public class ServerEventHandler {
 		loadedChunks.remove(event.getChunk());
 	}
 
-	private void replaceEntity(Entity oldEntity, Entity newEntity, World world, Chunk chunk) {
+	private boolean replaceEntity(Entity oldEntity, Entity newEntity, World world) {
+		int chunkX = MathHelper.floor_double(oldEntity.posX) >> 4;
+		int chunkZ = MathHelper.floor_double(oldEntity.posZ) >> 4;
+		IChunkProvider chunkProvider = world.getChunkProvider();
+		// EntityJoinWorldEvent can run while chunks load. An unconditional lookup here can recursively
+		// force-load neighboring chunks (Roadhog360/Et-Futurum-Requiem#701).
+		if (!chunkProvider.chunkExists(chunkX, chunkZ)) return false;
+
+		return replaceEntity(oldEntity, newEntity, world, world.getChunkFromChunkCoords(chunkX, chunkZ));
+	}
+
+	private boolean replaceEntity(Entity oldEntity, Entity newEntity, World world, Chunk chunk) {
 		newEntity.copyDataFrom(oldEntity, true);
 		if (loadedChunks.contains(chunk)) { // Use this list because somehow chunk.isChunkLoaded is always true here...
 			// World#addLoadedEntities has already run for the chunk, we don't have to worry about conflicting with it
-			world.spawnEntityInWorld(newEntity);
+			if (!world.spawnEntityInWorld(newEntity)) return false;
 		} else {
 			// don't add to tracker, because World#addLoadedEntities will also do it
 			chunk.addEntity(newEntity);
 		}
 		oldEntity.setDead();
+		return true;
 	}
 
 	@SubscribeEvent
@@ -1257,20 +1271,22 @@ public class ServerEventHandler {
 			BiomeDictionary.Type[] biomeTags = BiomeDictionary.getTypesForBiome(chunk.getBiomeGenForWorldCoords(x & 15, z & 15, world.getWorldChunkManager()));
 			if (ArrayUtils.contains(biomeTags, BiomeDictionary.Type.SNOWY)) {
 				EntityStray stray = new EntityStray(world);
-				replaceEntity(entity, stray, world, chunk);
-				stray.onSpawnWithEgg(null);
-				event.setCanceled(true);
-				event.setResult(Result.DENY);
+				if (replaceEntity(entity, stray, world, chunk)) {
+					stray.onSpawnWithEgg(null);
+					event.setCanceled(true);
+					event.setResult(Result.DENY);
+				}
 			}
 		} else if (ConfigEntities.enableHusk && !ConfigWorld.oldHuskSpawning && EntityList.getEntityID(entity) == 54 /*Zombie ID*/ && world.rand.nextFloat() < .80F && world.canBlockSeeTheSky(x, y + 1, z)) {
 			Chunk chunk = world.getChunkFromBlockCoords(x, z);
 			BiomeDictionary.Type[] biomeTags = BiomeDictionary.getTypesForBiome(chunk.getBiomeGenForWorldCoords(x & 15, z & 15, world.getWorldChunkManager()));
 			if (ArrayUtils.contains(biomeTags, BiomeDictionary.Type.HOT) && ArrayUtils.contains(biomeTags, BiomeDictionary.Type.DRY) && ArrayUtils.contains(biomeTags, BiomeDictionary.Type.SANDY)) {
 				EntityHusk husk = new EntityHusk(world);
-				replaceEntity(entity, husk, world, chunk);
-				husk.onSpawnWithEgg(null);
-				event.setCanceled(true);
-				event.setResult(Result.DENY);
+				if (replaceEntity(entity, husk, world, chunk)) {
+					husk.onSpawnWithEgg(null);
+					event.setCanceled(true);
+					event.setResult(Result.DENY);
+				}
 			}
 		}
 	}
