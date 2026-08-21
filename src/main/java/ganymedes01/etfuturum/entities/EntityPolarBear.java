@@ -69,7 +69,7 @@ public class EntityPolarBear extends EntityAnimal {
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(20.0D);
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(6.0D);
+		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(12.0D); //they are not nice creatures jeb
 	}
 
 	@Override
