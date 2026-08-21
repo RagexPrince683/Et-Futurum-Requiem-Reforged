@@ -20,6 +20,7 @@ public class ConfigEntities extends ConfigBase {
 	public static boolean enableShearableSnowGolems;
 	public static boolean enableBees;
 	public static boolean enablePolarBears;
+	public static boolean polarBearRealism;
 	public static boolean enableGoats;
 	public static boolean enableSquidInk;
 	public static boolean enableFoxes;
@@ -56,6 +57,7 @@ public class ConfigEntities extends ConfigBase {
 		//neutral
 		enableBees = getBoolean("enableBees", catNeutral, true, "");
 		enablePolarBears = getBoolean("enablePolarBears", catNeutral, true, "Polar bears spawn in snowy biomes and defend nearby cubs.");
+		polarBearRealism = getBoolean("polarBearRealism", catNeutral, true, "Makes adult polar bears hostile to players by default. Disable this to make them attack players only when defending nearby cubs.");
 
 		//hostile
 		enableEndermite = getBoolean("enableEndermite", catHostile, true, "Rarely spawns when the player lands from Ender Pearl throws");

@@ -36,6 +36,10 @@ https://www.ej-technologies.com/jprofiler
 
 To enable incomplete test features, add `-Detfuturum.testing=true` to your JVM arguments. This also enables a debug item
 
+## Polar bears
+
+Adult polar bears are hostile to players by default when `polarBearRealism` is enabled in the neutral entity configuration. Set this option to `false` to restore the modern neutral behavior, where adults attack players only while defending nearby cubs.
+
 ## Contributors
 <a href="https://github.com/Roadhog360/Et-Futurum-Requiem/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Roadhog360/Et-Futurum-Requiem" />
