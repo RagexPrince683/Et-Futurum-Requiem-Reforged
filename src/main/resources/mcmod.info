@@ -2,13 +2,13 @@
 {
   "modid": "etfuturum",
   "name": "${modName}",
-  "description": "Brings the future to now, for real this time.",
+  "description": "Brings the future to now, for real this time. With less bullshit",
   "version": "${modVersion}",
   "mcversion": "${minecraftVersion}",
   "url": "https://www.curseforge.com/minecraft/mc-mods/et-futurum-requiem",
   "updateUrl": "",
   "authorList": [
-    "ganymedes01", "Roadhog360", "embeddedt", "jss2a98aj", "makamys", "KryptonCaptain"
+    "ganymedes01", "Roadhog360", "embeddedt", "jss2a98aj", "makamys", "KryptonCaptain", "RagexPrince683"
   ],
   "credits": "DelirusCrux, AstroTibs",
   "logoFile": "assets/etfuturum/logo.png",
