@@ -17,6 +17,7 @@ import ganymedes01.etfuturum.api.mappings.MultiBlockSoundContainer;
 import ganymedes01.etfuturum.api.spectator.SpectatorUtils;
 import ganymedes01.etfuturum.blocks.BlockShulkerBox;
 import ganymedes01.etfuturum.client.OpenGLHelper;
+import ganymedes01.etfuturum.client.EndFlashState;
 import ganymedes01.etfuturum.client.SpawnChunkProgress;
 import ganymedes01.etfuturum.client.WorldIconManager;
 import ganymedes01.etfuturum.client.loading.LoadingScreenHooks;
@@ -29,6 +30,7 @@ import ganymedes01.etfuturum.client.renderer.entity.elytra.LayerBetterElytra;
 import ganymedes01.etfuturum.client.sound.AmbienceLoop;
 import ganymedes01.etfuturum.client.sound.BeeFlySound;
 import ganymedes01.etfuturum.client.sound.ElytraSound;
+import ganymedes01.etfuturum.client.sound.EndFlashSound;
 import ganymedes01.etfuturum.client.sound.ModSounds;
 import ganymedes01.etfuturum.compat.ModsList;
 import ganymedes01.etfuturum.configuration.ConfigBase;
@@ -54,6 +56,7 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiWinGame;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -102,6 +105,7 @@ public class ClientEventHandler {
 	private final Minecraft mc = FMLClientHandler.instance().getClient();
 	private final Random rand = new FastRandom();
 	private boolean showedDebugWarning;
+	private boolean wasInEnd;
 	private int currPage;
 	/**
 	 * Represents the two values that govern the last chime age in 1.17 and up.
@@ -155,7 +159,21 @@ public class ClientEventHandler {
 		EntityPlayer player = FMLClientHandler.instance().getClientPlayerEntity();
 
 		if (world == null || event.phase == Phase.START || mc.isGamePaused()) {
+			if (world == null && wasInEnd) {
+				EndFlashState.INSTANCE.reset(0L);
+				wasInEnd = false;
+			}
 			return;
+		}
+
+		boolean inEnd = world.provider instanceof net.minecraft.world.WorldProviderEnd;
+		if (inEnd != wasInEnd) {
+			EndFlashState.INSTANCE.reset(world.getTotalWorldTime());
+			wasInEnd = inEnd;
+		}
+		if (ConfigWorld.endFlashes && inEnd && EndFlashState.INSTANCE.tick(world.getTotalWorldTime())
+				&& !(mc.currentScreen instanceof GuiWinGame)) {
+			mc.getSoundHandler().playSound(new EndFlashSound());
 		}
 
 		if (player.ticksExisted == 40) {
