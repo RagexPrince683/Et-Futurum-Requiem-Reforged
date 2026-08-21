@@ -1,5 +1,12 @@
 # Changelog
 
+## Port modern lighting and End atmosphere (GTNewHorizons/Et-Futurum-Requiem#91, #104)
+
+- Add independent client options for End flashes, modern End ambience, hue-preserving gamma, warm block light, and modern night vision.
+- Add deterministic End flash state, directional delayed rumble audio, additive sky rendering, and a renderer-neutral client API.
+- Restrict modern lightmap processing to vanilla providers and custom providers whose complete brightness table matches a vanilla table.
+- Register the End flash sound and texture through the existing Minecraft AssetDirector namespace.
+
 ## Refine entity replacement chunk tracking (#701)
 
 - Track server-loaded chunks by dimension and packed coordinates instead of retaining weak `Chunk` references.

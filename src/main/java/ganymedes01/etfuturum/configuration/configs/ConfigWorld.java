@@ -24,6 +24,11 @@ public class ConfigWorld extends ConfigBase {
 	public static BlockMetaPair amethystMiddleBlock;
 
 	public static boolean enableDmgIndicator;
+	public static boolean endFlashes;
+	public static boolean modernEndAmbientColor;
+	public static boolean modernLightmapGamma;
+	public static boolean modernBlockLightTint;
+	public static boolean modernNightVision;
 	public static boolean enableAirDebris;
 	public static int debrisMax = 3;
 	public static int maxNetherGoldPerCluster;
@@ -92,6 +97,11 @@ public class ConfigWorld extends ConfigBase {
 	@Override
 	protected void syncConfigOptions() {
 		enableDmgIndicator = getBoolean("enableDmgIndicator", catClient, true, "Heart Damage Indicator");
+		endFlashes = getBoolean("endFlashes", catClient, true, "Render the modern, periodically flashing sky in The End.");
+		modernEndAmbientColor = getBoolean("modernEndAmbientColor", catClient, true, "Use the modern purple ambient light color in The End.");
+		modernLightmapGamma = getBoolean("modernLightmapGamma", catClient, true, "Use the modern hue-preserving brightness slider curve.");
+		modernBlockLightTint = getBoolean("modernBlockLightTint", catClient, true, "Use the modern warm block-light tint and gradient.");
+		modernNightVision = getBoolean("modernNightVision", catClient, true, "Use the modern colored light floor for night vision.");
 
 		enableAirDebris = getBoolean("enableAirDebris", catGeneration, false, "Can ancient debris generate next to air?");
 		maxStonesPerCluster = getInt("maxStonesPerCluster", catGeneration, 32, 0, 64, "Max vein size for Granite/Andesite/Diorite blocks in a cluster");

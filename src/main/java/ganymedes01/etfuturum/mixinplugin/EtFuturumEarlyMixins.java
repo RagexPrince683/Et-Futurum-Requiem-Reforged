@@ -67,6 +67,17 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 
 		List<String> mixins = new ObjectArrayList<>();
 
+		if (side == MixinEnvironment.Side.CLIENT) {
+			if (ConfigWorld.endFlashes || ConfigWorld.modernEndAmbientColor || ConfigWorld.modernBlockLightTint) {
+				mixins.add("endflashes.client.MixinEntityRenderer");
+			}
+			if (ConfigWorld.endFlashes) mixins.add("endflashes.client.MixinRenderGlobal");
+			if (ConfigWorld.modernLightmapGamma) mixins.add("modernlightmap.client.MixinEntityRenderer");
+			if (ConfigWorld.modernBlockLightTint || ConfigWorld.modernNightVision) {
+				mixins.add("modernblocklight.client.MixinEntityRenderer");
+			}
+		}
+
 		// These hooks add modern behavior without changing the identity of the placed vanilla block.
 		if (ConfigBlocksItems.enableEnchantingTable) mixins.add("functionalblocks.MixinBlockEnchantmentTable");
 		if (ConfigBlocksItems.enableBrewingStands) mixins.add("functionalblocks.MixinBlockBrewingStand");

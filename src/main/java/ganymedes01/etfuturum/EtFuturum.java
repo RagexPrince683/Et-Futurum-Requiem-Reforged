@@ -786,6 +786,7 @@ public class EtFuturum {
 		config.addSoundEvent(ver, "entity.player.attack.sweep", "player");
 		config.addSoundEvent(ver, "entity.player.attack.weak", "player");
 		config.addSoundEvent(ver, "entity.player.splash.high_speed", "player");
+		config.addSoundEvent(ver, "weather.end_flash", "weather");
 
 		config.addSoundEvent(ver, "item.axe.scrape", "player");
 		config.addSoundEvent(ver, "item.axe.wax_off", "player");
