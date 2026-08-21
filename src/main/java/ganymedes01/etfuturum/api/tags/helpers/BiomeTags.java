@@ -1,6 +1,6 @@
 package ganymedes01.etfuturum.api.tags.helpers;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import java.util.HashMap;
 import lombok.NonNull;
 import net.minecraft.world.biome.BiomeGenBase;
 import ganymedes01.etfuturum.api.tags.containers.InheritorContainer;
@@ -70,7 +70,7 @@ public final class BiomeTags extends TagContainerBasic<BiomeGenBase> {
         return getTags(biome).contains(tag);
     }
 
-    private static final Map<String, SetPair<BiomeGenBase>> REVERSE_LOOKUP_TABLE = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, SetPair<BiomeGenBase>> REVERSE_LOOKUP_TABLE = new HashMap<>();
     private static final InheritorContainer<BiomeGenBase> INHERITOR_CONTAINER =
         new InheritorContainer<>(REVERSE_LOOKUP_TABLE, key -> getInTag((String) key));
 

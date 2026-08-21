@@ -7,7 +7,7 @@ import ganymedes01.etfuturum.compat.CompatMisc;
 import ganymedes01.etfuturum.configuration.ConfigBase;
 import ganymedes01.etfuturum.configuration.configs.*;
 import ganymedes01.etfuturum.lib.Reference;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.ArrayList;
 import net.minecraft.launchwrapper.Launch;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
@@ -65,7 +65,7 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 
 		initConfigs();
 
-		List<String> mixins = new ObjectArrayList<>();
+		List<String> mixins = new ArrayList<>();
 
 		// Core APIs owned by Et Futurum: metadata-aware tags and nested generation tracking.
 		mixins.add("tags.MixinBlock");

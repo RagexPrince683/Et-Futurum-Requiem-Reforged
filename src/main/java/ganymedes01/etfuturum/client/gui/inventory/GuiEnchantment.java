@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import ganymedes01.etfuturum.Tags;
 import ganymedes01.etfuturum.client.OpenGLHelper;
 import ganymedes01.etfuturum.inventory.ContainerEnchantment;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.ArrayList;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -76,7 +76,7 @@ public class GuiEnchantment extends GuiContainer {
 		TEXTURE = new ResourceLocation(container.noFuel ? "textures/gui/container/enchanting_table.png" :
 				Tags.MOD_ID + ":textures/gui/container/enchanting_table.png");
 
-		displayStacks = new ObjectArrayList<>(ItemTags.getInTag(Tags.MOD_ID + ":enchantment_fuel"));
+		displayStacks = new ArrayList<>(ItemTags.getInTag(Tags.MOD_ID + ":enchantment_fuel"));
 		if (displayStacks.size() > 1) {
 			for (int i = 1; i < displayStacks.size(); i++) {
 				ItemMetaPair mapping = displayStacks.get(i);

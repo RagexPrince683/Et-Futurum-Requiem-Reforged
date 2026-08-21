@@ -9,7 +9,7 @@ import ganymedes01.etfuturum.configuration.configs.ConfigBlocksItems;
 import ganymedes01.etfuturum.configuration.configs.ConfigMixins;
 import ganymedes01.etfuturum.configuration.configs.ConfigModCompat;
 import ganymedes01.etfuturum.configuration.configs.ConfigSounds;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.ArrayList;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class EtFuturumLateMixins implements ILateMixinLoader {
 
 	@Override
 	public List<String> getMixins(Set<String> loadedMods) {
-		List<String> mixins = new ObjectArrayList<>();
+		List<String> mixins = new ArrayList<>();
 
 		if (ConfigMixins.enableElytra && loadedMods.stream().anyMatch(name -> name.equals("Thaumcraft"))) {
 			mixins.add("backlytra.thaumcraft.MixinEventHandlerEntity");

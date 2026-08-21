@@ -4,7 +4,7 @@ import com.google.common.primitives.SignedBytes;
 import cpw.mods.fml.client.FMLClientHandler;
 import ganymedes01.etfuturum.compat.CompatIronChests;
 import ganymedes01.etfuturum.compat.ModsList;
-import it.unimi.dsi.fastutil.Function;
+import java.util.function.Function;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;

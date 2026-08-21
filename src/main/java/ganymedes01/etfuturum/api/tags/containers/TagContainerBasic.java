@@ -1,6 +1,6 @@
 package ganymedes01.etfuturum.api.tags.containers;
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import java.util.HashSet;
 import lombok.NonNull;
 import org.apache.commons.lang3.ArrayUtils;
 import ganymedes01.etfuturum.api.tags.helpers.MiscHelpers;
@@ -26,7 +26,7 @@ public abstract class TagContainerBasic<Type> {
 
     protected final Type taggable;
 
-    protected final Set<String> tags = new ObjectOpenHashSet<>();
+    protected final Set<String> tags = new HashSet<>();
     protected Set<String> lookupCache;
 
     /// Both of these should be static lists, that are passed into every TagContainer of this type.
@@ -44,7 +44,7 @@ public abstract class TagContainerBasic<Type> {
 
         // Maintain reverse lookup table
         for(String tag : tags) {
-            revLookupTable.computeIfAbsent(tag, o -> new SetPair<>(new ObjectOpenHashSet<>())).getUnlocked().add(taggable);
+            revLookupTable.computeIfAbsent(tag, o -> new SetPair<>(new HashSet<>())).getUnlocked().add(taggable);
         }
 
         clearCaches();
@@ -72,7 +72,7 @@ public abstract class TagContainerBasic<Type> {
         }
 
         if(!getBaseTags().isEmpty()) {
-            lookupCache = new ObjectOpenHashSet<>(getBaseTags());
+            lookupCache = new HashSet<>(getBaseTags());
 
             for(String tag : lookupCache) {
                 inheritorContainer.addInheritedRecursive(tag, lookupCache);
