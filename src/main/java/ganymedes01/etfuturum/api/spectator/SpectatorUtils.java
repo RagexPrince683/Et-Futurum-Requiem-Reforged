@@ -31,14 +31,16 @@ public class SpectatorUtils {
 
     @ApiStatus.AvailableSince("3.0.0")
     public static boolean isSpectator(Entity entity) {
-        if(entity instanceof EntityPlayerMP player) {
+        if (entity instanceof EntityPlayerMP player) {
             if(!(player instanceof FakePlayer) && player.worldObj != null) {
                 return player.theItemInWorldManager.getGameType() == SpectatorUtils.SPECTATOR_GAMETYPE;
             }
-        } else if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-            if(FMLClientHandler.instance().getWorldClient() != null && FMLClientHandler.instance().getClientPlayerEntity() == entity) {
-                return FMLClientHandler.instance().getClient().playerController.currentGameType == SpectatorUtils.SPECTATOR_GAMETYPE;
-            }
+        } else if (FMLCommonHandler.instance().getSide() == Side.CLIENT
+                && FMLClientHandler.instance().getClientPlayerEntity() == entity) {
+            return FMLClientHandler.instance().getClient().playerController.currentGameType == SPECTATOR_GAMETYPE;
+        } else if (entity instanceof ISpectatorInfo info) {
+            // Remote clients do not receive another player's GameType. The player mixin supplies the synchronized value.
+            return info.etfu$isSpectator();
         }
         return false;
     }
