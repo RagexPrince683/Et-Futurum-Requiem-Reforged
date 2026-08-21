@@ -4,11 +4,13 @@ import ganymedes01.etfuturum.api.spectator.SpectatorUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** Filters JourneyMap's shared radar predicate before either map creates a live entity marker. */
+/** JourneyMap is optional and may not exist on the compile classpath, so its string target must be pseudo. */
+@Pseudo
 @Mixin(targets = "journeymap.client.render.map.RadarRenderer", remap = false)
 public class MixinRadarRenderer {
 	@Inject(method = "isEntityShown", at = @At("HEAD"), cancellable = true, remap = false)
