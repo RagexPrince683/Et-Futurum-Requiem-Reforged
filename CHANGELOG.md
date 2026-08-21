@@ -1,5 +1,9 @@
 # Changelog
 
+## Fix BOP/Witchery compatibility compilation
+
+- Initialize external wood pillars with the required wood material and restore the missing vanilla chunk-coordinate import used by entity replacement tracking.
+
 ## BOP and Witchery wood-family compatibility (GTNewHorizons/Et-Futurum-Requiem#35, #80)
 
 - Add optional, fail-safe Biomes O' Plenty and Witchery external wood descriptors and modern log, fence, redstone, door, trapdoor, boat, chest-boat, and bamboo-raft derivatives.
