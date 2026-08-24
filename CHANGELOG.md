@@ -1,5 +1,10 @@
 # Changelog
 
+## Fix Forge 1.7.10 spectator event-handler crash
+
+- Make the client and common spectator event subscribers instance methods to match their Forge singleton registrations and prevent generated event wrappers from invoking static methods as instance methods.
+- Keep spectator behavior, event priorities, conditional registration, and the statically called player-model restoration helper unchanged.
+
 ## Remove remaining external runtime utility mods
 
 - Remove the GTNHLib runtime declaration and replace its annotation subscribers with explicit Forge event-bus registration.

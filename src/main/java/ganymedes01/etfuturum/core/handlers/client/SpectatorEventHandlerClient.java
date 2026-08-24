@@ -21,14 +21,14 @@ public final class SpectatorEventHandlerClient {
 	}
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onRenderPlayerArmor(RenderPlayerEvent.Specials.Pre event) {
+    public void onRenderPlayerArmor(RenderPlayerEvent.Specials.Pre event) {
         if (SpectatorUtils.isSpectator(event.entityPlayer)) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
-    public static void onRenderEntity(RenderLivingEvent.Pre event) {
+    public void onRenderEntity(RenderLivingEvent.Pre event) {
         EntityPlayer player = FMLClientHandler.instance().getClientPlayerEntity();
         Entity following = SpectatorUtils.getSpectatingEntity(player);
         if (SpectatorUtils.isSpectator(player) && event.entity.equals(following) && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
@@ -37,7 +37,7 @@ public final class SpectatorEventHandlerClient {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onOverlayRenderPre(RenderGameOverlayEvent.Pre event) {
+    public void onOverlayRenderPre(RenderGameOverlayEvent.Pre event) {
         EntityPlayer player = FMLClientHandler.instance().getClientPlayerEntity();
         if (SpectatorUtils.isSpectator(player)) {
             if (event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
@@ -61,7 +61,7 @@ public final class SpectatorEventHandlerClient {
     }
 
     @SubscribeEvent
-    public static void onHandRender(RenderHandEvent event) {
+    public void onHandRender(RenderHandEvent event) {
         EntityPlayer player = FMLClientHandler.instance().getClientPlayerEntity();
         if (SpectatorUtils.isSpectator(player)) {
             event.setCanceled(true);
@@ -69,7 +69,7 @@ public final class SpectatorEventHandlerClient {
     }
 
     @SubscribeEvent
-    public static void onFireRender(RenderBlockOverlayEvent event) {
+    public void onFireRender(RenderBlockOverlayEvent event) {
         if (SpectatorUtils.isSpectator(event.player)) {
             event.setCanceled(true);
         }
@@ -77,7 +77,7 @@ public final class SpectatorEventHandlerClient {
 
     /* TODO look into increasing the distance instead of outright disabling it */
     @SubscribeEvent
-    public static void onRenderFogDensity(EntityViewRenderEvent.FogDensity event) {
+    public void onRenderFogDensity(EntityViewRenderEvent.FogDensity event) {
         if (SpectatorUtils.isSpectator(event.entity) && event.block.getMaterial().isLiquid()) {
             event.setCanceled(true);
             event.density = 0;
@@ -85,7 +85,7 @@ public final class SpectatorEventHandlerClient {
     }
 
     @SubscribeEvent
-    public static void onBlockHighlight(DrawBlockHighlightEvent event) {
+    public void onBlockHighlight(DrawBlockHighlightEvent event) {
         if (SpectatorUtils.isSpectator(event.player) && event.target.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             TileEntity te = FMLClientHandler.instance().getWorldClient().getTileEntity(event.target.blockX, event.target.blockY, event.target.blockZ);
             if (!SpectatorUtils.canSpectatorSelectTileEntity(te)) {
@@ -109,7 +109,7 @@ public final class SpectatorEventHandlerClient {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
+    public void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
         if(SpectatorUtils.isSpectator(event.entityPlayer)) {
             if(SpectatorUtils.getSpectatingEntity(event.entityPlayer) != null) {
                 event.setCanceled(true);
@@ -120,7 +120,7 @@ public final class SpectatorEventHandlerClient {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
+    public void onRenderPlayerPost(RenderPlayerEvent.Post event) {
         if(SpectatorUtils.isSpectator(event.entityPlayer)) {
             toggleVisibility(event.renderer.modelBipedMain, true);
         }
