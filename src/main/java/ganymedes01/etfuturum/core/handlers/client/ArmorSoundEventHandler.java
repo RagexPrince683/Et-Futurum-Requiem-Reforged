@@ -1,36 +1,89 @@
 package ganymedes01.etfuturum.core.handlers.client;
 
-import com.gtnewhorizon.gtnhlib.client.event.LivingEquipmentChangeEvent;
-import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
-import com.gtnewhorizon.gtnhlib.eventbus.Phase;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import ganymedes01.etfuturum.api.ArmorSoundsRegistry;
 import ganymedes01.etfuturum.api.spectator.SpectatorUtils;
-import ganymedes01.etfuturum.configuration.configs.ConfigSounds;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 
-@EventBusSubscriber(phase = Phase.PRE)
-public class ArmorSoundEventHandler {
+import java.util.Map;
+import java.util.WeakHashMap;
 
-	@EventBusSubscriber.Condition
-	public static boolean condition() {
-		ArmorSoundsRegistry.init();
-		return ConfigSounds.armorEquip;
+/** Tracks client-side armor slots using the native Forge living-update event. */
+public final class ArmorSoundEventHandler {
+
+	public static final ArmorSoundEventHandler INSTANCE = new ArmorSoundEventHandler();
+
+	private final Map<EntityLivingBase, EquipmentState> equipmentByEntity = new WeakHashMap<>();
+
+	private ArmorSoundEventHandler() {
 	}
 
 	@SubscribeEvent
-	public static void handleArmorSounds(LivingEquipmentChangeEvent event) {
-		if (!event.isInitial() && event.getSlot() > 0) {
-			if(SpectatorUtils.isSpectator(event.entity) || SpectatorUtils.wasSpectator(event.entity)) {
-				return;
-			}
-			ItemStack from = event.getFrom();
-			ItemStack to = event.getTo();
-			if (((from == null && to != null) || (from != null && to != null && from.getItem() != to.getItem()))) {
-				String sound = ArmorSoundsRegistry.getEquipSound(to);
-				if(sound != null) {
-					event.entity.worldObj.playSoundAtEntity(event.entity, sound, 1, 1);
+	public void handleArmorSounds(LivingUpdateEvent event) {
+		EntityLivingBase entity = event.entityLiving;
+		if (!entity.worldObj.isRemote) return;
+
+		EquipmentState state = equipmentByEntity.get(entity);
+		if (state == null) {
+			equipmentByEntity.put(entity, new EquipmentState(entity));
+			return;
+		}
+		if (SpectatorUtils.isSpectator(entity) || SpectatorUtils.wasSpectator(entity)) {
+			state.update(entity);
+			return;
+		}
+
+		for (int slot = 1; slot <= 4; slot++) {
+			ItemStack stack = entity.getEquipmentInSlot(slot);
+			Item previous = state.get(slot);
+			Item current = stack == null ? null : stack.getItem();
+			if (current != null && current != previous) {
+				String sound = ArmorSoundsRegistry.getEquipSound(stack);
+				if (sound != null) {
+					entity.worldObj.playSoundAtEntity(entity, sound, 1, 1);
 				}
+			}
+			state.set(slot, current);
+		}
+	}
+
+	private static final class EquipmentState {
+		private Item feet;
+		private Item legs;
+		private Item chest;
+		private Item head;
+
+		private EquipmentState(EntityLivingBase entity) {
+			update(entity);
+		}
+
+		private void update(EntityLivingBase entity) {
+			for (int slot = 1; slot <= 4; slot++) {
+				ItemStack stack = entity.getEquipmentInSlot(slot);
+				set(slot, stack == null ? null : stack.getItem());
+			}
+		}
+
+		private Item get(int slot) {
+			switch (slot) {
+				case 1: return feet;
+				case 2: return legs;
+				case 3: return chest;
+				case 4: return head;
+				default: throw new IllegalArgumentException("Not an armor slot: " + slot);
+			}
+		}
+
+		private void set(int slot, Item item) {
+			switch (slot) {
+				case 1: feet = item; break;
+				case 2: legs = item; break;
+				case 3: chest = item; break;
+				case 4: head = item; break;
+				default: throw new IllegalArgumentException("Not an armor slot: " + slot);
 			}
 		}
 	}

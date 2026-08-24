@@ -25,4 +25,4 @@ does not call or depend on them.
 
 The internalized facilities no longer reference fastutil. Metadata maps use `IdentityHashMap` for outer Block/Item keys and boxed-integer `HashMap` instances for metadata, while tag containers use Java maps and sets. This preserves identity and wildcard behavior without inheriting a hidden runtime library.
 
-GTNHLib remains independently required by Et Futurum's event subscribers, armor equipment-change handling, and ocean-monument coordinate packing. UniMixins' GTNH Mixins module supplies `IEarlyMixinLoader`/`ILateMixinLoader`; neither dependency replaces HogUtils ownership of the facilities above.
+GTNHLib is no longer required. Ordinary Forge event registration now owns the spectator and armor-sound handlers, a client-side Forge living-update tracker detects armor equipment changes, and project-owned primitive coordinate utilities back ocean monuments. UniMixins' GTNH Mixins module still supplies `IEarlyMixinLoader`/`ILateMixinLoader`; this is part of UniMixins and does not make GTNHLib or HogUtils a runtime dependency.

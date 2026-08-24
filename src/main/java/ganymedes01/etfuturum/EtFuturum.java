@@ -192,6 +192,10 @@ public class EtFuturum {
 	@SuppressWarnings("unchecked")
 	public void preInit(FMLPreInitializationEvent event) {
 		RecipeHelper.init();
+		if (event.getSide() == Side.CLIENT && ConfigSounds.armorEquip) {
+			ArmorSoundsRegistry.init();
+			MinecraftForge.EVENT_BUS.register(ArmorSoundsRegistry.INSTANCE);
+		}
 		if(ModsList.IRON_CHEST.isLoaded()) {
 			CompatIronChests.init();
 		}

@@ -1,11 +1,18 @@
 # Changelog
 
+## Remove remaining external runtime utility mods
+
+- Remove the GTNHLib runtime declaration and replace its annotation subscribers with explicit Forge event-bus registration.
+- Track client armor-slot item changes with a weakly keyed, allocation-stable state cache and preserve the existing equip-sound rules.
+- Replace boxed ocean-monument coordinates with project-owned packed-coordinate helpers and a pre-sized primitive open-addressing map.
+- Document Reforged's self-contained RageCraft focus while retaining upstream attribution.
+
 ## Remove accidental fastutil runtime dependency
 
 - Replace every direct fastutil collection, primitive map, function, and pair use with Java 8 collections/functions or the already bundled Apache Commons pair.
 - Keep block and item metadata maps identity-keyed with wildcard fallback and lazy map views, and retain tag inheritance, reverse lookup, and metadata-aware registration.
 - Make both Mixin loaders bootstrap-safe without fastutil while retaining UniMixins integration.
-- Retain GTNHLib for its event bus, client equipment event, and coordinate-packing APIs; HogUtils remains unnecessary.
+- At this stage of the migration, event registration, client equipment events, and coordinate packing still came from GTNHLib; the newer entry above completes their replacement.
 
 ## Fix GenericUtils filename validation overload
 

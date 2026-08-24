@@ -1,11 +1,9 @@
 package ganymedes01.etfuturum.api;
 
-import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
-import com.gtnewhorizon.gtnhlib.eventbus.Phase;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import ganymedes01.etfuturum.ModItems;
 import ganymedes01.etfuturum.Tags;
-import ganymedes01.etfuturum.core.handlers.client.ArmorSoundEventHandler;
+import ganymedes01.etfuturum.configuration.configs.ConfigSounds;
 import org.apache.commons.lang3.tuple.Pair;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,8 +19,8 @@ import ganymedes01.etfuturum.api.tags.helpers.ItemTags;
 import java.util.Map;
 import java.util.Set;
 
-@EventBusSubscriber(phase = Phase.INIT)
 public class ArmorSoundsRegistry {
+	public static final ArmorSoundsRegistry INSTANCE = new ArmorSoundsRegistry();
 	private static final HashMap<String, String> TAG_TO_SOUND_MAP = new HashMap<>();
 
 	public static final String GENERIC_EQUIP_SOUND = Tags.MC_ASSET_VER + ":item.armor.equip_generic";
@@ -117,7 +115,7 @@ public class ArmorSoundsRegistry {
 	}
 
 	@SubscribeEvent
-	public static void registerDefaults(BlockItemIterateEvent.ItemRegister.Init event) {
+	public void registerDefaults(BlockItemIterateEvent.ItemRegister.Init event) {
 		boolean checkEquip = event.objToRegister instanceof ItemArmor
 				|| event.namespaceID.contains("skull") || event.namespaceID.contains("head") || event.namespaceID.contains("pumpkin");
 		if(checkEquip && getEquipSound(event.objToRegister, OreDictionary.WILDCARD_VALUE) == null) {
@@ -133,8 +131,7 @@ public class ArmorSoundsRegistry {
 		}
 	}
 
-	@EventBusSubscriber.Condition
 	public static boolean condition() {
-		return ArmorSoundEventHandler.condition();
+		return ConfigSounds.armorEquip;
 	}
 }

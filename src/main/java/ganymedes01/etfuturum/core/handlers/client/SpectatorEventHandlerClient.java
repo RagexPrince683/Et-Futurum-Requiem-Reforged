@@ -1,12 +1,9 @@
 package ganymedes01.etfuturum.core.handlers.client;
 
-import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import ganymedes01.etfuturum.api.spectator.SpectatorUtils;
-import ganymedes01.etfuturum.configuration.configs.ConfigMixins;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -17,13 +14,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.*;
 
-@EventBusSubscriber(side = {Side.CLIENT})
-public abstract class SpectatorEventHandlerClient {
+public final class SpectatorEventHandlerClient {
+	public static final SpectatorEventHandlerClient INSTANCE = new SpectatorEventHandlerClient();
 
-    @EventBusSubscriber.Condition
-    private static boolean condition() {
-        return ConfigMixins.enableSpectatorMode;
-    }
+	private SpectatorEventHandlerClient() {
+	}
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onRenderPlayerArmor(RenderPlayerEvent.Specials.Pre event) {

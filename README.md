@@ -21,6 +21,16 @@ and other really good contributions.
 The mod uses MCLib's AssetDirector module to download assets from Mojang's servers.
 Check [its wiki page](https://github.com/makamys/MCLib/wiki/AssetDirector) for more information.
 
+## About This Fork
+
+Et Futurum Requiem Reforged is maintained primarily for the RageCraft modpack and for the maintainer's own goals. This fork may make different architecture, compatibility, and dependency choices from upstream for those reasons.
+
+Reforged aims to remain self-contained for players. When practical, required functionality is kept inside the project instead of requiring extra runtime library mods. This keeps RageCraft installation and maintenance simpler.
+
+These choices are specific to Reforged. They are not a claim that the upstream project's architecture or dependency choices are wrong.
+
+Upstream Et Futurum Requiem remains the foundation of this project and retains full credit for its original work.
+
 ![JProfiler](https://www.ej-technologies.com/images/product_banners/jprofiler_large.png)  
 This mod is tested and profiled with JProfiler! JProfiler combines high-level analytics with low-level JVM data to pinpoint performance bottlenecks, memory leaks, slow JDBC queries, costly HTTP calls, and much more. Free open-source projects may be eligible for a **free** license. You can learn more about JProfiler here:  
 https://www.ej-technologies.com/jprofiler
@@ -29,10 +39,7 @@ https://www.ej-technologies.com/jprofiler
 
 - [UniMixins](https://modrinth.com/mod/unimixins)
   - Specifically, its GTNH Mixins module supplies the early and late Mixin loader interfaces.
-- [GTNHLib](https://github.com/GTNewHorizons/GTNHLib)
-  - Used directly for event-bus subscribers, the client equipment-change event, and coordinate packing; it is not used as a source of collection classes.
-
-HogUtils is no longer required. Its formerly used tag, metadata-map, recipe, world, and utility functionality is owned by Et Futurum. UniMixins and GTNHLib remain the explicit runtime dependencies described above.
+HogUtils, FastUtil, GTNHLib, and GTNHExtLib are not runtime dependencies. Their formerly used functionality is either owned by Et Futurum or supplied by Minecraft and Forge 1.7.10 APIs already present in the target environment.
 
 ## Contributing
 
