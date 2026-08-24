@@ -13,7 +13,7 @@ public class SpectatorEventHandler {
 	public static final SpectatorEventHandler INSTANCE = new SpectatorEventHandler();
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onInteract(PlayerInteractEvent event) {
+    public void onInteract(PlayerInteractEvent event) {
         if (SpectatorUtils.isSpectator(event.entityPlayer)) {
             if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
                 event.setCanceled(true);
@@ -27,14 +27,14 @@ public class SpectatorEventHandler {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onPlace(BlockEvent.PlaceEvent event) {
+    public void onPlace(BlockEvent.PlaceEvent event) {
         if (SpectatorUtils.isSpectator(event.player)) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onItemPickup(EntityItemPickupEvent event) {
+    public void onItemPickup(EntityItemPickupEvent event) {
         if (SpectatorUtils.isSpectator(event.entityPlayer)) {
             event.setCanceled(true);
         }
@@ -42,7 +42,7 @@ public class SpectatorEventHandler {
 
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void itemToss(ItemTossEvent event) {
+    public void itemToss(ItemTossEvent event) {
         if (SpectatorUtils.isSpectator(event.player) && event.player.inventory.addItemStackToInventory(event.entityItem.getEntityItem())) {
             // Cancels any attempt to throw away items, unless they don't fit in the inventory.
             event.setCanceled(true);
