@@ -21,7 +21,11 @@ import ganymedes01.etfuturum.client.subtitle.GuiSubtitles;
 import ganymedes01.etfuturum.compat.CompatIronChests;
 import ganymedes01.etfuturum.compat.ModsList;
 import ganymedes01.etfuturum.configuration.configs.ConfigFunctions;
+import ganymedes01.etfuturum.configuration.configs.ConfigMixins;
+import ganymedes01.etfuturum.configuration.configs.ConfigSounds;
 import ganymedes01.etfuturum.core.handlers.client.ClientEventHandler;
+import ganymedes01.etfuturum.core.handlers.client.ArmorSoundEventHandler;
+import ganymedes01.etfuturum.core.handlers.client.SpectatorEventHandlerClient;
 import ganymedes01.etfuturum.entities.*;
 import ganymedes01.etfuturum.lib.RenderIDs;
 import ganymedes01.etfuturum.tileentities.*;
@@ -50,6 +54,12 @@ public class ClientProxy extends CommonProxy {
 		super.registerEvents();
 		FMLCommonHandler.instance().bus().register(ClientEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);
+		if (ConfigMixins.enableSpectatorMode) {
+			MinecraftForge.EVENT_BUS.register(SpectatorEventHandlerClient.INSTANCE);
+		}
+		if (ConfigSounds.armorEquip) {
+			MinecraftForge.EVENT_BUS.register(ArmorSoundEventHandler.INSTANCE);
+		}
 
 		if (ConfigFunctions.enableSubtitles) {
 			GuiSubtitles.INSTANCE = new GuiSubtitles(FMLClientHandler.instance().getClient());

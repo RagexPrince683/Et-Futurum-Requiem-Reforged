@@ -1,8 +1,9 @@
 package ganymedes01.etfuturum.world.structure;
 
-import com.gtnewhorizon.gtnhlib.util.CoordinatePacker;
 import ganymedes01.etfuturum.EtFuturum;
 import ganymedes01.etfuturum.ModBlocks;
+import ganymedes01.etfuturum.api.utils.LongIntOpenHashMap;
+import ganymedes01.etfuturum.api.utils.PackedBlockCoordinates;
 import ganymedes01.etfuturum.configuration.configs.ConfigBlocksItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -16,7 +17,7 @@ import java.util.*;
 public class OceanMonument {
 
 	private static final List<BiomeGenBase> validBiomes = Arrays.asList(BiomeGenBase.ocean, BiomeGenBase.deepOcean, BiomeGenBase.river, BiomeGenBase.frozenOcean, BiomeGenBase.frozenRiver);
-	private static final Map<Long, Integer> map = new HashMap<>(26000);
+	private static final LongIntOpenHashMap map = new LongIntOpenHashMap(26000);
 
 	public static void makeMap() {
 		try {
@@ -36,7 +37,7 @@ public class OceanMonument {
 				final int x = Integer.parseInt(coords[0].trim());
 				final int y = Integer.parseInt(coords[1].trim());
 				final int z = Integer.parseInt(coords[2].trim());
-				final long key = CoordinatePacker.pack(x, y, z);
+				final long key = PackedBlockCoordinates.pack(x, y, z);
 				final int value = Integer.parseInt(data[1]);
 
 				map.put(key, value);
@@ -52,12 +53,13 @@ public class OceanMonument {
 		if (world.isRemote)
 			return;
 
-		for (Map.Entry<Long, Integer> entry : map.entrySet()) {
-			final long pos = entry.getKey();
-			final int value = entry.getValue();
-			final int posX = CoordinatePacker.unpackX(pos);
-			final int posY = CoordinatePacker.unpackY(pos);
-			final int posZ = CoordinatePacker.unpackZ(pos);
+		for (int index = 0; index < map.capacity(); index++) {
+			if (!map.isOccupied(index)) continue;
+			final long pos = map.keyAt(index);
+			final int value = map.valueAt(index);
+			final int posX = PackedBlockCoordinates.unpackX(pos);
+			final int posY = PackedBlockCoordinates.unpackY(pos);
+			final int posZ = PackedBlockCoordinates.unpackZ(pos);
 
 			Block block = null;
 			int meta = 0;

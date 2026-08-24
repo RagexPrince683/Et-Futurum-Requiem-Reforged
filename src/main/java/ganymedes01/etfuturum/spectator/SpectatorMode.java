@@ -1,6 +1,5 @@
 package ganymedes01.etfuturum.spectator;
 
-import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
 import ganymedes01.etfuturum.api.spectator.ISpectatorInfo;
 import ganymedes01.etfuturum.api.spectator.SpectatorUtils;
 import ganymedes01.etfuturum.configuration.configs.ConfigMixins;
@@ -24,7 +23,6 @@ public class SpectatorMode {
 	@Deprecated
 	public static final WorldSettings.GameType SPECTATOR_GAMETYPE = SpectatorUtils.SPECTATOR_GAMETYPE;
 
-	@EventBusSubscriber.Condition
 	public static boolean condition() {
 		return ConfigMixins.enableSpectatorMode;
 	}
