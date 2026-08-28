@@ -44,6 +44,10 @@ public final class SpectatorEventHandlerClient {
                 event.setCanceled(true);
             } else if(event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS && SpectatorUtils.getSpectatingEntity(player) == null) {
                 MovingObjectPosition mop = FMLClientHandler.instance().getClient().objectMouseOver;
+                if (mop == null) {
+                    event.setCanceled(true);
+                    return;
+                }
                 if(mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                     TileEntity te = FMLClientHandler.instance().getWorldClient().getTileEntity(mop.blockX, mop.blockY, mop.blockZ);
                     if (!SpectatorUtils.canSpectatorSelectTileEntity(te)) {
