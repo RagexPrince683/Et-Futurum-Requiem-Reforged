@@ -1,5 +1,9 @@
 # Changelog
 
+## Fix spectator crosshair rendering with missing mouse-over state
+
+- Handle a missing `Minecraft.objectMouseOver` safely while rendering the spectator crosshair.
+
 ## Fix Forge 1.7.10 spectator event-handler crash
 
 - Make the client and common spectator event subscribers instance methods to match their Forge singleton registrations and prevent generated event wrappers from invoking static methods as instance methods.
