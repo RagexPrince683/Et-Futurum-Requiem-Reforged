@@ -45,7 +45,7 @@ public class EtFuturumLateMixins implements ILateMixinLoader {
 			}
 		}
 
-		if(ConfigBlocksItems.enableDeepslateOres && ConfigModCompat.moddedDeepslateOres && !ConfigModCompat.moddedDeepslateOresBlacklist.contains("appliedenergistics2") && loadedMods.contains("appliedenergistics2")) {
+		if(side == MixinEnvironment.Side.CLIENT && ConfigBlocksItems.enableDeepslateOres && ConfigModCompat.moddedDeepslateOres && !ConfigModCompat.moddedDeepslateOresBlacklist.contains("appliedenergistics2") && loadedMods.contains("appliedenergistics2")) {
 			mixins.add("deepslateores.MixinRenderQuartzOre");
 		}
 

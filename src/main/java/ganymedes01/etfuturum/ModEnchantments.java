@@ -18,6 +18,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
 
 import java.util.ArrayList;
@@ -53,10 +54,11 @@ public class ModEnchantments {
 		int level = 0;
 		if ((level = EnchantmentHelper.getEnchantmentLevel(frostWalker.effectId, boots)) > 0 && entity.onGround) {
 			double[] prevCoords = prevMoveCache.get(entity);
-			if (prevCoords == null || (Math.abs(prevCoords[0] - entity.posX) > 0.003D && Math.abs(prevCoords[1] - entity.posZ) > 0.003D)) {
-				int x = (int) entity.posX;
-				int y = (int) entity.posY;
-				int z = (int) entity.posZ;
+			if (prevCoords == null || Math.abs(prevCoords[0] - entity.posX) > 0.003D
+					|| Math.abs(prevCoords[1] - entity.posZ) > 0.003D || prevCoords[2] != entity.posY) {
+				int x = MathHelper.floor_double(entity.posX);
+				int y = MathHelper.floor_double(entity.posY);
+				int z = MathHelper.floor_double(entity.posZ);
 
 				int radius = Math.min(16, 2 + level);
 
@@ -73,7 +75,7 @@ public class ModEnchantments {
 						}
 					}
 				}
-				prevMoveCache.put(entity, new double[]{entity.posX, entity.posZ});
+				prevMoveCache.put(entity, new double[]{entity.posX, entity.posZ, entity.posY});
 			}
 		} else {
 			prevMoveCache.remove(entity);
@@ -86,7 +88,7 @@ public class ModEnchantments {
 		EntityXPOrb orb = event.orb;
 		if (player.worldObj.isRemote)
 			return;
-		if (!ConfigEnchantsPotions.enableMending)
+		if (!ConfigEnchantsPotions.enableMending || orb.xpValue <= 0)
 			return;
 
 		ArrayList<ItemStack> stacks = new ArrayList<>();
@@ -102,20 +104,20 @@ public class ModEnchantments {
 			}
 		}
 
+		int xp = orb.xpValue;
 		for (ItemStack stack : stacks)
 			if (stack != null && stack.getItemDamage() > 0 && EnchantmentHelper.getEnchantmentLevel(mending.effectId, stack) > 0) {
 				Item item = stack.getItem();
 				if (item == null || !item.isRepairable()) continue;
-				int xp = orb.xpValue;
-				while (xp > 0 && stack.getItemDamage() > 0) {
-					stack.setItemDamage(stack.getItemDamage() - 2);
-					xp--;
-				}
+				int repaired = (int) Math.min((long) xp * 2, stack.getItemDamage());
+				stack.setItemDamage(stack.getItemDamage() - repaired);
+				xp -= repaired / 2 + repaired % 2;
 				if (xp <= 0) {
 					orb.setDead();
 					event.setCanceled(true);
 					return;
 				}
 			}
+		orb.xpValue = xp;
 	}
 }

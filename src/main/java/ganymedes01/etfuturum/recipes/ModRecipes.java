@@ -263,7 +263,7 @@ public class ModRecipes {
 			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output, objects);
 		}
 
-		if (!ModsList.BOTANIA.isLoaded()) {
+		if (ConfigFunctions.enableRecipeForPrismarine && !ModsList.BOTANIA.isLoaded()) {
 			ItemStack output1 = ModItems.PRISMARINE_SHARD.newItemStack(4);
 			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output1, "xy", "zx", 'x', "gemQuartz", 'y', "dyeBlue", 'z', "dyeGreen");
 			ItemStack output = ModItems.PRISMARINE_CRYSTALS.newItemStack(4);

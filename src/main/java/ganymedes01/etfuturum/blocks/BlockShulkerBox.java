@@ -175,6 +175,7 @@ public class BlockShulkerBox extends BlockContainer {
 				box.type = newType;
 				box.chestContents = new ItemStack[box.getSizeInventory()];
 				System.arraycopy(tempCopy, 0, box.chestContents, 0, tempCopy.length);
+				box.markDirty();
 				if (!player.capabilities.isCreativeMode) {
 					stack.stackSize--;
 				}

@@ -94,6 +94,7 @@ public class EtFuturum {
 
 	@EventHandler
 	public void serverStopped(FMLServerStoppedEvent event) {
+		ServerPacketExecutor.stop();
 		ServerEventHandler.INSTANCE.onServerStopped();
 	}
 
@@ -512,6 +513,7 @@ public class EtFuturum {
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
+		ServerPacketExecutor.start();
 		if (ConfigFunctions.enableFillCommand) {
 			event.registerServerCommand(new CommandFill());
 		}

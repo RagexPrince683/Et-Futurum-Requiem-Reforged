@@ -144,3 +144,16 @@
 
 - Guard entity replacement chunk access so `EntityJoinWorldEvent` never force-loads an absent neighboring chunk.
 - Keep the original entity alive and its join event active when replacement cannot be completed.
+
+## 2026-10-20 22:28 — Initial audit and correctness stabilization
+
+- Validate armor-stand interaction identity, range, hit coordinates and entity state; validate boat movement and disabled-elytra requests while preserving existing packet layouts.
+- Execute custom server packet actions on the server thread through a bounded lifecycle-managed queue, and isolate scheduled client packet callbacks behind the sided proxy.
+- Conserve Mending's remaining XP budget across equipment and player XP, preserve existing repair order and rounding, and correct Frost Walker straight-line/negative-coordinate behavior.
+- Correct brewing inventory extraction and dirty state, keep brewing server-authoritative, and reject invalid fuel consumption. Correct the documented blaze-powder cycle count and identify unsupported legacy custom-fuel operations.
+- Restore dedicated-server damage-direction synchronization, late-resolved shulker storage bans, furnace fuel rules, prismarine recipe and netherite flammability options; validate invalid regex and floating-point settings and declare restart requirements.
+- Correct bamboo biome selection, fossil filtering/fallback and mud generation independent of cherry content; restrict falling-concrete work to its world and prevent repeated conversion/removal.
+- Restrict the optional AE2 renderer Mixin to clients, preserve smithing NBT independence, fix its input slot ranges, persist shulker upgrades and apply the intended rabbit biome exclusion.
+- Correct lava cauldron bucket withdrawal, rain/water interaction and comparator behavior without changing its registered identity.
+- Add a source audit and full configuration-field trace with separately tracked unresolved findings and upstream integration candidates.
+- Load dependent configurations in declaration order so the Nether master switch consistently overrides experimental Nether content.

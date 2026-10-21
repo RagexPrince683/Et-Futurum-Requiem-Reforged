@@ -205,7 +205,7 @@ public class ConfigWorld extends ConfigBase {
 	@Override
 	protected void initValues() {
 		if (enableFossils) {
-			if (ModsList.NETHERLICIOUS.isLoaded() && fossilBlockID.equals("etfuturum:bone_block") && !ModBlocks.BONE.isEnabled()) {
+			if (ModsList.NETHERLICIOUS.isLoaded() && (fossilBlockID.equals("etfuturum:bone") || fossilBlockID.equals("etfuturum:bone_block")) && !ModBlocks.BONE.isEnabled()) {
 				fossilBlock = new BlockMetaPair(ExternalContent.Blocks.NETHERLICIOUS_BONE_BLOCK.get(), 0);
 			} else {
 				String[] fossilBlockArray = fossilBlockID.split(":");

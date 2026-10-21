@@ -12,6 +12,8 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class ConfigFunctions extends ConfigBase {
 
@@ -28,7 +30,7 @@ public class ConfigFunctions extends ConfigBase {
 	public static boolean enableMeltGear = false;
 	public static boolean enableRecipeForTotem;
 	public static boolean enableGamemodeSwitcher;
-	public static List<Item> shulkerBans;
+	public static List<Item> shulkerBans = new ArrayList<>();
 	public static String[] shulkerBansString;
 	public static int shulkerBoxTooltipLines;
 	public static boolean enableExtraF3HTooltips;
@@ -191,9 +193,7 @@ public class ConfigFunctions extends ConfigBase {
 
 	@Override
 	protected void syncConfigOptions() {
-		if (EtFuturumEarlyMixins.side == MixinEnvironment.Side.CLIENT) {
-			enableAttackedAtYawFix = getBoolean("enableAttackedAtYawFix", catChanges, true, "Adds a packet to send the attackedAtYaw field value to the client, which allows the screen to tilt based on where damage came from, and either left or right for direction-less sources like drowning or burning, instead of tilting to the left no matter what.");
-		}
+		enableAttackedAtYawFix = getBoolean("enableAttackedAtYawFix", catChanges, true, "Adds a packet to send the attackedAtYaw field value to the client, which allows the screen to tilt based on where damage came from, and either left or right for direction-less sources like drowning or burning, instead of tilting to the left no matter what.");
 
 		//changes
 		enableExtraBurnableBlocks = getBoolean("enableExtraBurnableBlocks", catChanges, true, "Fences, gates and dead bushes burn");
@@ -246,10 +246,17 @@ public class ConfigFunctions extends ConfigBase {
 
 		enableSubtitles = getBoolean("enableSubtitles", catClient, false, "Enable subtitles");
 		subtitleBlacklist = getString("subtitleBlacklist", catClient, "^(dig\\.*)", "Regex of subtitles to blacklist");
+		try {
+			Pattern.compile(subtitleBlacklist);
+		} catch (PatternSyntaxException e) {
+			Logger.warn("Invalid subtitleBlacklist expression; using the default filter.");
+			subtitleBlacklist = "^(dig\\.*)";
+			get(catClient, "subtitleBlacklist", subtitleBlacklist).set(subtitleBlacklist);
+		}
 	}
 
 	@Override
-	protected void onConstructingValues() {
+	protected void initValues() {
 		ConfigFunctions.shulkerBans = new ArrayList<Item>();
 		for (String itemName : ConfigFunctions.shulkerBansString) {
 			String[] nameAndID;
@@ -266,7 +273,10 @@ public class ConfigFunctions extends ConfigBase {
 				System.err.println("Shulker ban list entry \"" + itemName + "\" is formatted incorrectly!");
 			}
 		}
+	}
 
+	@Override
+	protected void onConstructingValues() {
 		if (EtFuturumEarlyMixins.side == MixinEnvironment.Side.CLIENT && ConfigFunctions.enablePlayerSkinOverlay) {
 			if (ModsList.EARS.isLoaded() || ModsList.FOAMFIX.isLoaded() || ModsList.SKINPORT.isLoaded() || ModsList.MOREPLAYERMODELS.isLoaded()
 					|| ModsList.DRAGON_BLOCK_C.isLoaded() || FMLClientHandler.instance().hasOptifine()) {

@@ -5,6 +5,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import ganymedes01.etfuturum.Tags;
 import ganymedes01.etfuturum.configuration.configs.*;
 import ganymedes01.etfuturum.mixinplugin.EtFuturumEarlyMixins;
+import ganymedes01.etfuturum.core.utils.Logger;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
@@ -13,13 +14,13 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 public abstract class ConfigBase extends Configuration {
 	protected final List<ConfigCategory> configCats = new ArrayList<>();
-	private static final Set<ConfigBase> CONFIGS = new HashSet<>();
+	private static final Set<ConfigBase> CONFIGS = new LinkedHashSet<>();
 
 	public static final String configDir = "config" + File.separator + Tags.MOD_ID + File.separator;
 
@@ -55,6 +56,7 @@ public abstract class ConfigBase extends Configuration {
 		syncConfigOptions();
 
 		for (ConfigCategory cat : configCats) {
+			cat.setRequiresMcRestart(true);
 			if (EtFuturumEarlyMixins.side == MixinEnvironment.Side.SERVER) {
 				if (cat.getName().toLowerCase().contains("client")) {
 					for (Property prop : cat.getOrderedValues()) {
@@ -74,6 +76,17 @@ public abstract class ConfigBase extends Configuration {
 	}
 
 	protected abstract void syncConfigOptions();
+
+	@Override
+	public float getFloat(String name, String category, float defaultValue, float minValue, float maxValue, String comment) {
+		float value = super.getFloat(name, category, defaultValue, minValue, maxValue, comment);
+		if (!Float.isFinite(value)) {
+			Logger.warn("Invalid non-finite value for " + category + "." + name + "; using " + defaultValue);
+			get(category, name, defaultValue).set(defaultValue);
+			return defaultValue;
+		}
+		return value;
+	}
 
 	/**
 	 * Used in case we need to wait until after preInit to initialize values.

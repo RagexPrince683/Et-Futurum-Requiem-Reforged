@@ -292,11 +292,7 @@ public class ConfigBlocksItems extends ConfigBase {
 				"\nmods.etfuturum.enchantingFuel.addFuel(<etfuturum:amethyst_shard>); //(Adds amethyst shards as an enchanting fuel)" +
 				"\nmods.etfuturum.enchantingFuel.remove(<minecraft:dye:4>); //(Removes lapis lazuli as an enchanting fuel)");
 		enableAnvil = getBoolean("enableNewAnvil", catBlockFunc, true, "Enables new anvil behavior, such as less expensive item renaming");
-		enableBrewingStands = getBoolean("enableNewBrewingStand", catBlockFunc, true, "Makes the brewing stand have a fuel slot like in 1.9+. The fuel slot is compatible with CraftTweaker and takes blaze powder by default. Blaze powder can brew 30 potion cycles." +
-				"\nThe mod prefix is \"mods.etfuturum.brewingFuel\", and the function is \"addFuel\" and an ItemStack or OreDictionary tag, then an integer for how many brew cycles. (Any brewing, regardless of if 1 or all 3 slots are filled, is still one \"cycle\") You can remove fuels using the \"remove\" function and an ItemStack or an OreDictionary tag." +
-				"\nExamples:" +
-				"\nmods.etfuturum.brewingFuel.addFuel(<minecraft:gunpowder>, 10); //(Makes gunpowder have 10 brewing cycles)" +
-				"\nmods.etfuturum.brewingFuel.remove(<minecraft:blaze_powder>); //(Removes blaze powder as a brewing fuel)");
+		enableBrewingStands = getBoolean("enableNewBrewingStand", catBlockFunc, true, "Makes the brewing stand have a fuel slot like in 1.9+. The fuel slot takes blaze powder by default. Blaze powder can brew 20 potion cycles. One cycle brews up to three potions. Custom fuel counts and removal through the legacy CraftTweaker fuel API are currently unsupported.");
 		enableColourfulBeacons = getBoolean("enableNewBeacon", catBlockFunc, true, "Beacon beam can be colored using stained glass");
 		enableInvertedDaylightSensor = getBoolean("enableInvertedSensor", catBlockFunc, true, "Inverted Daylight Sensor");
 		enableOldBaseDaylightSensor = getBoolean("enableOldBaseDaylightSensor", catBlockFunc, false, "Enable the old Et Futurum daylight sensor block. Should be enabled if you still have the old Et Futurum copy of the non-inverted daylight detector that need to be converted.");

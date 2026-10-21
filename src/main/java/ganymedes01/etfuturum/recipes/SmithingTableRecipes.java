@@ -113,7 +113,7 @@ public class SmithingTableRecipes {
 			if (copyNBT) {
 				ItemStack toCopy = var1.getStackInSlot(0);
 				if (toCopy.hasTagCompound()) {
-					stack.setTagCompound(toCopy.getTagCompound());
+					stack.setTagCompound((net.minecraft.nbt.NBTTagCompound) toCopy.getTagCompound().copy());
 				}
 				if (toCopy.isItemStackDamageable() && stack.isItemStackDamageable()) {
 					stack.setItemDamage(toCopy.getItemDamage());

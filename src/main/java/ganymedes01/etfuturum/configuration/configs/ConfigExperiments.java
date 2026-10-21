@@ -41,6 +41,7 @@ public class ConfigExperiments extends ConfigBase {
 
 	@Override
 	protected void syncConfigOptions() {
+		enabledFeatures.clear();
 		enableCrimsonBlocks = getBoolean("enableCrimsonBlocks", catExperiments, false, "Enables the crimson nylium, wood, and plants. This must be on for the crimson forest biome to generate unless Netherlicious is installed.\nThe nether wart block is still a separate toggle, both this and the wart toggle must be turned off to disable the nether wart block, because crimson trees need the wart blocks.");
 		enableWarpedBlocks = getBoolean("enableWarpedBlocks", catExperiments, false, "Enables the warped nylium, wood, and plants. This must be on for the warped forest biome to generate unless Netherlicious is installed. Requires newNether to be enabled without Netherlicious.");
 		enableMangroveBlocks = getBoolean("enableMangroveBlocks", catExperiments, false, "Enables mangrove wood and all of its wood subtypes, and the roots (+ muddy versions).");

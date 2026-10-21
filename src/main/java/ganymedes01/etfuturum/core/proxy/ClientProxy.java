@@ -5,6 +5,9 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import ganymedes01.etfuturum.client.network.ClientPacketHandler;
 import ganymedes01.etfuturum.ModBlocks;
 import ganymedes01.etfuturum.api.event.GlowLichenHighlightEvent;
 import ganymedes01.etfuturum.ModItems;
@@ -46,6 +49,11 @@ import net.minecraftforge.common.MinecraftForge;
 import java.io.File;
 
 public class ClientProxy extends CommonProxy {
+
+	@Override
+	public void handleClientPacket(IMessage packet, MessageContext context) {
+		ClientPacketHandler.handle(packet, context);
+	}
 
 	public static boolean isRenderingInventoryPlayer = false;
 

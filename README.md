@@ -45,6 +45,8 @@ HogUtils, FastUtil, GTNHLib, and GTNHExtLib are not runtime dependencies. Their 
 
 To enable incomplete test features, add `-Detfuturum.testing=true` to your JVM arguments. This also enables a debug item
 
+Configuration files are under `config/etfuturum`. Restart Minecraft or the dedicated server after editing them; a world reload does not reapply content registration, recipes or Mixins. Keep content and Mixin options consistent between clients and servers. Disabling registered content in an existing world can produce Forge missing-mapping warnings and remove saved content.
+
 ## Polar bears
 
 Adult polar bears are hostile to players by default when `polarBearRealism` is enabled in the neutral entity configuration. Set this option to `false` to restore the modern neutral behavior, where adults attack players only while defending nearby cubs.

@@ -210,6 +210,7 @@ public class EntityArmourStand extends EntityLiving {
 	}
 
 	public boolean interact(EntityPlayer player, Vec3 hitPos) {
+		if (isDead) return false;
 		if (!worldObj.isRemote) {
 			byte b0 = 0;
 			ItemStack itemstack = player.getCurrentEquippedItem();

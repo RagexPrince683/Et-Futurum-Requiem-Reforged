@@ -44,7 +44,8 @@ public class TileEntityNewBrewingStand extends TileEntityBrewingStand {
 
 	@Override
 	public void updateEntity() {
-		if (fuel <= 0 && inventory[4] != null) {
+		if (worldObj.isRemote) return;
+		if (fuel <= 0 && inventory[4] != null && BrewingFuelRegistry.getBrewingAmount(inventory[4]) > 0) {
 			fuel = currentFuel = BrewingFuelRegistry.getBrewingAmount(inventory[4]);
 			if (--inventory[4].stackSize <= 0) {
 				inventory[4] = inventory[4].getItem().hasContainerItem(inventory[4]) ? inventory[4].getItem().getContainerItem(inventory[4]) : null;
@@ -204,9 +205,15 @@ public class TileEntityNewBrewingStand extends TileEntityBrewingStand {
 
 	@Override
 	public ItemStack decrStackSize(int slot, int size) {
-		if (slot >= 0 && slot < inventory.length) {
-			ItemStack itemstack = inventory[slot];
-			inventory[slot] = null;
+		if (slot >= 0 && slot < inventory.length && size > 0 && inventory[slot] != null) {
+			ItemStack itemstack;
+			if (inventory[slot].stackSize <= size) {
+				itemstack = inventory[slot];
+				inventory[slot] = null;
+			} else {
+				itemstack = inventory[slot].splitStack(size);
+			}
+			markDirty();
 			return itemstack;
 		}
 		return null;
@@ -224,8 +231,11 @@ public class TileEntityNewBrewingStand extends TileEntityBrewingStand {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
-		if (slot >= 0 && slot < inventory.length)
+		if (slot >= 0 && slot < inventory.length) {
 			inventory[slot] = stack;
+			if (stack != null && stack.stackSize > getInventoryStackLimit()) stack.stackSize = getInventoryStackLimit();
+			markDirty();
+		}
 	}
 
 	@Override

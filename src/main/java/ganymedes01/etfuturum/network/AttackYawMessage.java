@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 
 public class AttackYawMessage implements IMessage {
 
-	float attackedAtYaw;
+	public float attackedAtYaw;
 
 	public AttackYawMessage() {
 	}

@@ -3,6 +3,8 @@ package ganymedes01.etfuturum.core.proxy;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -22,6 +24,7 @@ import ganymedes01.etfuturum.core.utils.Utils;
 import ganymedes01.etfuturum.entities.*;
 import ganymedes01.etfuturum.inventory.*;
 import ganymedes01.etfuturum.lib.GUIIDs;
+import ganymedes01.etfuturum.network.ServerPacketExecutor;
 import ganymedes01.etfuturum.tileentities.*;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -42,7 +45,11 @@ import java.util.List;
 
 public class CommonProxy implements IGuiHandler {
 
+	public void handleClientPacket(IMessage packet, MessageContext context) {
+	}
+
 	public void registerEvents() {
+		FMLCommonHandler.instance().bus().register(ServerPacketExecutor.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EntityEventHandler.INSTANCE);
 		if (ConfigMixins.enableSpectatorMode) {
 			MinecraftForge.EVENT_BUS.register(SpectatorEventHandler.INSTANCE);
@@ -120,7 +127,7 @@ public class CommonProxy implements IGuiHandler {
 			array = ArrayUtils.addAll(array, BiomeDictionary.getBiomesForType(Type.FOREST));
 			for (BiomeGenBase biome : ArrayUtils.clone(array)) {
 				if (biome.getClass().getName().toLowerCase().contains("divinerpg")) {
-					ArrayUtils.removeElement(array, biome);
+					array = ArrayUtils.removeElement(array, biome);
 				}
 			}
 			EntityRegistry.addSpawn(EntityRabbit.class, 6, 1, 3, EnumCreatureType.creature, array);

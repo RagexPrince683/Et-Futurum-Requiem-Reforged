@@ -10,6 +10,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -29,15 +31,31 @@ public class BlockLavaCauldron extends BlockCauldron {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, int x, int y, int z, EntityPlayer player, int side, float subX, float subY, float subZ) {
-//      ItemStack item;
-//      if (player.getCurrentEquippedItem() != null) {
-//          item = player.getCurrentEquippedItem();
-//          if (item.getItem() instanceof ItemBucket) {
-//              // TODO Bucketing lava out of the cauldron
-//          }
-//      }
-//      return true;
-		return super.onBlockActivated(worldIn, x, y, z, player, side, subX, subY, subZ);
+		if (worldIn.isRemote) return true;
+		ItemStack held = player.getCurrentEquippedItem();
+		if (held != null && held.getItem() == Items.bucket && player.canPlayerEdit(x, y, z, side, held)
+				&& worldIn.setBlock(x, y, z, Blocks.cauldron, 0, 3)) {
+			if (!player.capabilities.isCreativeMode) {
+				ItemStack filled = new ItemStack(Items.lava_bucket);
+				if (--held.stackSize == 0) {
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, filled);
+				} else if (!player.inventory.addItemStackToInventory(filled)) {
+					player.dropPlayerItemWithRandomChoice(filled, false);
+				}
+				player.inventory.markDirty();
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public void fillWithRain(World world, int x, int y, int z) {
+		// A full lava cauldron cannot collect rainwater.
+	}
+
+	@Override
+	public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
+		return 3;
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package ganymedes01.etfuturum.mixins.early.uninflammableitem;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import ganymedes01.etfuturum.EtFuturum;
+import ganymedes01.etfuturum.configuration.configs.ConfigFunctions;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -32,7 +33,7 @@ public abstract class MixinEntityItem extends Entity {
 	}
 
 	private void makeImmuneToFire(ItemStack stack) {
-		if (stack != null) {
+		if (stack != null && !ConfigFunctions.enableNetheriteFlammable) {
 			List<String> tags = EtFuturum.getOreStrings(stack);
 			if (getEntityItem().getUnlocalizedName().contains("netherite")
 					|| tags.contains("oreDebris") || tags.contains("scrapDebris")

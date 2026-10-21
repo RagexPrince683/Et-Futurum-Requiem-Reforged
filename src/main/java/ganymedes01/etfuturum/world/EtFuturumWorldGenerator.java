@@ -83,7 +83,6 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 			for (BiomeGenBase biome : fossilBiomesArray) {
 				if (!ArrayUtils.contains(BiomeDictionary.getBiomesForType(Type.HOT), biome) || !ArrayUtils.contains(BiomeDictionary.getBiomesForType(Type.DRY), biome)) {
 					fossilBiomesArray = ArrayUtils.removeElement(fossilBiomesArray, biome);
-					break;
 				}
 			}
 			fossilBiomesArray = ArrayUtils.addAll(fossilBiomesArray, BiomeDictionary.getBiomesForType(Type.SWAMP));
@@ -144,15 +143,12 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 		}
         
 		if (ModBlocks.CHERRY_LOG.isEnabled() && ModBlocks.LEAVES.isEnabled()) {
-		{
 			BiomeGenBase[] cherryBiomeArray = BiomeDictionary.getBiomesForType(Type.MOUNTAIN);
 			cherryBiomeArray = Utils.excludeBiomesFromTypesWithDefaults(cherryBiomeArray, Type.SNOWY, Type.HOT, Type.SANDY, Type.MESA, Type.SPARSE, Type.JUNGLE);
-			if (ModBlocks.CHERRY_LOG.isEnabled() && ModBlocks.LEAVES.isEnabled()) {
-				for(BiomeGenBase biome : cherryBiomeArray) {
-					BiomeTags.addTags(biome, Tags.MOD_ID + ":has_decorator/cherry_tree");
-				}
-				cherryTreeGen = new WorldGenCherryTrees(false);
+			for(BiomeGenBase biome : cherryBiomeArray) {
+				BiomeTags.addTags(biome, Tags.MOD_ID + ":has_decorator/cherry_tree");
 			}
+			cherryTreeGen = new WorldGenCherryTrees(false);
 
 			if (ModBlocks.PINK_PETALS.isEnabled()) {
 				pinkPetalsGen = new WorldGenPinkPetals(ModBlocks.PINK_PETALS.get());
@@ -166,12 +162,11 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 			}
 		}
 
-			if (ModBlocks.MUD.isEnabled()) {
-				mudGen = new WorldGenClay(4);
-				((WorldGenClay) mudGen).field_150546_a/*block*/ = ModBlocks.MUD.get();
-				for(BiomeGenBase biome : BiomeDictionary.getBiomesForType(Type.SWAMP)) {
-					BiomeTags.addTags(biome, Tags.MOD_ID + ":has_decorator/mud_blob");
-				}
+		if (ModBlocks.MUD.isEnabled()) {
+			mudGen = new WorldGenClay(4);
+			((WorldGenClay) mudGen).field_150546_a/*block*/ = ModBlocks.MUD.get();
+			for(BiomeGenBase biome : BiomeDictionary.getBiomesForType(Type.SWAMP)) {
+				BiomeTags.addTags(biome, Tags.MOD_ID + ":has_decorator/mud_blob");
 			}
 		}
 	}
@@ -232,7 +227,7 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 				// null = no bamboo, neither tag present
 				BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 				Boolean dense = BiomeTags.hasTag(biome, Tags.MOD_ID + ":has_decorator/dense_bamboo")
-						? BiomeTags.hasTag(biome, Tags.MOD_ID + ":has_decorator/sparse_bamboo") : null;
+						? Boolean.TRUE : BiomeTags.hasTag(biome, Tags.MOD_ID + ":has_decorator/sparse_bamboo") ? Boolean.FALSE : null;
 				if (y > 0 && dense != null) {
 					int count = dense && rand.nextInt(16) == 0 ? 256 : 16;
 					for (int i = 0; i < count; i++) {

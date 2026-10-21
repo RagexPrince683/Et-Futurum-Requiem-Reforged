@@ -942,7 +942,7 @@ public class ServerEventHandler {
 							if (ConfigBlocksItems.enableLavaCauldrons && item instanceof ItemBucket && ((ItemBucket) item).isFull == Blocks.flowing_lava && meta == 0) {
 								event.setResult(Result.DENY);
 								player.swingItem();
-								world.setBlock(x, y, z, ModBlocks.LAVA_CAULDRON.get());
+								if (!world.setBlock(x, y, z, ModBlocks.LAVA_CAULDRON.get())) return;
 								if (ConfigSounds.fluidInteract) {
 									world.playSoundEffect(x, y, z, Tags.MC_ASSET_VER + ":item.bucket.empty_lava", 1, 1);
 								}
@@ -1985,7 +1985,7 @@ public class ServerEventHandler {
 	public void onPreWorldTick(TickEvent.WorldTickEvent e) {
 		if (e.phase == TickEvent.Phase.START && e.side == Side.SERVER) {
 			if (ModBlocks.CONCRETE_POWDER.isEnabled() && ModBlocks.CONCRETE.isEnabled()) {
-				doConcreteTracking();
+				doConcreteTracking(e.world);
 			}
 			if (ConfigMixins.enableDoWeatherCycle) {
 				DoWeatherCycle.INSTANCE.isWorldTickInProgress = true;
@@ -2018,9 +2018,10 @@ public class ServerEventHandler {
 		}
 	}
 
-	private void doConcreteTracking() {
+	private void doConcreteTracking(World world) {
 		for (Iterator<EntityFallingBlock> iterator = fallingConcreteBlocks.iterator(); iterator.hasNext(); ) {
 			EntityFallingBlock block = iterator.next();
+			if (block.worldObj != world) continue;
 			if (!block.isDead) {
 				int i = MathHelper.floor_double(block.posX);
 				int j = MathHelper.floor_double(block.posY);
@@ -2031,6 +2032,7 @@ public class ServerEventHandler {
 						block.worldObj.setBlock(i, j - jOff, k, ModBlocks.CONCRETE.get(), block.field_145814_a, 3); // metadata
 						block.setDead();
 						iterator.remove();
+						break;
 					}
 				}
 			} else {
@@ -2044,7 +2046,7 @@ public class ServerEventHandler {
 
 	@SubscribeEvent
 	public void fuelBurnTime(FuelBurnTimeEvent e) {
-		if (RecipeHelper.validateItems(e.fuel))
+		if (!RecipeHelper.validateItems(e.fuel))
 			return;
 
 		initFurnaceModifiers();
