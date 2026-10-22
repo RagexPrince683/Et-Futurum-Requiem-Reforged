@@ -145,7 +145,7 @@
 - Guard entity replacement chunk access so `EntityJoinWorldEvent` never force-loads an absent neighboring chunk.
 - Keep the original entity alive and its join event active when replacement cannot be completed.
 
-## 2026-10-20 22:28 — Initial audit and correctness stabilization
+## 2026-10-20 22:28 â€” Initial audit and correctness stabilization
 
 - Validate armor-stand interaction identity, range, hit coordinates and entity state; validate boat movement and disabled-elytra requests while preserving existing packet layouts.
 - Execute custom server packet actions on the server thread through a bounded lifecycle-managed queue, and isolate scheduled client packet callbacks behind the sided proxy.
@@ -157,3 +157,41 @@
 - Correct lava cauldron bucket withdrawal, rain/water interaction and comparator behavior without changing its registered identity.
 - Add a source audit and full configuration-field trace with separately tracked unresolved findings and upstream integration candidates.
 - Load dependent configurations in declaration order so the Nether master switch consistently overrides experimental Nether content.
+
+## 2026-10-21 00:43 â€” Stage A stabilization
+
+- Restore coarse-dirt replacement at native terrain-array generation boundaries and configured client book-page sounds; existing chunks are not scanned or regenerated.
+- Restore count-aware brewing fuel registration, wildcard/exact exclusions, enumeration and CraftTweaker undo while retaining tag-based eligibility. Synchronize full integer fuel counts using native container progress updates, keep existing fuel NBT keys, and reject invalid IMC registrations.
+- Bind native smithing containers to the opened table and eight-block reach. Keep the public two-argument constructor with a bounded opening-position anchor for external callers.
+- Adapt dripstone fluid transfer, mud drying, growth, cave generation and single-entity falling columns from upstream #706 without restoring removed libraries or changing local metadata ordering. Preserve old falling-entity reads; add optional column/source-state NBT.
+- Isolate incomplete sculk catalyst spreading by disabling its death/XP interception while preserving block and tile registrations and ordinary XP drops.
+- Add native lightning-rod rendering, loaded-rod lifecycle indexing, natural strike attraction and eight-tick redstone pulses with persisted deadlines. Existing block-only rods lazily acquire their tile through native lookup. Enable bone-meal azalea growth through the native tree generator.
+- Correct structure sapling-pot items, banner color matching, beetroot maturity and unknown item mappings; restrict End-city chest loot processing to the placed chunk. Honor structure/content gates and preserve EndCity/start/piece identifiers.
+- Validate biome, potion and enchantment slots against live registry capacities and occupants without silently assigning new IDs; retain compatibility with runtime registry expansion.
+- Prevent large generation footprints from loading absent border chunks, use non-loading Nether biome queries, fix monument pillar coordinate checks and inverted delta bounds, and restore nested Nether falling-block state with a finally boundary. Unsafe candidates are skipped before placement; border feature frequency can change, with no retrogen.
+- Move elytra velocity flags into native tracker updates, group falling concrete by its world, and bound server packet admission to 128 actions per connection, 4,096 total and 256 drained per tick. Keep connection/world checks and packet discriminators.
+- Recheck all 371 public configuration fields, retain ordered master toggles and optional-mod gates, remove an unused NEI class reference from the fuel map, and update the existing audit/configuration trace.
+
+## 2026-10-21 02:43 â€” Stage B native Nether and surface content
+
+- Inventory the maintained 1.7.10 catalog against the Java 1.21.11 ceiling, separating completed paths, progression gaps, experimental mechanics, optional integrations and excluded engine work.
+- Add explicit, collision-checked surface biome identities and native climate/decorating paths for Cherry Grove, Mangrove Swamp, Pale Garden, Bamboo Jungle, meadows, groves and mountain variants. Add temperature ocean layers without replacing native coastlines, terrain noise or world height. New-generation switches retain registered biome identities; no retrogen or silent ID changes.
+- Complete mangrove propagule tree growth and hanging ages using existing wood, leaf and sapling identities. Bound moss growth, protect cherry tree footprints and connect cherry sapling bee nests. Correct warped nylium placement and add native bone-meal propagation.
+- Add piglins, brutes, hoglins, zoglins and striders with native AI, survival interactions, timed conversions, persisted payment/anger state, gold reactions, bartering, breeding, riding and drops. Add Soul Speed with a configured enchantment ID, native movement-attribute lifecycle and soul-sand exemption. Retain the Nether master toggle and experimental provider boundaries.
+- Add four bastion template/pool families with bounded deterministic assembly, native saved structure pieces, chunk-clipped placement/loot/mobs and variant loot categories. Preserve existing fortress generation and Nether ore/debris paths.
+- Add pale oak families, native growth, pale vegetation, eyeblossoms, resin production/processing/building recipes and a persisted Creaking Heart/Creaking lifecycle. Keep existing wood metadata separate; preserve Stage A's disabled sculk XP interception.
+- Add frogs, frogspawn, bucketable tadpoles and froglight acquisition as the mangrove dependency chain. Preserve native bucket placement permissions and event handling.
+- Retain the existing dependency/toolchain/Mixin stack, packet IDs, old entity/tile identities and old save formats. New content uses additive identities and NBT. Document legacy adaptations and remaining incomplete mechanics rather than claiming complete modern parity.
+
+- Complete stonecutting, loom patterning and cartography with block-bound native containers, atomic ingredient/output transfers, reusable pattern items, map-copy/scale/lock persistence and NEI views. Preserve existing workstation keys and banner/map identities.
+- Add native guardians and persistent elder variants, monument-bound aquatic spawning, charged beams, mining fatigue and wet sponge acquisition. Migrate new monument generation to saved chunk-clipped template pieces without retrogen or forced neighbor loading.
+- Add saved dragon-victory gateway progression to the experimental End while preserving native combat/XP/portal behavior and rejecting overlapping crystal respawns. Complete eyeblossom states, bee poisoning, dyes/stew, hanging-moss bone meal and bastion degradation processors.
+
+## 2026-10-21 21:18 — Stage B7 native mob backports and survival dependencies
+
+- Add the missing post-1.7.10 mob families through Java 1.21.11, including aquatic life, illagers, traders/llamas, pandas/cats, allays/wardens, camels/sniffers, armadillos, Breeze/Bogged, copper golems, happy ghasts, nautiluses and undead mounts. Preserve existing local IDs and append new living/projectile/passenger identities with bounded saved state.
+- Adapt acquisition to native biomes, villages and structures: bounded water populations, patrols, chunk-contained outposts/allay cages, saved finite raids, dungeon eggs/equipment and naturally summoning underground shriekers. Selected native dungeons provide finite Breeze/Bogged fights; full Trial Chambers, vaults and keys are not included.
+- Add buckets, seagrass/turtle eggs, scutes, membranes, crossbows, tridents/enchantments, wind charges, ancient plants, wolf armor, harnesses, nautilus armor and spears. Use native inventory, smithing, merchant and rider paths; retain disabled-prerequisite recipe deferral and server authority.
+- Add retained native models, released textures, equipment/variant layers, core state animations and AssetDirector sound events. Preserve existing compatibility boundaries and avoid modern player swimming, waterlogging, cave-engine replacement or world-height changes.
+- Complete related husk conversion, fox food/village behavior, piglin crossbows/social combat, hoglin herd retreat, zoglin knockback and tadpole feeding. Index loaded chest lifecycle for bounded copper sorting, and allow adjacent chest transfers without requiring a path into the chest block.
+- Release raid-owned mobs back to normal despawning when a raid ends or is abandoned, preventing permanent escaped raider accumulation. Document the full mob inventory, survival adaptations, configuration identities and remaining mechanic/presentation differences in the existing coverage and configuration documents.

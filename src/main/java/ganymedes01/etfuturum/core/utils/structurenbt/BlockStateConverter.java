@@ -4,7 +4,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -24,9 +23,6 @@ public class BlockStateConverter {
 		for (Pair<Integer, NBTTagCompound> pair : paletteNBT) {
 			String namespace = NBTStructure.getBlockNamespaceFromNBT(pair.getRight());
 
-			//TODO: TileEntity data from some default states (eg potted_poppy)
-			//Flower pots and skulls will need some default TE data since some things that are TE data in 1.7.10 are now BlockState data.
-
 			Map<String, String> properties = NBTStructure.getProperties(pair.getRight());
 			Block block = getBlockFromNamespace(namespace, properties);
 			if (block != null) {
@@ -38,7 +34,7 @@ public class BlockStateConverter {
 
 	/**
 	 * Note that blockName is the ID of the block in the palette mapping, not the object you're mapping it to.
-	 * TODO: This will be used for mapping BlockState data to what was TE data in 1.7.10.
+	 * Converts properties stored in tile NBT on 1.7.10 as well as ordinary metadata.
 	 */
 	public BlockStateContainer createBlockStateContainer(String blockName, Block block, Map<String, String> blockStates, ForgeDirection dir) {
 		BlockStateContainer bsc = new BlockStateContainer(block, getMetaFromStateWithSubtypeAdditions(blockName, blockStates, dir));
@@ -91,25 +87,25 @@ public class BlockStateConverter {
 					case "dead_bush" -> pottedBlock = Blocks.deadbush;
 					case "red_mushroom" -> pottedBlock = Blocks.red_mushroom;
 					case "brown_mushroom" -> pottedBlock = Blocks.brown_mushroom;
-					case "oak_sapling" -> pottedBlock = Blocks.brown_mushroom;
+					case "oak_sapling" -> pottedBlock = Blocks.sapling;
 					case "spruce_sapling" -> {
-						pottedBlock = Blocks.brown_mushroom;
+						pottedBlock = Blocks.sapling;
 						pottedMeta = 1;
 					}
 					case "birch_sapling" -> {
-						pottedBlock = Blocks.brown_mushroom;
+						pottedBlock = Blocks.sapling;
 						pottedMeta = 2;
 					}
 					case "jungle_sapling" -> {
-						pottedBlock = Blocks.brown_mushroom;
+						pottedBlock = Blocks.sapling;
 						pottedMeta = 3;
 					}
 					case "acacia_sapling" -> {
-						pottedBlock = Blocks.brown_mushroom;
+						pottedBlock = Blocks.sapling;
 						pottedMeta = 4;
 					}
 					case "dark_oak_sapling" -> {
-						pottedBlock = Blocks.brown_mushroom;
+						pottedBlock = Blocks.sapling;
 						pottedMeta = 5;
 					}
 					default -> {
@@ -117,7 +113,7 @@ public class BlockStateConverter {
 				}
 				if (pottedBlock != null) {
 					nbt = new NBTTagCompound();
-					nbt.setInteger("Item", Block.getIdFromBlock(pottedBlock));
+					nbt.setInteger("Item", Item.getIdFromItem(Item.getItemFromBlock(pottedBlock)));
 					nbt.setInteger("Data", pottedMeta);
 				}
 			} else if ((truncatedName.endsWith("skull") || truncatedName.endsWith("head"))) {
@@ -519,7 +515,6 @@ public class BlockStateConverter {
 		} else if (blockStates.containsKey("moisture")) {
 			return Integer.parseInt(blockStates.get("moisture")) == 7 ? 1 : 0;
 		}
-		//TODO: skulls
 		//Should we map the "pressed" states of things like pressure plates or buttons, or the state of sleeping in a bed? Should "temporary" states be mapped at all?
 		return 0;
 	}
@@ -1218,6 +1213,12 @@ public class BlockStateConverter {
 	}
 
 	public Pair<Item, Integer> getItemAndMetadataFromNamespace(String itemName) {
-		return new ImmutablePair<>(Items.rotten_flesh, 0); //TODO: Actual mappings (rotten flesh will probably be the default return value though lol)
+		int separator = itemName.indexOf(':');
+		String namespace = separator < 0 ? "minecraft" : itemName.substring(0, separator);
+		String name = separator < 0 ? itemName : itemName.substring(separator + 1);
+		Item item = GameRegistry.findItem(namespace, name);
+		if (item == null && namespace.equals("minecraft")) item = GameRegistry.findItem("etfuturum", name);
+		if (item == null) throw new IllegalArgumentException("No legacy item mapping for structure item " + itemName);
+		return new ImmutablePair<>(item, 0);
 	}
 }

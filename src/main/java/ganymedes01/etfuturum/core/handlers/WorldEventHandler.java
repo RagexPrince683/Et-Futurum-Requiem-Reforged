@@ -80,6 +80,9 @@ public class WorldEventHandler {
 
 
 	public void postInit() {
+		WeightedRandomList<WorldGenerator> cherry = new WeightedRandomList<>();
+		cherry.addEntry(new ganymedes01.etfuturum.world.generate.decorate.WorldGenCherryTrees(true), 1);
+		BEE_NEST_SAPLINGS.put(new BlockMetaPair(ModBlocks.SAPLING.get(), 1), cherry);
 		//If the mangrove swamp or cherry grove is added, it should be a 5% (.05F chance)
 		//If the meadow is added, it should be a 100% (1F chance)
 		for (BiomeGenBase biome : Utils.excludeBiomesFromTypesWithDefaults(

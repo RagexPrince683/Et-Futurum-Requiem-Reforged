@@ -22,14 +22,18 @@ public class ModPotions extends Potion {
 	private final ResourceLocation icon;
 
 	protected ModPotions(String name, int id, boolean isBad, int color) {
-		super(id, isBad, color);
+		super(ganymedes01.etfuturum.core.utils.RegistrySafety.requireVacant(Potion.potionTypes, id, name), isBad, color);
 		icon = new ResourceLocation("textures/mob_effect/" + name + ".png");
 	}
 
 	public static Potion levitation;
 	public static Potion glowing;
+	public static Potion darkness, nautilusBreath, dolphinGrace;
 
 	public static void init() {
+		dolphinGrace = new ModPotions("dolphins_grace", ConfigEnchantsPotions.dolphinGraceID, false, 0x88A3BE).setPotionName("potion.dolphins_grace");
+		darkness = new ModPotions("darkness", ConfigEnchantsPotions.darknessID, true, 0x292721).setPotionName("potion.darkness");
+		nautilusBreath = new ModPotions("breath_of_the_nautilus", ConfigEnchantsPotions.nautilusBreathID, false, 0xDA9560).setPotionName("potion.breath_of_the_nautilus");
 		if (ConfigEntities.enableShulker) {
 			levitation = new PotionLevitation("levitation", ConfigEnchantsPotions.levitationID, true, 0xFFFFFF);
 		}

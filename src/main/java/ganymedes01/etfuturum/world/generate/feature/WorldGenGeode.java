@@ -90,6 +90,9 @@ public class WorldGenGeode extends WorldGenerator {
 	 */
 	@Override
 	public boolean generate(World world, Random random, int x, int y, int z) {
+		// Include bud attachment neighbors; never force population of a missing border chunk.
+		if (!world.checkChunksExist(x + minGenOffset - 1, 0, z + minGenOffset - 1,
+				x + maxGenOffset + 1, world.getActualHeight() - 1, z + maxGenOffset + 1)) return false;
 		BlockPos blockPos = new BlockPos(x, y, z);
 		List<Pair<BlockPos, Integer>> list = Lists.newLinkedList();
 		int distPoint = Utils.getRandom(distributionPoints, random);

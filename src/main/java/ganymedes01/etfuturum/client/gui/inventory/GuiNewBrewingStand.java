@@ -71,8 +71,9 @@ public class GuiNewBrewingStand extends GuiContainer {
 		}
 
 		int fuel = tile.getFuel();
-		if (fuel > 0) {
-			int size = (int) (18F * (fuel / (float) tile.getCurrentFuel()));
+		int currentFuel = tile.getCurrentFuel();
+		if (fuel > 0 && currentFuel > 0) {
+			int size = (int) (18D * Math.min(fuel, currentFuel) / currentFuel);
 			drawTexturedModalRect(k + 60, l + 44, 176, 29, size, 4);
 		}
 	}

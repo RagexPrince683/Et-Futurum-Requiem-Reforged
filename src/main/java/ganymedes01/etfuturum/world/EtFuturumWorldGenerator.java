@@ -15,7 +15,6 @@ import ganymedes01.etfuturum.world.generate.decorate.WorldGenGlowLichen;
 import ganymedes01.etfuturum.world.generate.decorate.WorldGenPinkPetals;
 import ganymedes01.etfuturum.world.generate.feature.WorldGenFossil;
 import ganymedes01.etfuturum.world.generate.feature.WorldGenGeode;
-import ganymedes01.etfuturum.world.structure.OceanMonument;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
@@ -61,6 +60,7 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 	protected WorldGenerator glowLichenGen;
 	protected WorldGenerator caveVineGen;
 	protected WorldGenerator mudGen;
+	protected WorldGenerator dripstoneGen;
 
 	//trees
 	protected WorldGenAbstractTree cherryTreeGen;
@@ -72,6 +72,8 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 	}
 
 	public void postInit() {
+		if (ModBlocks.DRIPSTONE_BLOCK.isEnabled() && ModBlocks.POINTED_DRIPSTONE.isEnabled())
+			dripstoneGen = new ganymedes01.etfuturum.world.generate.feature.WorldGenDripstone();
 		if (ConfigWorld.enableAmethystGeodes && ModBlocks.AMETHYST_BLOCK.isEnabled() && ModBlocks.AMETHYST_CLUSTER_1.isEnabled() && ModBlocks.AMETHYST_CLUSTER_2.isEnabled()
 				&& ModBlocks.BUDDING_AMETHYST.isEnabled() && ConfigWorld.amethystOuterBlock != null && ConfigWorld.amethystMiddleBlock != null) {
 			amethystGen = new WorldGenGeode(ConfigWorld.amethystOuterBlock, ConfigWorld.amethystMiddleBlock);
@@ -175,6 +177,8 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 	@Override
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if (!isFlatWorld(chunkGenerator) || world.getWorldInfo().getGeneratorOptions().contains("decoration")) {
+			MobSpawning.seagrass(world, rand, chunkX, chunkZ);
+			if (dripstoneGen != null) dripstoneGen.generate(world, rand, (chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
 			int x;
 			int z;
 
@@ -301,17 +305,9 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 
 			if (ConfigWorld.enableOceanMonuments && ModBlocks.PRISMARINE_BLOCK.isEnabled() && ModBlocks.SEA_LANTERN.isEnabled()
 					&& !(world.provider instanceof WorldProviderEnd) && !(world.provider instanceof WorldProviderHell)) {
-				if (OceanMonument.canSpawnAt(world, chunkX, chunkZ)) {
-					x = (chunkX << 4) + rand.nextInt(16) + 8;
-					z = (chunkZ << 4) + rand.nextInt(16) + 8;
-					int y;
-					for (y = world.getActualHeight(); y > 0; y--)
-						if (!world.isAirBlock(x, y, z))
-							break;
-					int monumentCeiling = y - (1 + rand.nextInt(3));
-					OceanMonument.buildTemple(world, x, monumentCeiling - 22, z);
-					return;
-				}
+				ganymedes01.etfuturum.world.structure.MapGenOceanMonument monuments = ganymedes01.etfuturum.world.structure.MapGenOceanMonument.get(world);
+				monuments.func_151539_a(chunkGenerator, world, chunkX, chunkZ, null);
+				monuments.generateStructuresInChunk(world, rand, chunkX, chunkZ);
 			}
 		}
 

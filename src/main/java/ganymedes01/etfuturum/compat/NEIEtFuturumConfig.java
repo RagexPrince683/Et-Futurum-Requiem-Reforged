@@ -24,6 +24,18 @@ public class NEIEtFuturumConfig implements IConfigureNEI {
 
 	@Override
 	public void loadConfig() {
+		if (ModBlocks.LOOM.isEnabled() && ModBlocks.BANNER.isEnabled()) {
+			API.registerRecipeHandler(new ganymedes01.etfuturum.compat.nei.LoomHandler());
+			API.registerUsageHandler(new ganymedes01.etfuturum.compat.nei.LoomHandler());
+		}
+		if (ModBlocks.CARTOGRAPHY_TABLE.isEnabled()) {
+			API.registerRecipeHandler(new ganymedes01.etfuturum.compat.nei.CartographyHandler());
+			API.registerUsageHandler(new ganymedes01.etfuturum.compat.nei.CartographyHandler());
+		}
+		if (ModBlocks.STONECUTTER.isEnabled()) {
+			API.registerRecipeHandler(new ganymedes01.etfuturum.compat.nei.StonecuttingHandler());
+			API.registerUsageHandler(new ganymedes01.etfuturum.compat.nei.StonecuttingHandler());
+		}
 		{
 			if (ModBlocks.BREWING_STAND.isEnabled()) {
 				API.hideItem(ModBlocks.BREWING_STAND.newItemStack());

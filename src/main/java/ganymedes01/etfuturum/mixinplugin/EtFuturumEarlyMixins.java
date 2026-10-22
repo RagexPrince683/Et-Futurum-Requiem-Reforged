@@ -72,8 +72,17 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 		mixins.add("tags.MixinItem");
 		mixins.add("tags.MixinBiomeGenBase");
 		mixins.add("deepslateores.MixinChunkProviderServer");
+		if (ConfigExperiments.enableLightningRod) {
+			mixins.add("lightningrod.MixinWorldServer");
+			mixins.add("lightningrod.MixinEntityLightningBolt");
+		}
+		if (ConfigWorld.enableCoarseDirtReplacement && ConfigBlocksItems.enableCoarseDirt) {
+			mixins.add("coarsedirt.MixinBiomeGenBase");
+			mixins.add("coarsedirt.MixinBiomeGenMesa");
+		}
 
 		if (side == MixinEnvironment.Side.CLIENT) {
+			if (ConfigSounds.bookPageTurn) mixins.add("sounds.client.MixinGuiButton");
 			if (ConfigWorld.endFlashes || ConfigWorld.modernEndAmbientColor || ConfigWorld.modernBlockLightTint) {
 				mixins.add("endflashes.client.MixinEntityRenderer");
 			}
@@ -243,6 +252,21 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 			mixins.add("backinslime.MixinBlockPistonBase");
 		}
 
+		// Saved locked maps must remain locked even if new cartography tables are disabled.
+		mixins.add("cartography.MixinMapData");
+		mixins.add("cartography.MixinItemMap");
+		if (ganymedes01.etfuturum.configuration.configs.ConfigExperiments.endDimensionProvider) mixins.add("endgateway.MixinEntityDragon");
+		{
+			mixins.add("nethermobs.MixinSpawnerAnimals");
+			mixins.add("nethermobs.MixinBiomeGenBase");
+			mixins.add("nethermobs.MixinRiderInput");
+			mixins.add("nethermobs.MixinNautilusBreath");
+			mixins.add("nethermobs.MixinDolphinGrace");
+			mixins.add("nethermobs.MixinMobDungeons");
+			mixins.add("nethermobs.MixinChestLifecycle");
+			if (side == MixinEnvironment.Side.CLIENT) mixins.add("nethermobs.MixinWolfArmor");
+		}
+		if (ganymedes01.etfuturum.configuration.configs.ConfigEnchantsPotions.enableSoulSpeed) mixins.add("soulspeed.MixinBlockSoulSand");
 		if (ConfigMixins.soulFire) {
 			mixins.add("soulfire.MixinBlockFire");
 			if(loadedCoreMods.stream().anyMatch(name -> name.contains("rple"))) { //RPLE compat

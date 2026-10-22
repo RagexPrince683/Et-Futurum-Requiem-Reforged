@@ -295,6 +295,7 @@ public class EndCityTemplate extends NBTStructure {
 
 		// Process deferred chests
 		for (int[] chestPos : pendingChests) {
+			if (clipBox != null && !clipBox.isVecInside(chestPos[0], chestPos[1], chestPos[2])) continue;
 			TileEntity te = world.getTileEntity(chestPos[0], chestPos[1], chestPos[2]);
 			if (te instanceof net.minecraft.inventory.IInventory) {
 				WeightedRandomChestContent.generateChestContents(

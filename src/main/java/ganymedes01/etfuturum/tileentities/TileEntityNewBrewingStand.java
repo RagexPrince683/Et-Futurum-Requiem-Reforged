@@ -15,7 +15,6 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
-import ganymedes01.etfuturum.api.tags.helpers.ItemTags;
 
 import java.util.List;
 
@@ -240,8 +239,9 @@ public class TileEntityNewBrewingStand extends TileEntityBrewingStand {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		if (stack == null || stack.getItem() == null) return false;
 		if (slot == 4)
-			return ItemTags.hasTag(stack.getItem(), stack.getItemDamage(), "minecraft:brewing_fuel");
+			return BrewingFuelRegistry.isFuel(stack);
 		else if (slot == 3)
 			return stack.getItem().isPotionIngredient(stack);
 		else

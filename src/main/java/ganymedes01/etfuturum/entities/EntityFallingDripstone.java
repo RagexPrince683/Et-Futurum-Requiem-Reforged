@@ -2,121 +2,96 @@ package ganymedes01.etfuturum.entities;
 
 import ganymedes01.etfuturum.ModBlocks;
 import ganymedes01.etfuturum.blocks.BlockPointedDripstone;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 public class EntityFallingDripstone extends EntityFallingBlock {
+	private int fallHurtMax = 40;
+	private float fallHurtAmount = 4;
+	private boolean hurtEntities = true;
+	private boolean sourceRemoved;
 
-	private int fallHurtMax;
-	private float fallHurtAmount;
-	private boolean hurtEntities;
+	public EntityFallingDripstone(World world) { super(world); }
 
-	public EntityFallingDripstone(World p_i45318_1_) {
-		super(p_i45318_1_);
-		this.fallHurtMax = 40;
-		this.fallHurtAmount = 4.0F;
-		hurtEntities = true;
+	public EntityFallingDripstone(World world, double x, double y, double z) {
+		super(world, x, y, z, ModBlocks.POINTED_DRIPSTONE.get());
 	}
 
-	public EntityFallingDripstone(World p_i45318_1_, double p_i45318_2_, double p_i45318_4_, double p_i45318_6_) {
-		super(p_i45318_1_, p_i45318_2_, p_i45318_4_, p_i45318_6_, ModBlocks.POINTED_DRIPSTONE.get());
-		this.fallHurtMax = 40;
-		this.fallHurtAmount = 4.0F;
-		hurtEntities = true;
+	public EntityFallingDripstone(World world, double x, double y, double z, int meta, int count) {
+		super(world, x, y, z, ModBlocks.POINTED_DRIPSTONE.get(), meta);
+		dataWatcher.updateObject(20, MathHelper.clamp_int(count, 1, 256));
+		sourceRemoved = true;
 	}
 
 	@Override
+	protected void entityInit() {
+		super.entityInit();
+		dataWatcher.addObject(20, 1);
+	}
+
+	public int getCount() { return dataWatcher.getWatchableObjectInt(20); }
+
+	@Override
 	public void onUpdate() {
-
-		Block block = ModBlocks.POINTED_DRIPSTONE.get();
-
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-		++this.field_145812_b; // fallTime
-		this.motionY -= 0.03999999910593033D;
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
-		this.motionX *= 0.9800000190734863D;
-		this.motionY *= 0.9800000190734863D;
-		this.motionZ *= 0.9800000190734863D;
-
-		int i = MathHelper.floor_double(this.posX);
-		int j = MathHelper.floor_double(this.posY);
-		int k = MathHelper.floor_double(this.posZ);
-		if (this.field_145812_b == 1) { // fallTime
-			field_145814_a/*metadata*/ = worldObj.getBlockMetadata(i, j, k);
+		// Legacy constructor/saves still remove their original source on the first tick.
+		if (!worldObj.isRemote && field_145812_b == 0 && !sourceRemoved) {
+			int x = MathHelper.floor_double(posX), y = MathHelper.floor_double(posY), z = MathHelper.floor_double(posZ);
+			if (worldObj.getBlock(x, y, z) != ModBlocks.POINTED_DRIPSTONE.get()) { setDead(); return; }
+			field_145814_a = worldObj.getBlockMetadata(x, y, z);
+			worldObj.setBlockToAir(x, y, z);
+			sourceRemoved = true;
 		}
-
-		if (!this.worldObj.isRemote) {
-
-			if (this.field_145812_b == 1) { // fallTime
-				if (this.worldObj.getBlock(i, j, k) != block) {
-					this.setDead();
-					return;
-				}
-
-				this.worldObj.setBlockToAir(i, j, k);
-			}
-
-			if (this.onGround && worldObj.getBlock(i, j - 1, k) != block) {
-				this.motionX *= 0.699999988079071D;
-				this.motionZ *= 0.699999988079071D;
-				this.motionY *= -0.5D;
-				this.setDead();
-
-				if (this.field_145813_c) { // shouldDropItem
-					this.entityDropItem(new ItemStack(block, 1, block.damageDropped(this.field_145814_a/*metadata*/)), 0.0F);
-				}
-			} else if (this.field_145812_b/*fallTime*/ > 100 && !this.worldObj.isRemote && (j < 1 || j > 256) || this.field_145812_b/*fallTime*/ > 600) {
-				if (this.field_145813_c) { // shouldDropItem
-					this.entityDropItem(new ItemStack(block, 1, block.damageDropped(this.field_145814_a/*metadata*/)), 0.0F);
-				}
-
-				this.setDead();
+		prevPosX = posX;
+		prevPosY = posY;
+		prevPosZ = posZ;
+		field_145812_b++;
+		motionY -= 0.04;
+		moveEntity(motionX, motionY, motionZ);
+		motionX *= 0.98;
+		motionY *= 0.98;
+		motionZ *= 0.98;
+		if (!worldObj.isRemote && (onGround || field_145812_b > 600
+				|| field_145812_b > 100 && (posY < 1 || posY > worldObj.getActualHeight()))) {
+			setDead();
+			if (field_145813_c && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
+				for (int remaining = getCount(); remaining > 0; remaining -= 64)
+					entityDropItem(new ItemStack(ModBlocks.POINTED_DRIPSTONE.get(), Math.min(64, remaining), 0), 0);
 			}
 		}
 	}
 
 	@Override
 	protected void fall(float distance) {
-		if (this.hurtEntities) {
-			int i = MathHelper.ceiling_float_int(distance - 1.0F);
-
-			if (i > 0) {
-				ArrayList<Entity> arraylist = new ArrayList<>(this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox));
-				DamageSource damagesource = BlockPointedDripstone.STALACTITE_DAMAGE;
-				Iterator<Entity> iterator = arraylist.iterator();
-
-				while (iterator.hasNext()) {
-					Entity entity = iterator.next();
-					entity.attackEntityFrom(damagesource, (float) Math.min(MathHelper.floor_float((float) i * this.fallHurtAmount), this.fallHurtMax));
-				}
-			}
-		}
+		if (worldObj.isRemote || !hurtEntities) return;
+		int blocks = MathHelper.ceiling_float_int(distance - 1);
+		if (blocks <= 0) return;
+		float damage = Math.min(blocks * fallHurtAmount * getCount(), fallHurtMax);
+		for (Entity entity : worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox))
+			entity.attackEntityFrom(BlockPointedDripstone.STALACTITE_DAMAGE, damage);
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tagCompound) {
-		super.writeEntityToNBT(tagCompound);
-		tagCompound.setBoolean("HurtEntities", this.hurtEntities);
-		tagCompound.setFloat("FallHurtAmount", this.fallHurtAmount);
-		tagCompound.setInteger("FallHurtMax", this.fallHurtMax);
+	protected void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setBoolean("HurtEntities", hurtEntities);
+		nbt.setFloat("FallHurtAmount", fallHurtAmount);
+		nbt.setInteger("FallHurtMax", fallHurtMax);
+		nbt.setInteger("Count", getCount());
+		nbt.setBoolean("SourceRemoved", sourceRemoved);
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tagCompund) {
-		super.readEntityFromNBT(tagCompund);
-		this.hurtEntities = tagCompund.getBoolean("HurtEntities");
-		this.fallHurtAmount = tagCompund.getFloat("FallHurtAmount");
-		this.fallHurtMax = tagCompund.getInteger("FallHurtMax");
+	protected void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		hurtEntities = !nbt.hasKey("HurtEntities") || nbt.getBoolean("HurtEntities");
+		fallHurtAmount = nbt.hasKey("FallHurtAmount") ? nbt.getFloat("FallHurtAmount") : 4;
+		if (!Float.isFinite(fallHurtAmount) || fallHurtAmount < 0) fallHurtAmount = 4;
+		fallHurtMax = nbt.hasKey("FallHurtMax") ? Math.max(0, nbt.getInteger("FallHurtMax")) : 40;
+		dataWatcher.updateObject(20, MathHelper.clamp_int(nbt.hasKey("Count") ? nbt.getInteger("Count") : 1, 1, 256));
+		sourceRemoved = nbt.getBoolean("SourceRemoved");
 	}
 }

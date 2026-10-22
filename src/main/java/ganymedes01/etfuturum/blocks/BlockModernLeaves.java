@@ -9,6 +9,7 @@ import ganymedes01.etfuturum.configuration.configs.ConfigBlocksItems;
 import ganymedes01.etfuturum.configuration.configs.ConfigExperiments;
 import lombok.NonNull;
 import net.minecraft.block.Block;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -20,11 +21,27 @@ import ganymedes01.etfuturum.api.blocksanditems.block.IMultiBlockSound;
 import java.util.List;
 import java.util.Random;
 
-public class BlockModernLeaves extends BaseLeaves implements IMultiBlockSound {
+public class BlockModernLeaves extends BaseLeaves implements IMultiBlockSound, IGrowable {
 
 	public BlockModernLeaves() {
 		super("mangrove", "cherry");
 		setCreativeTab(EtFuturum.creativeTabBlocks);
+	}
+
+	@Override
+	public boolean func_149851_a(World world, int x, int y, int z, boolean client) {
+		return ConfigExperiments.enableMangroveBlocks && (world.getBlockMetadata(x, y, z) & 3) == 0
+				&& world.isAirBlock(x, y - 1, z);
+	}
+
+	@Override
+	public boolean func_149852_a(World world, Random random, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public void func_149853_b(World world, Random random, int x, int y, int z) {
+		if (func_149851_a(world, x, y, z, false)) world.setBlock(x, y - 1, z, ModBlocks.SAPLING.get(), 2, 2);
 	}
 
 	/**

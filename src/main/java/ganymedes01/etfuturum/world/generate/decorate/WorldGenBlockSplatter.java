@@ -28,6 +28,7 @@ public class WorldGenBlockSplatter extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random random, int x, int y, int z) {
+		if (!world.checkChunksExist(x - size, 0, z - size, x + size, world.getActualHeight() - 1, z + size)) return false;
 		while (y-- > 0) {
 			if (!world.isAirBlock(x, y, z)) {
 				break;

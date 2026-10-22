@@ -41,6 +41,7 @@ public class WorldGenHugeFungus extends WorldGenAbstractTree {
 
 	@Override
 	public boolean generate(World world, Random random, int x, int y, int z) {
+		if (!world.checkChunksExist(x - 4, 0, z - 4, x + 4, world.getActualHeight() - 1, z + 4)) return false;
 		Block blockstate = world.getBlock(x, y - 1, z);
 		if (blockstate instanceof BlockNylium) {
 			int i = MathHelper.getRandomIntegerInRange(random, 4, 13);

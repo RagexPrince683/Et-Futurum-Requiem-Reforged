@@ -12,6 +12,7 @@ import java.util.Random;
 public class WorldGenTwistingVines extends WorldGenerator {
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
+		if (!world.checkChunksExist(x - 8, 0, z - 8, x + 8, world.getActualHeight() - 1, z + 8)) return false;
 		if (isInvalidPlacementLocation(world, x, y, z)) {
 			return false;
 		} else {

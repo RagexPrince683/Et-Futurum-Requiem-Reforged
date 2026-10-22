@@ -29,7 +29,6 @@ public class WorldGenDeepslateLayer extends WorldGenerator {
 			for (int yPos = 0; yPos <= Math.min(height, world.provider.getHeight()); yPos++) {
 				for (int xPos = 0; xPos < 16; xPos++) {
 					for (int zPos = 0; zPos < 16; zPos++) {
-						Block currentBlock = chunk.getBlock(xPos, yPos, zPos);
 						if ((height >= world.provider.getHeight() || yPos < height - 4 || yPos <= height - chunk.worldObj.rand.nextInt(4))) {
 							DeepslateOreRegistry.setBlockDeepslate(chunk, xPos, yPos, zPos, block, meta);
 						}

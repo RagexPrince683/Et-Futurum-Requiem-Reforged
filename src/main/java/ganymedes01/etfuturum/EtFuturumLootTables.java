@@ -13,6 +13,13 @@ public class EtFuturumLootTables {
 	public static final ChestGenHooks END_CITY_ELYTRA = ChestGenHooks.getInfo("endCityElytra");
 
 	public static void init() {
+		addLoot(ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST), ModBlocks.SNIFFER_EGG.newItemStack(), 1, 1, 2);
+		addLoot(ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST), ModItems.NAUTILUS_ARMOR.newItemStack(1, 0), 1, 1, 5);
+		addLoot(ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST), ModItems.NAUTILUS_ARMOR.newItemStack(1, 1), 1, 1, 4);
+		addLoot(ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST), ModItems.NAUTILUS_ARMOR.newItemStack(1, 2), 1, 1, 3);
+		addLoot(ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST), ModItems.NAUTILUS_ARMOR.newItemStack(1, 3), 1, 1, 2);
+		addLoot(ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR), ModItems.NAUTILUS_ARMOR.newItemStack(1, 3), 1, 1, 2);
+		addLoot(ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST), ModBlocks.DRIED_GHAST.newItemStack(), 1, 1, 2);
 		COMPOSTER_LOOT.setMin(1);
 		COMPOSTER_LOOT.setMax(1);
 		addLoot(COMPOSTER_LOOT, new ItemStack(Items.dye, 1, 15), 1, 1, 10);
@@ -26,7 +33,7 @@ public class EtFuturumLootTables {
 		addLoot(END_CITY_TREASURE, new ItemStack(Items.iron_ingot), 4, 8, 10);
 		addLoot(END_CITY_TREASURE, new ItemStack(Items.gold_ingot), 2, 7, 15);
 		addLoot(END_CITY_TREASURE, new ItemStack(Items.emerald), 2, 6, 2);
-		addLoot(END_CITY_TREASURE, new ItemStack(Items.wheat_seeds), 1, 10, 5); // Beetroot seeds substitute
+		addLoot(END_CITY_TREASURE, ModItems.BEETROOT_SEEDS.newItemStack(), 1, 10, 5);
 
 		// Equipment
 		addLoot(END_CITY_TREASURE, new ItemStack(Items.saddle), 1, 1, 3);

@@ -1,6 +1,7 @@
 package ganymedes01.etfuturum.world.end.dimension;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
+import ganymedes01.etfuturum.ModBlocks;
 import ganymedes01.etfuturum.blocks.BlockChorusFlower;
 import ganymedes01.etfuturum.configuration.configs.ConfigExperiments;
 import ganymedes01.etfuturum.world.end.gen.MapGenEndCity;
@@ -72,7 +73,7 @@ public class ChunkProviderEFREnd implements IChunkProvider {
 
 	public ChunkProviderEFREnd(World worldObjIn, long seed) {
 		this.worldObj = worldObjIn;
-		this.mapFeaturesEnabled = true; //come back to
+		this.mapFeaturesEnabled = worldObjIn.getWorldInfo().isMapFeaturesEnabled();
 		this.rand = new Random(seed);
 		this.lperlinNoise1 = new NoiseGeneratorOctaves(this.rand, 16);
 		this.lperlinNoise2 = new NoiseGeneratorOctaves(this.rand, 16);
@@ -80,7 +81,12 @@ public class ChunkProviderEFREnd implements IChunkProvider {
 		this.noiseGen5 = new NoiseGeneratorOctaves(this.rand, 10);
 		this.noiseGen6 = new NoiseGeneratorOctaves(this.rand, 16);
 		this.islandNoise = new NoiseGeneratorSimplex(this.rand);
-		this.endCityGen = (ConfigExperiments.endDimensionProvider && ConfigExperiments.enableEndCities) ? new MapGenEndCity(this) : null;
+		boolean citiesRequested = ConfigExperiments.endDimensionProvider && ConfigExperiments.enableEndCities;
+		boolean cityBlocks = ModBlocks.PURPUR_BLOCK.isEnabled() && ModBlocks.PURPUR_PILLAR.isEnabled()
+				&& ModBlocks.PURPUR_SLAB.isEnabled() && ModBlocks.PURPUR_STAIRS.isEnabled() && ModBlocks.END_BRICKS.isEnabled();
+		if (citiesRequested && !cityBlocks)
+			ganymedes01.etfuturum.core.utils.Logger.warn("End city generation requires chorus/purpur blocks; generation is disabled without remapping saved structure data.");
+		this.endCityGen = citiesRequested && cityBlocks ? new MapGenEndCity(this) : null;
 	}
 
 	public Chunk provideChunk(int x, int z) {

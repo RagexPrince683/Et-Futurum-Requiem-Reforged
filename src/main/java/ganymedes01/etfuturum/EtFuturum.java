@@ -245,6 +245,7 @@ public class EtFuturum {
 		if (ConfigExperiments.netherDimensionProvider) {
 			NetherBiomeManager.init();
 		}
+		ganymedes01.etfuturum.world.surface.SurfaceBiomeManager.init();
 
 		GameRegistry.registerWorldGenerator(EtFuturumEarlyWorldGenerator.INSTANCE, Integer.MIN_VALUE);
 		GameRegistry.registerWorldGenerator(EtFuturumWorldGenerator.INSTANCE, 0);
@@ -315,7 +316,11 @@ public class EtFuturum {
 				NBTTagCompound nbt = message.getNBTValue();
 				ItemStack stack = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("Fuel"));
 				int brews = nbt.getInteger("Brews");
-				BrewingFuelRegistry.registerFuel(stack, brews);
+				try {
+					BrewingFuelRegistry.registerFuel(stack, brews);
+				} catch (IllegalArgumentException invalidFuel) {
+					Logger.warn("Ignoring invalid register-brewing-fuel message from " + message.getSender() + ": " + invalidFuel.getMessage());
+				}
 			}
 		}
 	}
@@ -407,6 +412,11 @@ public class EtFuturum {
 		}
 
 		EtFuturumLootTables.init();
+		ganymedes01.etfuturum.world.nether.structure.BastionLoot.init();
+		MapGenStructureIO.registerStructure(ganymedes01.etfuturum.world.nether.structure.MapGenBastion.Start.class, "EFRBastion");
+		MapGenStructureIO.registerStructure(ganymedes01.etfuturum.world.structure.MapGenOceanMonument.Start.class, "EFROceanMonument");
+		MapGenStructureIO.func_143031_a(ganymedes01.etfuturum.world.structure.MapGenOceanMonument.Piece.class, "EFRMonumentPiece");
+		MapGenStructureIO.func_143031_a(ganymedes01.etfuturum.world.nether.structure.MapGenBastion.Piece.class, "EFRBastionPiece");
 		if (ConfigExperiments.enableEndCities) {
 			MapGenStructureIO.registerStructure(MapGenEndCity.Start.class, "EndCity");
 			MapGenStructureIO.func_143031_a(EndCityPieces.EndCityPiece.class, "ECP");
@@ -599,6 +609,9 @@ public class EtFuturum {
 			return null;
 
 		Item item = stack.getItem();
+		if (ModBlocks.EYEBLOSSOM.isEnabled() && item == ModBlocks.EYEBLOSSOM.getItem()) {
+			return (stack.getItemDamage() & 1) == 0 ? new PotionEffect(Potion.confusion.id, 140, 0) : new PotionEffect(Potion.blindness.id, 220, 0);
+		}
 
 		if (item == Item.getItemFromBlock(Blocks.red_flower)) {
 			switch (stack.getItemDamage()) {
@@ -641,6 +654,12 @@ public class EtFuturum {
 
 	private static void getSounds(ADConfig config) {
 		String ver = Tags.MC_ASSET_VER.split("_")[1];
+		for (String sound : new String[]{"entity.allay.ambient_with_item", "entity.allay.ambient_without_item", "entity.allay.death", "entity.allay.hurt", "entity.allay.item_given", "entity.allay.item_taken", "entity.allay.item_thrown", "entity.armadillo.ambient", "entity.armadillo.brush", "entity.armadillo.death", "entity.armadillo.eat", "entity.armadillo.hurt", "entity.armadillo.hurt_reduced", "entity.armadillo.land", "entity.armadillo.peek", "entity.armadillo.roll", "entity.armadillo.scute_drop", "entity.armadillo.step", "entity.armadillo.unroll_finish", "entity.armadillo.unroll_start", "entity.bogged.ambient", "entity.bogged.death", "entity.bogged.hurt", "entity.bogged.shear", "entity.bogged.step", "entity.breeze.charge", "entity.breeze.death", "entity.breeze.deflect", "entity.breeze.hurt", "entity.breeze.idle_air", "entity.breeze.idle_ground", "entity.breeze.inhale", "entity.breeze.jump", "entity.breeze.land", "entity.breeze.shoot", "entity.breeze.slide", "entity.breeze.whirl", "entity.breeze.wind_burst", "entity.camel.ambient", "entity.camel.dash", "entity.camel.dash_ready", "entity.camel.death", "entity.camel.eat", "entity.camel.hurt", "entity.camel.saddle", "entity.camel.sit", "entity.camel.stand", "entity.camel.step", "entity.camel.step_sand", "entity.camel_husk.ambient", "entity.camel_husk.dash", "entity.camel_husk.dash_ready", "entity.camel_husk.death", "entity.camel_husk.eat", "entity.camel_husk.hurt", "entity.camel_husk.saddle", "entity.camel_husk.sit", "entity.camel_husk.stand", "entity.camel_husk.step", "entity.camel_husk.step_sand", "entity.cat.ambient", "entity.cat.beg_for_food", "entity.cat.death", "entity.cat.eat", "entity.cat.hiss", "entity.cat.hurt", "entity.cat.purr", "entity.cat.purreow", "entity.cat.stray_ambient", "entity.copper_golem.death", "entity.copper_golem.hurt", "entity.copper_golem.item_drop", "entity.copper_golem.item_no_drop", "entity.copper_golem.no_item_get", "entity.copper_golem.no_item_no_get", "entity.copper_golem.shear", "entity.copper_golem.spawn", "entity.copper_golem.spin", "entity.copper_golem.step", "entity.evoker.ambient", "entity.evoker.cast_spell", "entity.evoker.celebrate", "entity.evoker.death", "entity.evoker.hurt", "entity.evoker.prepare_attack", "entity.evoker.prepare_summon", "entity.evoker.prepare_wololo", "entity.ghastling.ambient", "entity.ghastling.death", "entity.ghastling.hurt", "entity.ghastling.spawn", "entity.guardian.ambient", "entity.guardian.ambient_land", "entity.guardian.attack", "entity.guardian.death", "entity.guardian.death_land", "entity.guardian.flop", "entity.guardian.hurt", "entity.guardian.hurt_land", "entity.happy_ghast.ambient", "entity.happy_ghast.death", "entity.happy_ghast.equip", "entity.happy_ghast.harness_goggles_down", "entity.happy_ghast.harness_goggles_up", "entity.happy_ghast.hurt", "entity.happy_ghast.riding", "entity.happy_ghast.unequip", "entity.hoglin.ambient", "entity.hoglin.angry", "entity.hoglin.attack", "entity.hoglin.converted_to_zombified", "entity.hoglin.death", "entity.hoglin.hurt", "entity.hoglin.retreat", "entity.hoglin.step", "entity.illusioner.ambient", "entity.illusioner.cast_spell", "entity.illusioner.death", "entity.illusioner.hurt", "entity.illusioner.mirror_move", "entity.illusioner.prepare_blindness", "entity.illusioner.prepare_mirror", "entity.llama.ambient", "entity.llama.angry", "entity.llama.chest", "entity.llama.death", "entity.llama.eat", "entity.llama.hurt", "entity.llama.spit", "entity.llama.step", "entity.llama.swag", "entity.nautilus.ambient", "entity.nautilus.ambient_land", "entity.nautilus.dash", "entity.nautilus.dash_land", "entity.nautilus.dash_ready", "entity.nautilus.dash_ready_land", "entity.nautilus.death", "entity.nautilus.death_land", "entity.nautilus.eat", "entity.nautilus.hurt", "entity.nautilus.hurt_land", "entity.nautilus.riding", "entity.nautilus.swim", "entity.panda.aggressive_ambient", "entity.panda.ambient", "entity.panda.bite", "entity.panda.cant_breed", "entity.panda.death", "entity.panda.eat", "entity.panda.hurt", "entity.panda.pre_sneeze", "entity.panda.sneeze", "entity.panda.step", "entity.panda.worried_ambient", "entity.parched.ambient", "entity.parched.death", "entity.parched.hurt", "entity.parched.step", "entity.piglin.admiring_item", "entity.piglin.ambient", "entity.piglin.angry", "entity.piglin.celebrate", "entity.piglin.converted_to_zombified", "entity.piglin.death", "entity.piglin.hurt", "entity.piglin.jealous", "entity.piglin.retreat", "entity.piglin.step", "entity.piglin_brute.ambient", "entity.piglin_brute.angry", "entity.piglin_brute.converted_to_zombified", "entity.piglin_brute.death", "entity.piglin_brute.hurt", "entity.piglin_brute.step", "entity.pillager.ambient", "entity.pillager.celebrate", "entity.pillager.death", "entity.pillager.hurt", "entity.ravager.ambient", "entity.ravager.attack", "entity.ravager.celebrate", "entity.ravager.death", "entity.ravager.hurt", "entity.ravager.roar", "entity.ravager.step", "entity.ravager.stunned", "entity.sniffer.death", "entity.sniffer.digging", "entity.sniffer.digging_stop", "entity.sniffer.drop_seed", "entity.sniffer.eat", "entity.sniffer.happy", "entity.sniffer.hurt", "entity.sniffer.idle", "entity.sniffer.scenting", "entity.sniffer.searching", "entity.sniffer.sniffing", "entity.sniffer.step", "entity.strider.ambient", "entity.strider.death", "entity.strider.eat", "entity.strider.happy", "entity.strider.hurt", "entity.strider.retreat", "entity.strider.saddle", "entity.strider.step", "entity.strider.step_lava", "entity.vex.ambient", "entity.vex.charge", "entity.vex.death", "entity.vex.hurt", "entity.vindicator.ambient", "entity.vindicator.celebrate", "entity.vindicator.death", "entity.vindicator.hurt", "entity.wandering_trader.ambient", "entity.wandering_trader.death", "entity.wandering_trader.disappeared", "entity.wandering_trader.drink_milk", "entity.wandering_trader.drink_potion", "entity.wandering_trader.hurt", "entity.wandering_trader.no", "entity.wandering_trader.reappeared", "entity.wandering_trader.trade", "entity.wandering_trader.yes", "entity.warden.agitated", "entity.warden.ambient", "entity.warden.angry", "entity.warden.attack_impact", "entity.warden.death", "entity.warden.dig", "entity.warden.emerge", "entity.warden.heartbeat", "entity.warden.hurt", "entity.warden.listening", "entity.warden.listening_angry", "entity.warden.nearby_close", "entity.warden.nearby_closer", "entity.warden.nearby_closest", "entity.warden.roar", "entity.warden.sniff", "entity.warden.sonic_boom", "entity.warden.sonic_charge", "entity.warden.step", "entity.warden.tendril_clicks", "entity.zoglin.ambient", "entity.zoglin.angry", "entity.zoglin.attack", "entity.zoglin.death", "entity.zoglin.hurt", "entity.zoglin.step", "entity.zombie_nautilus.ambient", "entity.zombie_nautilus.ambient_land", "entity.zombie_nautilus.dash", "entity.zombie_nautilus.dash_land", "entity.zombie_nautilus.dash_ready", "entity.zombie_nautilus.dash_ready_land", "entity.zombie_nautilus.death", "entity.zombie_nautilus.death_land", "entity.zombie_nautilus.eat", "entity.zombie_nautilus.hurt", "entity.zombie_nautilus.hurt_land", "entity.zombie_nautilus.swim"}) config.addSoundEvent(ver, sound, "neutral");
+		for (String mob : new String[]{"cod", "salmon", "tropical_fish", "puffer_fish", "dolphin", "turtle", "axolotl", "glow_squid", "phantom", "drowned"}) {
+			config.addSoundEvent(ver, "entity." + mob + ".hurt", "neutral");
+			config.addSoundEvent(ver, "entity." + mob + ".death", "neutral");
+		}
+		for (String sound : new String[]{"puffer_fish.blow_up", "puffer_fish.blow_out", "puffer_fish.sting", "dolphin.ambient_water", "dolphin.eat", "turtle.ambient_land", "axolotl.idle_air", "axolotl.idle_water", "glow_squid.ambient", "phantom.ambient", "phantom.bite", "phantom.swoop", "drowned.ambient", "drowned.ambient_water", "drowned.shoot"}) config.addSoundEvent(ver, "entity." + sound, "neutral");
 		config.addObject(ver, "minecraft/sounds/ambient/cave/cave14.ogg");
 		config.addObject(ver, "minecraft/sounds/ambient/cave/cave15.ogg");
 		config.addObject(ver, "minecraft/sounds/ambient/cave/cave16.ogg");

@@ -20,6 +20,7 @@ public class WorldGenBamboo extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
+		if (!world.blockExists(x, y, z)) return false;
 		int height = MathHelper.getRandomIntegerInRange(rand, 6, 16);
 		if (!ModBlocks.BAMBOO.get().canBlockStay(world, x, y + 1, z)) {
 			return false;

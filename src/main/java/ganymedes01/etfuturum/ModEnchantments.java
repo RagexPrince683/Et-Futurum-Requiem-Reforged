@@ -7,6 +7,7 @@ import ganymedes01.etfuturum.configuration.configs.ConfigModCompat;
 import ganymedes01.etfuturum.enchantment.FrostWalker;
 import ganymedes01.etfuturum.enchantment.Mending;
 import ganymedes01.etfuturum.enchantment.SwiftSneak;
+import ganymedes01.etfuturum.core.utils.RegistrySafety;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -31,22 +32,43 @@ public class ModEnchantments {
 	public static Enchantment frostWalker;
 	public static Enchantment mending;
 	public static Enchantment swiftSneak;
+	public static Enchantment soulSpeed;
+	public static Enchantment quickCharge, multishot, piercing, loyalty, impaling, riptide, channeling;
+	public static int level(Enchantment enchantment, ItemStack stack) { return enchantment == null || stack == null ? 0 : EnchantmentHelper.getEnchantmentLevel(enchantment.effectId, stack); }
 
 	private static final Map<EntityLivingBase, double[]> prevMoveCache = new WeakHashMap<>();
 
 	public static void init() {
-		if (ConfigEnchantsPotions.enableFrostWalker)
+		RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.quickChargeID, "quick_charge"); quickCharge = new ganymedes01.etfuturum.enchantment.MobEquipmentEnchantment(ConfigEnchantsPotions.quickChargeID, "quick_charge", 3, 0);
+		RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.multishotID, "multishot"); multishot = new ganymedes01.etfuturum.enchantment.MobEquipmentEnchantment(ConfigEnchantsPotions.multishotID, "multishot", 1, 0);
+		RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.piercingID, "piercing"); piercing = new ganymedes01.etfuturum.enchantment.MobEquipmentEnchantment(ConfigEnchantsPotions.piercingID, "piercing", 4, 0);
+		RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.loyaltyID, "loyalty"); loyalty = new ganymedes01.etfuturum.enchantment.MobEquipmentEnchantment(ConfigEnchantsPotions.loyaltyID, "loyalty", 3, 1);
+		RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.impalingID, "impaling"); impaling = new ganymedes01.etfuturum.enchantment.MobEquipmentEnchantment(ConfigEnchantsPotions.impalingID, "impaling", 5, 1);
+		RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.riptideID, "riptide"); riptide = new ganymedes01.etfuturum.enchantment.MobEquipmentEnchantment(ConfigEnchantsPotions.riptideID, "riptide", 3, 1);
+		RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.channelingID, "channeling"); channeling = new ganymedes01.etfuturum.enchantment.MobEquipmentEnchantment(ConfigEnchantsPotions.channelingID, "channeling", 1, 1);
+		if (ConfigEnchantsPotions.enableSoulSpeed) {
+			RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.soulSpeedID, "Soul Speed");
+			soulSpeed = new ganymedes01.etfuturum.enchantment.SoulSpeed();
+		}
+		if (ConfigEnchantsPotions.enableFrostWalker) {
+			RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.frostWalkerID, "Frost Walker");
 			frostWalker = new FrostWalker();
-		if (ConfigEnchantsPotions.enableMending)
+		}
+		if (ConfigEnchantsPotions.enableMending) {
+			RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.mendingID, "Mending");
 			mending = new Mending();
-		if (ConfigEnchantsPotions.enableSwiftSneak)
+		}
+		if (ConfigEnchantsPotions.enableSwiftSneak) {
+			RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.swiftSneakID, "Swift Sneak");
 			swiftSneak = new SwiftSneak();
+		}
 	}
 
 	// Frost Walker logic
 	public static void onLivingUpdate(EntityLivingBase entity) {
 		if (entity.worldObj.isRemote)
 			return;
+		if (ConfigEnchantsPotions.enableSoulSpeed) ganymedes01.etfuturum.enchantment.SoulSpeed.update(entity);
 		if (!ConfigEnchantsPotions.enableFrostWalker)
 			return;
 

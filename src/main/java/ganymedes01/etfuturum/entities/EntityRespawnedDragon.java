@@ -51,6 +51,7 @@ public class EntityRespawnedDragon extends EntityDragon {
 				worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, posX, posY, posZ, j));
 			}
 
+			ganymedes01.etfuturum.world.end.EndGatewayProgress.defeated(this);
 			setDead();
 		}
 	}

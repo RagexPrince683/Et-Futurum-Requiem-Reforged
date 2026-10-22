@@ -67,8 +67,8 @@ public class EntityFox extends EntityAnimal {
             entity -> entity instanceof EntityLiving;
 
     private EntityAIBase followChickenAndRabbitTask;
-    // private EntityAIBase followBabyTurtleTask;
-    // private EntityAIBase followFishTask;
+    private EntityAIBase followBabyTurtleTask;
+    private EntityAIBase followFishTask;
 
     private float headRollProgress;
     private float lastHeadRollProgress;
@@ -99,12 +99,10 @@ public class EntityFox extends EntityAnimal {
     protected void initTasks() {
         this.followChickenAndRabbitTask = new EntityAICustomNearestAttackableTarget(this, EntityLiving.class, 10, true, false,
                 entity -> entity instanceof EntityChicken || entity instanceof EntityRabbit);
-        // todo when turtles are added
-        // this.followBabyTurtleTask = new EntityAICustomNearestAttackableTarget(this, EntityTurtle.class, 10, false, false,
-        //         TurtleEntity.BABY_TURTLE_ON_LAND_FILTER);
-        // todo when fish entities are added
-        // this.followFishTask = new EntityAICustomNearestAttackableTarget(this, EntityFish.class, 20, false, false,
-        //         entity -> entity instanceof EntitySchoolingFish);
+        this.followBabyTurtleTask = new EntityAICustomNearestAttackableTarget(this, EntityTurtle.class, 10, true, false,
+                entity -> ((EntityTurtle) entity).isChild() && !entity.isInWater());
+        this.followFishTask = new EntityAICustomNearestAttackableTarget(this, EntityFish.class, 20, true, false,
+                entity -> !(entity instanceof EntityPufferfish));
 
         this.tasks.addTask(0, new EntityFox.AISwim());
         this.tasks.addTask(1, new EntityFox.AIStopWandering());
@@ -114,9 +112,8 @@ public class EntityFox extends EntityAnimal {
                 livingEntity -> NOTICEABLE_PLAYER_FILTER.test(livingEntity) && !this.canTrust(livingEntity.getUniqueID()) && !this.isAggressive()));
         this.tasks.addTask(3, new EntityAICustomAvoidEntity(this, EntityWolf.class, 8.0F, 1.6D, 1.4D,
                 livingEntity -> !((EntityWolf) livingEntity).isTamed() && !this.isAggressive()));
-        // todo when polar bears are added
-        // this.tasks.addTask(3, new EntityAICustomAvoidEntity(this, EntityPolarBear.class, 8.0F, 1.6D, 1.4D,
-        //         livingEntity -> !this.isAggressive()));
+        this.tasks.addTask(3, new EntityAICustomAvoidEntity(this, EntityPolarBear.class, 8.0F, 1.6D, 1.4D,
+                livingEntity -> !this.isAggressive()));
 
         this.tasks.addTask(4, new EntityFox.AIMoveToHunt());
         this.tasks.addTask(5, new EntityFox.AIJumpChase());
@@ -125,9 +122,8 @@ public class EntityFox extends EntityAnimal {
         this.tasks.addTask(6, new EntityFox.AIAttack(1.2D, true));
         this.tasks.addTask(6, new EntityFox.AIDelayedCalmDown());
         this.tasks.addTask(7, new EntityFox.AIFollowParent(this, 1.25D));
-        // TODO (hint: this.worldObj.villageCollectionObj.findNearestVillage)
-        // this.tasks.addTask(8, new EntityFox.GoToVillageGoal(32, 200));
-        if (ConfigBlocksItems.enableSweetBerryBushes) {
+        this.tasks.addTask(8, new EntityAIMoveThroughVillage(this, 1.0D, true));
+        if (ConfigBlocksItems.enableSweetBerryBushes || ConfigBlocksItems.enableGlowBerries) {
             this.tasks.addTask(9, new EntityFox.AIEatSweetBerries(1.2D, 12, 2));
         }
         this.tasks.addTask(9, new EntityAILeapAtTarget(this, 0.4F));
@@ -339,12 +335,12 @@ public class EntityFox extends EntityAnimal {
     private void addTypeSpecificTasks() {
         if (this.getFoxType() == EntityFox.Type.RED) {
             this.targetTasks.addTask(4, this.followChickenAndRabbitTask);
-            // this.targetTasks.addTask(4, this.followBabyTurtleGoal);
-            // this.targetTasks.addTask(6, this.followFishGoal);
+            this.targetTasks.addTask(4, this.followBabyTurtleTask);
+            this.targetTasks.addTask(6, this.followFishTask);
         } else {
-            // this.targetTasks.addTask(4, this.followFishGoal);
+            this.targetTasks.addTask(4, this.followFishTask);
             this.targetTasks.addTask(6, this.followChickenAndRabbitTask);
-            // this.targetTasks.addTask(6, this.followBabyTurtleGoal);
+            this.targetTasks.addTask(6, this.followBabyTurtleTask);
         }
     }
 
@@ -582,13 +578,10 @@ public class EntityFox extends EntityAnimal {
     private static List<Item> getBreedingItems() {
         if (breedingItems == null) {
             breedingItems = new ArrayList<>();
-            if (ConfigBlocksItems.enableSweetBerryBushes) {
+            if (ConfigBlocksItems.enableSweetBerryBushes || ConfigBlocksItems.enableGlowBerries) {
                 breedingItems.add(ModItems.SWEET_BERRIES.get());
             }
-            // todo when glow berries are added
-            // if (ConfigBlocksItems.enableGlowBerries) {
-            //     breedingItems.add(ModItems.GLOW_BERRIES.get());
-            // }
+            if (ConfigBlocksItems.enableGlowBerries) breedingItems.add(ModItems.GLOW_BERRIES_ITEM.get());
             if (breedingItems.isEmpty()) {
                 // Fallback if no vanilla option is enabled via config
                 breedingItems.add(Items.wheat);
@@ -1327,7 +1320,9 @@ public class EntityFox extends EntityAnimal {
         }
 
         private boolean isTargetPos(World world, int bx, int by, int bz) {
+            if (!world.blockExists(bx, by, bz)) return false;
             Block block = world.getBlock(bx, by, bz);
+            if (ConfigBlocksItems.enableGlowBerries && block instanceof ganymedes01.etfuturum.blocks.BaseCaveVines) return world.getBlockMetadata(bx, by, bz) == 1;
             if (block instanceof BlockBerryBush) {
                 return world.getBlockMetadata(bx, by, bz) >= 2;
             }
@@ -1341,7 +1336,8 @@ public class EntityFox extends EntityAnimal {
                 int z = this.targetPos.getZ();
                 Block block = EntityFox.this.worldObj.getBlock(x, y, z);
 
-                if (block instanceof BlockBerryBush) {
+                if (block instanceof ganymedes01.etfuturum.blocks.BaseCaveVines && worldObj.getBlockMetadata(x, y, z) == 1) { if (!worldObj.isRemote) { if (getHeldItem() == null) setCurrentItemOrArmor(0, ModItems.GLOW_BERRIES_ITEM.newItemStack()); else entityDropItem(ModItems.GLOW_BERRIES_ITEM.newItemStack(), 0); worldObj.setBlockMetadataWithNotify(x, y, z, 0, 3); worldObj.updateLightByType(net.minecraft.world.EnumSkyBlock.Block, x, y, z); }
+                } else if (block instanceof BlockBerryBush) {
                     int i = worldObj.getBlockMetadata(x, y, z);
                     int j = 1 + EntityFox.this.worldObj.rand.nextInt(2) + (i == 3 ? 1 : 0);
                     ItemStack itemStack = EntityFox.this.getHeldItem();

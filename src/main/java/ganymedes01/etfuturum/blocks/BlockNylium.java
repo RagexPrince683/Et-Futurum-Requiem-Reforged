@@ -141,8 +141,9 @@ public class BlockNylium extends BaseSubtypesBlock implements IGrowable {
 			if (rand.nextInt(40) == 0) {
 				int vineX = x + MathHelper.getRandomIntegerInRange(rand, -4, 4);
 				int vineZ = z + MathHelper.getRandomIntegerInRange(rand, -4, 4);
-				Block block = world.getBlock(x, y + 1, z);
-				if (block instanceof BlockNylium || block instanceof BlockNetherrack) {
+				if (!world.blockExists(vineX, y, vineZ)) return;
+				Block block = world.getBlock(vineX, y, vineZ);
+				if (world.isAirBlock(vineX, y + 1, vineZ) && (block instanceof BlockNylium || block instanceof BlockNetherrack)) {
 					world.setBlock(vineX, y + 1, vineZ, ModBlocks.TWISTING_VINES.get());
 				}
 			}

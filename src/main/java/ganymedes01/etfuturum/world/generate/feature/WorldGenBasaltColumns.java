@@ -27,6 +27,8 @@ public class WorldGenBasaltColumns extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
+		int reach = Math.min(maxHeight, 8) + maxReach + 1;
+		if (!world.checkChunksExist(x - reach, 0, z - reach, x + reach, world.getActualHeight() - 1, z + reach)) return false;
 //		int i = p_159444_.chunkGenerator().getSeaLevel();
 		int i = 32;
 		if (!canPlaceAt(world, i, x, y, z)) {

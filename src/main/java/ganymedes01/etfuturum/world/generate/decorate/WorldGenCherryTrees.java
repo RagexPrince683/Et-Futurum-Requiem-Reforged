@@ -204,6 +204,9 @@ public class WorldGenCherryTrees extends WorldGenAbstractTree {
 	}
 
 	protected boolean checkSpace(World world, Random random, int x, int y, int z) {
+		if (y < 3 || y + 14 >= world.getHeight() || !world.checkChunksExist(x - 8, y - 2, z - 8, x + 8, y + 14, z + 8)) return false;
+		Block soil = world.getBlock(x, y - 1, z);
+		if (!soil.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, (net.minecraftforge.common.IPlantable) ModBlocks.SAPLING.get())) return false;
 		if (doNotify) { //If this is false, this is a naturally generated tree, which doesn't need this check.
 			for (int my = y + 1; my <= y + 6; my++) {
 				for (int mx = x - 1; mx <= x + 1; mx++) {

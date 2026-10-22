@@ -47,6 +47,18 @@ To enable incomplete test features, add `-Detfuturum.testing=true` to your JVM a
 
 Configuration files are under `config/etfuturum`. Restart Minecraft or the dedicated server after editing them; a world reload does not reapply content registration, recipes or Mixins. Keep content and Mixin options consistent between clients and servers. Disabling registered content in an existing world can produce Forge missing-mapping warnings and remove saved content.
 
+## Surface and Nether content
+
+The runtime remains Forge 1.7.10; the modern content reference stops at Minecraft 1.21.11. Modern surface biomes use native climate generation and the legacy world height. Their IDs are configurable in `world.cfg`; keep those IDs stable in existing saves. `enableSurfaceBiomes=false` disables new placement while retaining registered biome identities. Individual `generateCherryGrove`, `generateMangroveSwamp`, `generatePaleGarden` and equivalent biome switches provide the same control for each added biome. No automatic retrogen is performed.
+
+Mangrove and Pale Garden content remain behind `enableMangroveBlocks` and `enablePaleGarden` in `experiments.cfg`. The EFR Nether provider remains experimental and is enabled separately by `netherDimensionProvider`; bastion generation has its own `enableBastions` switch and also respects Generate Structures. Nether mobs honor the existing Nether master toggle. Full Netherlicious provider compatibility is not supplied by these options.
+
+Stonecutters, looms and cartography tables provide native processing interfaces and NEI recipe views. Loom special patterns are reusable items crafted from paper and the existing pattern ingredient. Cartography supports copying, expansion and permanent map locking with glass panes. Guardians spawn in newly saved monument bounds; enableGuardians controls them independently. The experimental End keeps native dragon combat and creates up to twenty saved victory gateways.
+
+Modern mobs include aquatic life, illagers and raids, allays, sniffers, wardens, armadillos, copper golems, happy ghasts and the 1.21.11 mounts. Spawning and acquisition use native 1.7.10 biomes, villages and structures. Breeze/Bogged fights use converted vanilla dungeons; full Trial Chambers, vaults and keys are not included. See [mob coverage](MOB_COVERAGE.md) for survival paths, configuration boundaries and remaining differences.
+
+See [the content catalog](CONTENT_CATALOG.md) for supported content, survival paths, deliberate exclusions and experimental limitations. Biome presence does not imply complete modern terrain, ecology or gameplay parity.
+
 ## Polar bears
 
 Adult polar bears are hostile to players by default when `polarBearRealism` is enabled in the neutral entity configuration. Set this option to `false` to restore the modern neutral behavior, where adults attack players only while defending nearby cubs.

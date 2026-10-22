@@ -29,6 +29,8 @@ public class SmithingTableRecipes {
 			SmithingTableRecipes.getInstance().addRecipe(new ItemStack(ModItems.NETHERITE_PICKAXE.get()), "ingotNetherite", new ItemStack(Items.diamond_pickaxe, 1, OreDictionary.WILDCARD_VALUE));
 			SmithingTableRecipes.getInstance().addRecipe(new ItemStack(ModItems.NETHERITE_AXE.get()), "ingotNetherite", new ItemStack(Items.diamond_axe, 1, OreDictionary.WILDCARD_VALUE));
 			SmithingTableRecipes.getInstance().addRecipe(new ItemStack(ModItems.NETHERITE_SPADE.get()), "ingotNetherite", new ItemStack(Items.diamond_shovel, 1, OreDictionary.WILDCARD_VALUE));
+			SmithingTableRecipes.getInstance().addRecipe(ModItems.NETHERITE_SPEAR.newItemStack(), "ingotNetherite", new ItemStack(ModItems.DIAMOND_SPEAR.get(), 1, OreDictionary.WILDCARD_VALUE));
+			SmithingTableRecipes.getInstance().addRecipe(ModItems.NAUTILUS_ARMOR.newItemStack(1, 4), "ingotNetherite", ModItems.NAUTILUS_ARMOR.newItemStack(1, 3));
 			SmithingTableRecipes.getInstance().addRecipe(new ItemStack(ModItems.NETHERITE_SWORD.get()), "ingotNetherite", new ItemStack(Items.diamond_sword, 1, OreDictionary.WILDCARD_VALUE));
 			SmithingTableRecipes.getInstance().addRecipe(new ItemStack(ModItems.NETHERITE_HOE.get()), "ingotNetherite", new ItemStack(Items.diamond_hoe, 1, OreDictionary.WILDCARD_VALUE));
 

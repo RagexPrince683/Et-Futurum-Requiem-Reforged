@@ -13,14 +13,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.Random;
 
 public class WorldGenDeltas extends WorldGenerator {
-	private final int sizeMin = 7;
-	private final int sizeMax = 3;
+	private final int sizeMin = 3;
+	private final int sizeMax = 7;
 	private final int rimSizeMin = 0;
 	private final int rimSizeMax = 2;
 	private static final double RIM_SPAWN_CHANCE = 0.9D;
 
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
+		if (!world.checkChunksExist(x - 10, 0, z - 10, x + 10, world.getActualHeight() - 1, z + 10)) return false;
 		boolean flag = false;
 		boolean flag1 = rand.nextDouble() < RIM_SPAWN_CHANCE;
 		int rimXSize = flag1 ? MathHelper.getRandomIntegerInRange(rand, sizeMin, sizeMax) : 0;

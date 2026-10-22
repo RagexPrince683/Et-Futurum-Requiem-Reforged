@@ -16,6 +16,34 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public enum ModItems {
+	WOODEN_SPEAR(true, new ItemSpear(Item.ToolMaterial.WOOD, "wooden_spear")),
+	STONE_SPEAR(true, new ItemSpear(Item.ToolMaterial.STONE, "stone_spear")),
+	COPPER_SPEAR(true, new ItemSpear(net.minecraftforge.common.util.EnumHelper.addToolMaterial("EFR_COPPER_SPEAR", 1, 190, 4, 1, 13), "copper_spear")),
+	IRON_SPEAR(true, new ItemSpear(Item.ToolMaterial.IRON, "iron_spear")),
+	GOLDEN_SPEAR(true, new ItemSpear(Item.ToolMaterial.GOLD, "golden_spear")),
+	DIAMOND_SPEAR(true, new ItemSpear(Item.ToolMaterial.EMERALD, "diamond_spear")),
+	CROSSBOW(true, new ItemCrossbow()),
+	OMINOUS_BOTTLE(true, new ItemOminousBottle()),
+	BRUSH(true, new BaseItem("brush").setMaxStackSize(1).setMaxDamage(64)),
+	ARMADILLO_SCUTE(true, new BaseItem("armadillo_scute")),
+	WOLF_ARMOR(true, new BaseItem("wolf_armor").setMaxStackSize(1).setMaxDamage(64)),
+	WIND_CHARGE(true, new ItemWindCharge()),
+	BREEZE_ROD(true, new BaseItem("breeze_rod")),
+	TORCHFLOWER_SEEDS(true, new net.minecraft.item.ItemSeeds(ModBlocks.TORCHFLOWER_CROP.get(), Blocks.farmland).setUnlocalizedName("etfuturum.torchflower_seeds").setTextureName("torchflower_seeds")),
+	PITCHER_POD(true, new net.minecraft.item.ItemSeeds(ModBlocks.PITCHER_CROP.get(), Blocks.farmland).setUnlocalizedName("etfuturum.pitcher_pod").setTextureName("pitcher_pod")),
+	HARNESS(true, new BaseSubtypesItem("white_harness", "orange_harness", "magenta_harness", "light_blue_harness", "yellow_harness", "lime_harness", "pink_harness", "gray_harness", "light_gray_harness", "cyan_harness", "purple_harness", "blue_harness", "brown_harness", "green_harness", "red_harness", "black_harness").setNames("harness").setMaxStackSize(1)),
+	NAUTILUS_ARMOR(true, new BaseSubtypesItem("copper_nautilus_armor", "golden_nautilus_armor", "iron_nautilus_armor", "diamond_nautilus_armor", "netherite_nautilus_armor").setNames("nautilus_armor").setMaxStackSize(1)),
+	COD_BUCKET(true, new ItemFishBucket(0, "cod_bucket")),
+	SALMON_BUCKET(true, new ItemFishBucket(1, "salmon_bucket")),
+	TROPICAL_FISH_BUCKET(true, new ItemFishBucket(2, "tropical_fish_bucket")),
+	PUFFERFISH_BUCKET(true, new ItemFishBucket(3, "pufferfish_bucket")),
+	AXOLOTL_BUCKET(true, new ItemFishBucket(4, "axolotl_bucket")),
+	GLOW_INK_SAC(true, new BaseItem("glow_ink_sac")),
+	TURTLE_SCUTE(true, new BaseItem("turtle_scute")),
+	TURTLE_HELMET(true, new ItemTurtleHelmet()),
+	PHANTOM_MEMBRANE(true, new BaseItem("phantom_membrane")),
+	TRIDENT(true, new ItemTrident()),
+	NAUTILUS_SHELL(true, new BaseItem("nautilus_shell")),
 	MUTTON_RAW(ConfigBlocksItems.enableMutton, new BaseFood(2, 0.3F, true).setNames("mutton")),
 	MUTTON_COOKED(ConfigBlocksItems.enableMutton, new BaseFood(6, 0.8F, true).setNames("cooked_mutton")),
 	PRISMARINE_SHARD(ConfigBlocksItems.enablePrismarine, new BaseItem("prismarine_shard")),
@@ -51,6 +79,7 @@ public enum ModItems {
 	NETHERITE_AXE(ConfigBlocksItems.enableNetherite, new ItemEFRAxe(ModMaterials.NETHERITE_TOOL, ConfigBlocksItems.netheriteAxeDurability)),
 	NETHERITE_HOE(ConfigBlocksItems.enableNetherite, new ItemEFRHoe(ModMaterials.NETHERITE_TOOL, ConfigBlocksItems.netheriteHoeDurability)),
 	NETHERITE_SWORD(ConfigBlocksItems.enableNetherite, new ItemEFRSword(ModMaterials.NETHERITE_TOOL, ConfigBlocksItems.netheriteSwordDurability)),
+	NETHERITE_SPEAR(ConfigBlocksItems.enableNetherite, new ItemSpear(ModMaterials.NETHERITE_TOOL, "netherite_spear")),
 	TOTEM_OF_UNDYING(ConfigBlocksItems.enableTotemUndying, new BaseItem("totem_of_undying").setMaxStackSize(1)),
 	DYE(ConfigBlocksItems.enableNewDyes, new BaseSubtypesItem("white_dye", "blue_dye", "brown_dye", "black_dye").setNames("dye")),
 	COPPER_INGOT(ConfigBlocksItems.enableCopper && !ConfigModCompat.disableCopperOreAndIngotOnly, new BaseItem("copper_ingot")),
@@ -76,6 +105,11 @@ public enum ModItems {
 	HONEY_BOTTLE(ConfigBlocksItems.enableHoney, new ItemHoneyBottle()),
 	BAMBOO(ConfigBlocksItems.enableBambooBlocks, new ItemBamboo()),
 	GOAT_HORN(ConfigEntities.enableGoats, new ItemGoatHorn()),
+	RESIN_BRICK(ConfigExperiments.enablePaleGarden, new BaseItem("resin_brick")),
+	TADPOLE_BUCKET(ConfigEntities.enableFrogs, new ItemTadpoleBucket()),
+	WARPED_FUNGUS_ON_A_STICK(ConfigEntities.enableNetherMobs && ConfigExperiments.enableWarpedBlocks, new ItemWarpedFungusOnAStick()),
+	PALE_OAK_BOAT(ConfigBlocksItems.enableNewBoats && ConfigExperiments.enablePaleGarden, new ItemNewBoat("minecraft", "pale_oak", ModBlocks.PALE_OAK_PLANKS::getItem, 0, false, false)),
+	PALE_OAK_CHEST_BOAT(ConfigBlocksItems.enableNewBoats && ConfigExperiments.enablePaleGarden, new ItemNewBoat("minecraft", "pale_oak", ModBlocks.PALE_OAK_PLANKS::getItem, 0, true, false)),
 
 	OAK_BOAT(ConfigBlocksItems.enableNewBoats && !ConfigBlocksItems.replaceOldBoats, new ItemNewBoat("minecraft", "oak", () -> Item.getItemFromBlock(Blocks.planks), 0, false, false)),
 	OAK_CHEST_BOAT(ConfigBlocksItems.enableNewBoats, new ItemNewBoat("minecraft", "oak", () -> Item.getItemFromBlock(Blocks.planks), 0, true, false)),
@@ -109,7 +143,8 @@ public enum ModItems {
 	RAW_ADAMANTIUM(Utils.enableModdedRawOres(ModsList.SIMPLEORES), new BaseRawOre("simpleores", "adamantium")),
 
 	//Debug Item
-	DEBUGGING_TOOL(Reference.DEV_ENVIRONMENT, new DebugTestItem());
+	DEBUGGING_TOOL(Reference.DEV_ENVIRONMENT, new DebugTestItem()),
+	BANNER_PATTERN(ConfigBlocksItems.enableBanners, new ItemBannerPattern());
 
 	public static final ModItems[] CHEST_BOATS = new ModItems[]{OAK_CHEST_BOAT, SPRUCE_CHEST_BOAT, BIRCH_CHEST_BOAT, JUNGLE_CHEST_BOAT, ACACIA_CHEST_BOAT, DARK_OAK_CHEST_BOAT, CHERRY_CHEST_BOAT, BAMBOO_CHEST_RAFT};
 	public static final ModItems[] BOATS = new ModItems[]{OAK_BOAT, SPRUCE_BOAT, BIRCH_BOAT, JUNGLE_BOAT, ACACIA_BOAT, DARK_OAK_BOAT, CHERRY_BOAT, BAMBOO_RAFT};

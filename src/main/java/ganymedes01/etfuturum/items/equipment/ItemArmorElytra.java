@@ -45,7 +45,7 @@ public class ItemArmorElytra extends BaseItem implements IBaubleExpanded {
 	 */
 	@Override
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-		return repair.getItem() == Items.leather;
+		return repair.getItem() == Items.leather || repair.getItem() == ganymedes01.etfuturum.ModItems.PHANTOM_MEMBRANE.get();
 	}
 
 	@Override

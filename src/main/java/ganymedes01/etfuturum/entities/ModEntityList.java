@@ -27,6 +27,8 @@ public class ModEntityList {
 	}
 
 	private static void registerEntity(Class<? extends Entity> entityClass, String entityName, int id, Object mod, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int eggColour1, int eggColour2, boolean hasEgg) {
+		if (id < 0 || id < array.length && array[id] != null || map.containsValue(entityClass)) throw new IllegalArgumentException("Duplicate or invalid EFR entity registration: " + entityName + " (" + id + ")");
+		for (EntityData data : array) if (data != null && data.name.equals(entityName)) throw new IllegalArgumentException("Duplicate EFR entity name: " + entityName);
 		EntityRegistry.registerModEntity(entityClass, entityName, id, mod, trackingRange, updateFrequency, sendsVelocityUpdates);
 
 		if (id >= array.length) {
@@ -50,7 +52,7 @@ public class ModEntityList {
 	}
 
 	public static EntityData getData(int id) {
-		if (id >= array.length)
+		if (id < 0 || id >= array.length)
 			return null;
 		return array[id];
 	}

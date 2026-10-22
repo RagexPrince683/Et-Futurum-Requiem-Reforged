@@ -1,6 +1,7 @@
 package ganymedes01.etfuturum.core.utils.structurenbt;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import ganymedes01.etfuturum.ModBlocks;
 import ganymedes01.etfuturum.configuration.configs.ConfigWorld;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -20,8 +21,9 @@ public class EFRBlockStateConverter extends BlockStateConverter {
 		if (container.getType() == BlockStateContainer.BlockStateType.BLOCK_ENTITY && blockName.contains("banner")) {
 			net.minecraft.nbt.NBTTagCompound nbt = new net.minecraft.nbt.NBTTagCompound();
 			int color = 0;
+			String name = blockName.substring(blockName.indexOf(':') + 1).replace("_wall_banner", "").replace("_banner", "");
 			for (int i = 0; i < DYE_COLORS.length; i++) {
-				if (blockName.contains(DYE_COLORS[i])) {
+				if (name.equals(DYE_COLORS[i])) {
 					color = i;
 					break;
 				}
@@ -40,7 +42,10 @@ public class EFRBlockStateConverter extends BlockStateConverter {
 				return super.getMetaFromState("minecraft:quartz_pillar", blockStates, dir);
 			}
 		}
-		//TODO: Beetroot should be age * 2
+		if (blockName.equals("minecraft:beetroots") && blockStates.containsKey("age")) {
+			int age = Integer.parseInt(blockStates.get("age"));
+			return age >= 3 ? 7 : Math.max(0, age) * 2;
+		}
 		return super.getMetaFromState(blockName, blockStates, dir);
 	}
 
@@ -67,6 +72,9 @@ public class EFRBlockStateConverter extends BlockStateConverter {
 	public Block getBlockFromNamespace(String blockName, Map<String, String> blockStates) {
 		String truncatedName = blockName.substring(blockName.indexOf(":") + 1);
 		String nameToFind = truncatedName;
+		// Optional decorations should leave air, never the generic converter's stone fallback.
+		if (truncatedName.equals("end_rod") && !ModBlocks.END_ROD.isEnabled()) return Blocks.air;
+		if (truncatedName.endsWith("banner") && !ModBlocks.BANNER.isEnabled()) return Blocks.air;
 
 		// Removed explicit mapping to Blocks.air for dragon heads
 

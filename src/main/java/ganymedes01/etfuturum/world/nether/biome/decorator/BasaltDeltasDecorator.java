@@ -53,12 +53,12 @@ public class BasaltDeltasDecorator extends NetherBiomeDecorator {
 				}
 
 				boolean useSmallGen = rand.nextInt(4) == 0
-						|| world.getBiomeGenForCoords(x + 16, z) != NetherBiomeManager.basaltDeltas
-						|| world.getBiomeGenForCoords(x, z + 16) != NetherBiomeManager.basaltDeltas
-						|| world.getBiomeGenForCoords(x + 16, z + 16) != NetherBiomeManager.basaltDeltas
-						|| world.getBiomeGenForCoords(x - 16, z) != NetherBiomeManager.basaltDeltas
-						|| world.getBiomeGenForCoords(x, z - 16) != NetherBiomeManager.basaltDeltas
-						|| world.getBiomeGenForCoords(x - 16, z - 16) != NetherBiomeManager.basaltDeltas;
+						|| world.getWorldChunkManager().getBiomeGenAt(x + 16, z) != NetherBiomeManager.basaltDeltas
+						|| world.getWorldChunkManager().getBiomeGenAt(x, z + 16) != NetherBiomeManager.basaltDeltas
+						|| world.getWorldChunkManager().getBiomeGenAt(x + 16, z + 16) != NetherBiomeManager.basaltDeltas
+						|| world.getWorldChunkManager().getBiomeGenAt(x - 16, z) != NetherBiomeManager.basaltDeltas
+						|| world.getWorldChunkManager().getBiomeGenAt(x, z - 16) != NetherBiomeManager.basaltDeltas
+						|| world.getWorldChunkManager().getBiomeGenAt(x - 16, z - 16) != NetherBiomeManager.basaltDeltas;
 
 				if (world.getBlock(x, y - 1, z) != ModBlocks.BASALT.get()) {
 					(useSmallGen ? smallBasaltColumnGenerator : largeBasaltColumnGenerator).generate(world, rand, x, y, z);

@@ -2,6 +2,7 @@ package ganymedes01.etfuturum.inventory;
 
 import ganymedes01.etfuturum.inventory.slot.SlotSmithingResult;
 import ganymedes01.etfuturum.recipes.SmithingTableRecipes;
+import ganymedes01.etfuturum.ModBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
@@ -10,6 +11,8 @@ import net.minecraft.world.World;
 
 public class ContainerSmithingTable extends Container {
 	private final World world;
+	private final int tableX, tableY, tableZ;
+	private final boolean tableBound;
 	public final InventoryCrafting inputMatrix = new InventoryCrafting(this, 2, 1);
 	private final InventoryCraftResult resultInventory = new InventoryCraftResult();
 	private final Slot applicant = new Slot(inputMatrix, 0, 27, 47);
@@ -17,7 +20,20 @@ public class ContainerSmithingTable extends Container {
 	private final Slot result;
 
 	public ContainerSmithingTable(InventoryPlayer inv, World world) {
+		this(inv, world, net.minecraft.util.MathHelper.floor_double(inv.player.posX),
+				net.minecraft.util.MathHelper.floor_double(inv.player.posY), net.minecraft.util.MathHelper.floor_double(inv.player.posZ), false);
+	}
+
+	public ContainerSmithingTable(InventoryPlayer inv, World world, int blockX, int blockY, int blockZ) {
+		this(inv, world, blockX, blockY, blockZ, true);
+	}
+
+	private ContainerSmithingTable(InventoryPlayer inv, World world, int blockX, int blockY, int blockZ, boolean tableBound) {
 		this.world = world;
+		this.tableBound = tableBound;
+		tableX = blockX;
+		tableY = blockY;
+		tableZ = blockZ;
 		addSlotToContainer(applicant);
 		addSlotToContainer(ingot);
 		result = addSlotToContainer(new SlotSmithingResult(inv.player, inputMatrix, resultInventory, 2, 134, 47));
@@ -28,7 +44,10 @@ public class ContainerSmithingTable extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return true;
+		return player.worldObj == world && !player.isDead
+				&& (!tableBound || world.blockExists(tableX, tableY, tableZ)
+				&& world.getBlock(tableX, tableY, tableZ) == ModBlocks.SMITHING_TABLE.get())
+				&& player.getDistanceSq(tableX + 0.5, tableY + 0.5, tableZ + 0.5) <= 64;
 	}
 
 	@Override

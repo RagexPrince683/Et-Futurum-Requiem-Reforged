@@ -52,6 +52,7 @@ public class NetherChunkProvider implements IChunkProvider {
 	private final World worldObj;
 	private double[] noiseField;
 	public MapGenNetherBridge genNetherBridge = new MapGenNetherBridge();
+	private final ganymedes01.etfuturum.world.nether.structure.MapGenBastion bastions = new ganymedes01.etfuturum.world.nether.structure.MapGenBastion();
 	private double[] slowsandNoise = new double[256];
 	private double[] gravelNoise = new double[256];
 	private BiomeGenBase[] biomesForGeneration;
@@ -369,6 +370,7 @@ public class NetherChunkProvider implements IChunkProvider {
 		netherRavineGenerator.func_151539_a(this, worldObj, par1, par2, blocks); //generate TODO: Make this available for the vanilla Nether as a separate mixin
 
 		genNetherBridge.func_151539_a(this, worldObj, par1, par2, blocks); // generate
+		if (ganymedes01.etfuturum.configuration.configs.ConfigWorld.enableBastions) bastions.func_151539_a(this, worldObj, par1, par2, blocks);
 		Chunk chunk = new Chunk(worldObj, blocks, abyte, par1, par2);
 		BiomeGenBase[] abiomegenbase = worldObj.getWorldChunkManager().loadBlockGeneratorData(null,
 				par1 * 16, par2 * 16, 16, 16);
@@ -523,7 +525,9 @@ public class NetherChunkProvider implements IChunkProvider {
 	 */
 	@Override
 	public void populate(IChunkProvider par1IChunkProvider, int par2, int par3) {
+		boolean previousFallInstantly = BlockFalling.fallInstantly;
 		BlockFalling.fallInstantly = true;
+		try {
 		MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(par1IChunkProvider, worldObj, hellRNG, par2, par3, false));
 
 		int k = par2 * 16;
@@ -535,6 +539,7 @@ public class NetherChunkProvider implements IChunkProvider {
 		this.hellRNG.setSeed(par2 * rand1 + par3 * rand2 ^ this.worldObj.getSeed());
 
 		genNetherBridge.generateStructuresInChunk(worldObj, hellRNG, par2, par3);
+		if (ganymedes01.etfuturum.configuration.configs.ConfigWorld.enableBastions && worldObj.getWorldInfo().isMapFeaturesEnabled()) bastions.generateStructuresInChunk(worldObj, hellRNG, par2, par3);
 		int i1;
 		int j1;
 		int k1;
@@ -633,7 +638,9 @@ public class NetherChunkProvider implements IChunkProvider {
 		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(worldObj, hellRNG, k, l));
 		MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Post(par1IChunkProvider, worldObj, hellRNG, par2, par3, false));
 
-		BlockFalling.fallInstantly = false;
+		} finally {
+			BlockFalling.fallInstantly = previousFallInstantly;
+		}
 	}
 
 
@@ -677,6 +684,7 @@ public class NetherChunkProvider implements IChunkProvider {
 	 */
 	@Override
 	public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int par2, int par3, int par4) {
+		if (ganymedes01.etfuturum.world.nether.NetherSpawning.STRIDERS != null && par1EnumCreatureType == ganymedes01.etfuturum.world.nether.NetherSpawning.STRIDERS) return ganymedes01.etfuturum.world.nether.NetherSpawning.SPAWNS;
 		if (par1EnumCreatureType == EnumCreatureType.monster && genNetherBridge.hasStructureAt(par2, par3, par4))
 			return genNetherBridge.getSpawnList();
 		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(par2, par4);
@@ -690,6 +698,7 @@ public class NetherChunkProvider implements IChunkProvider {
 
 	@Override
 	public void recreateStructures(int par1, int par2) {
+		if (ganymedes01.etfuturum.configuration.configs.ConfigWorld.enableBastions) bastions.func_151539_a(this, worldObj, par1, par2, null);
 		genNetherBridge.func_151539_a(this, worldObj, par1, par2, null); // generate
 	}
 

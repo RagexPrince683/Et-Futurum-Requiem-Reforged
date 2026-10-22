@@ -61,6 +61,13 @@ public class ConfigWorld extends ConfigBase {
 	public static boolean amethystDimensionBlacklistAsWhitelist;
 	public static int cherryTreeRarity;
 	public static boolean bambooWorldgen;
+	public static boolean enableBastions;
+	public static int bastionSpacing;
+	public static boolean enableSurfaceBiomes;
+	public static int cherryGroveID, mangroveSwampID, paleGardenID, meadowID, groveID, snowySlopesID, jaggedPeaksID, frozenPeaksID, stonyPeaksID, bambooJungleID;
+	public static int warmOceanID, lukewarmOceanID, coldOceanID, deepLukewarmOceanID, deepColdOceanID, deepFrozenOceanID;
+	private static final java.util.Map<String, Boolean> surfaceGeneration = new java.util.HashMap<>();
+	public static boolean generatesSurfaceBiome(String name) { return surfaceGeneration.getOrDefault(name, false); }
 
 	public static int crimsonForestID;
 	public static int warpedForestID;
@@ -115,7 +122,7 @@ public class ConfigWorld extends ConfigBase {
 		deepslateReplacesStones = getBoolean("deepslateReplacesStones", catGeneration, true, "Whether or not Deepslate will overwrite granite, diorite, andesite (Only works when deepslate generation mode is set to 0)");
 		deepslateReplacesDirt = getBoolean("deepslateReplacesDirt", catGeneration, true, "Whether or not Deepslate will overwrite dirt (Only works when deepslate generation mode is set to 0)");
 		deepslateGenerationMode = getInt("deepslateGenerationMode", catGeneration, 0, -1, 1, "If 0, deepslate replaces all stone below the specified value, with a shattering effect near the top similar to bedrock. If 1, it generates in clusters using the deepslate cluster settings. -1 disables Et Futurum deepslate generation entirely.");
-		enableOceanMonuments = getBoolean("enableOceanMonuments", catGeneration, true, "Note: Ocean monuments currently do not have guardians");
+		enableOceanMonuments = getBoolean("enableOceanMonuments", catGeneration, true, "Generates saved ocean-monument structures in deep oceans. New monuments are placed in clipped chunks without retrogen; guardians are controlled separately in the entity configuration.");
 		enableFossils = getBoolean("enableFossils", catGeneration, true, "");
 		if (hasKey(catGeneration, "fossilBoneBlock")) {
 			Property oldFossilIDProp = get(catGeneration, "fossilBoneBlock", 0);
@@ -184,6 +191,29 @@ public class ConfigWorld extends ConfigBase {
 		amethystMaxY = getInt("amethystMaxY", catGeneration, 46, 6, 245, "Max Y level amethyst geodes should attempt to generate at");
 		cherryTreeRarity = getInt("cherryTreeRarity", catGeneration, 72, 0, Byte.MAX_VALUE, "How rare should cherry trees be? 1/x chance per chunk, 1 means a tree attempts to appear every chunk. 0 = no cherry trees. They will spawn in mountain-type biomes.");
 		bambooWorldgen = getBoolean("bambooWorldgen", catGeneration, true, "Whether bamboo should naturally spawn in the overworld. Turning this off allows you to use bamboo based blocks without bamboo world gen for mod compatability.");
+		enableBastions = getBoolean("enableBastions", catGeneration, true, "Generate bastion remnants in new chunks of the experimental EFR Nether. Requires blackstone; respects the world's Generate Structures switch. No retrogen.");
+		bastionSpacing = getInt("bastionSpacing", catGeneration, 27, 8, 128, "Bastion candidate grid spacing in chunks. Existing saved structure starts keep their positions.");
+		enableSurfaceBiomes = getBoolean("enableSurfaceBiomes", catGeneration, true, "Add enabled modern surface biomes to native Forge climate generation in new chunks. Disabling generation retains registered biome IDs for existing saves. No retrogen or terrain-engine replacement.");
+		surfaceGeneration.clear();
+		for (String name : new String[]{"Cherry Grove", "Mangrove Swamp", "Pale Garden", "Meadow", "Grove", "Snowy Slopes", "Jagged Peaks", "Frozen Peaks", "Stony Peaks", "Bamboo Jungle", "Warm Ocean", "Lukewarm Ocean", "Cold Ocean", "Deep Lukewarm Ocean", "Deep Cold Ocean", "Deep Frozen Ocean"}) {
+			surfaceGeneration.put(name, getBoolean("generate" + name.replace(" ", ""), catGeneration, true, "Generate " + name + " in new chunks. Disabling placement retains this biome's configured registry identity."));
+		}
+		cherryGroveID = getInt("cherryGroveID", catBiomes, 204, -1, 65535, "Cherry Grove (requires cherry blocks). -1 disables registration; keep saved IDs stable.");
+		mangroveSwampID = getInt("mangroveSwampID", catBiomes, 205, -1, 65535, "Mangrove Swamp (requires experimental mangrove blocks and mud). -1 disables registration.");
+		paleGardenID = getInt("paleGardenID", catBiomes, 206, -1, 65535, "Pale Garden (requires experimental pale garden content). -1 disables registration.");
+		meadowID = getInt("meadowID", catBiomes, 207, -1, 65535, "Meadow. -1 disables registration.");
+		groveID = getInt("groveID", catBiomes, 208, -1, 65535, "Grove. -1 disables registration.");
+		snowySlopesID = getInt("snowySlopesID", catBiomes, 209, -1, 65535, "Snowy Slopes. Uses native snow; no powder-snow or height-engine replacement. -1 disables registration.");
+		jaggedPeaksID = getInt("jaggedPeaksID", catBiomes, 210, -1, 65535, "Jagged Peaks within native 1.7.10 terrain height. -1 disables registration.");
+		frozenPeaksID = getInt("frozenPeaksID", catBiomes, 211, -1, 65535, "Frozen Peaks within native 1.7.10 terrain height. -1 disables registration.");
+		stonyPeaksID = getInt("stonyPeaksID", catBiomes, 212, -1, 65535, "Stony Peaks within native 1.7.10 terrain height. -1 disables registration.");
+		bambooJungleID = getInt("bambooJungleID", catBiomes, 213, -1, 65535, "Bamboo Jungle (requires bamboo content). -1 disables registration.");
+		warmOceanID = getInt("warmOceanID", catBiomes, 214, -1, 65535, "Warm Ocean. -1 disables registration.");
+		lukewarmOceanID = getInt("lukewarmOceanID", catBiomes, 215, -1, 65535, "Lukewarm Ocean. -1 disables registration.");
+		coldOceanID = getInt("coldOceanID", catBiomes, 216, -1, 65535, "Cold Ocean. -1 disables registration.");
+		deepLukewarmOceanID = getInt("deepLukewarmOceanID", catBiomes, 217, -1, 65535, "Deep Lukewarm Ocean. -1 disables registration.");
+		deepColdOceanID = getInt("deepColdOceanID", catBiomes, 218, -1, 65535, "Deep Cold Ocean. -1 disables registration.");
+		deepFrozenOceanID = getInt("deepFrozenOceanID", catBiomes, 219, -1, 65535, "Deep Frozen Ocean. -1 disables registration.");
 
 		crimsonForestID = getInt("crimsonForestID", catBiomes, 200, -1, 65536, "Set to -1 to disable the generation of Crimson Forests. To use an ID above 255, EndlessIDs is required.");
 		warpedForestID = getInt("warpedForestID", catBiomes, 201, -1, 65536, "Set to -1 to disable the generation of Warped Forests. To use an ID above 255, EndlessIDs is required.");

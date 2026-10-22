@@ -25,6 +25,8 @@ public class WorldGenNetherFossil extends WorldGenFossil {
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 		NBTStructure fossil = fossils.get(rand.nextInt(fossils.size()));
 		ForgeDirection dir = ForgeDirection.getOrientation(rand.nextInt(4) + 2);
+		BlockPos size = fossil.getSize(dir);
+		if (!world.checkChunksExist(x, y, z, x + size.getX(), y + size.getY(), z + size.getZ())) return false;
 		if (!canFossilGenerateHere(world, x, y, z, fossil.getSize(dir))) return false;
 		fossil.placeStructure(world, rand, x, y, z, dir);
 		return true;

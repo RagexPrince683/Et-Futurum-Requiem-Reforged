@@ -26,7 +26,6 @@ import ganymedes01.etfuturum.configuration.configs.*;
 import ganymedes01.etfuturum.core.utils.ItemStackMap;
 import ganymedes01.etfuturum.core.utils.ItemStackSet;
 import ganymedes01.etfuturum.core.utils.Utils;
-import ganymedes01.etfuturum.elytra.IElytraEntityTrackerEntry;
 import ganymedes01.etfuturum.elytra.IElytraPlayer;
 import ganymedes01.etfuturum.entities.*;
 import ganymedes01.etfuturum.entities.ai.EntityAIOpenCustomDoor;
@@ -121,13 +120,15 @@ public class ServerEventHandler {
 	public static final ServerEventHandler INSTANCE = new ServerEventHandler();
 	public final Set<EntityPlayerMP> playersClosedContainers = new HashSet<>();
 	private final Map<EntityPlayer, List<ItemStack>> armorTracker = new WeakHashMap<>();
-	private final Set<EntityFallingBlock> fallingConcreteBlocks = new HashSet<>();
+	private final Map<World, Set<EntityFallingBlock>> fallingConcreteBlocks = new IdentityHashMap<>();
 	public final Cache<EntityItem, EntityPlayer> droppedEntityItems = CacheBuilder.newBuilder().weakKeys().maximumSize(1000).build();
 
 	private ServerEventHandler() {
 	}
 
 	public void onServerStopped() {
+		ganymedes01.etfuturum.world.structure.MapGenOceanMonument.clear();
+		ganymedes01.etfuturum.tileentities.TileEntityLightningRod.clearAll();
 		playersClosedContainers.clear();
 		armorTracker.clear();
 		fallingConcreteBlocks.clear();
@@ -139,10 +140,12 @@ public class ServerEventHandler {
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event) {
 		if (!event.world.isRemote) {
+			ganymedes01.etfuturum.world.structure.MapGenOceanMonument.unload(event.world);
+			ganymedes01.etfuturum.tileentities.TileEntityLightningRod.clear(event.world);
 			removeLoadedChunks(event.world.provider.dimensionId);
 			playersClosedContainers.removeIf(player -> player.worldObj == event.world);
 			armorTracker.entrySet().removeIf(entry -> entry.getKey().worldObj == event.world);
-			fallingConcreteBlocks.removeIf(entity -> entity.worldObj == event.world);
+			fallingConcreteBlocks.remove(event.world);
 			lastAttackedAtYaw.entrySet().removeIf(entry -> entry.getKey().worldObj == event.world);
 		}
 
@@ -174,6 +177,17 @@ public class ServerEventHandler {
 
 	@SubscribeEvent
 	public void livingFall(LivingFallEvent event) {
+		if (!event.entity.worldObj.isRemote && ModBlocks.POINTED_DRIPSTONE.isEnabled()) {
+			int x = MathHelper.floor_double(event.entity.posX);
+			int y = MathHelper.floor_double(event.entity.boundingBox.minY - 0.01);
+			int z = MathHelper.floor_double(event.entity.posZ);
+			if (event.entity.worldObj.getBlock(x, y, z) == ModBlocks.POINTED_DRIPSTONE.get()
+					&& event.entity.worldObj.getBlockMetadata(x, y, z) == 5) {
+				int damage = Math.max(0, MathHelper.ceiling_float_int(event.distance - 1)) * 2;
+				if (damage > 0) event.entity.attackEntityFrom(ganymedes01.etfuturum.blocks.BlockPointedDripstone.STALAGMITE_DAMAGE, damage);
+				event.distance = 0; // Replace ordinary fall damage; do not apply both damage sources.
+			}
+		}
 		if (event.entity instanceof EntityFox fox) {
 			event.distance = fox.computeFallDistance(event.distance);
 		}
@@ -1495,7 +1509,7 @@ public class ServerEventHandler {
 			}
 		} else if (!event.world.isRemote && ModBlocks.CONCRETE_POWDER.isEnabled()
 				&& event.entity instanceof EntityFallingBlock && ((EntityFallingBlock) event.entity).field_145811_e/*blockObj*/ == ModBlocks.CONCRETE_POWDER.get()) {
-			fallingConcreteBlocks.add((EntityFallingBlock) event.entity);
+			fallingConcreteBlocks.computeIfAbsent(event.world, world -> new HashSet<>()).add((EntityFallingBlock) event.entity);
 		}
 	}
 
@@ -1995,33 +2009,21 @@ public class ServerEventHandler {
 	}
 
 	@SubscribeEvent
-	@SuppressWarnings("unchecked")
 	public void onPostWorldTick(TickEvent.WorldTickEvent e) {
-		if (ConfigMixins.enableElytra && e.phase == TickEvent.Phase.END && e.world instanceof WorldServer ws) {
-			for (EntityTrackerEntry ete : (Set<EntityTrackerEntry>) ws.getEntityTracker().trackedEntities) {
-				if (ete != null && ete.myEntity instanceof IElytraPlayer elb) {
-					boolean flying = elb.etfu$isElytraFlying();
-					if (!flying && ((IElytraEntityTrackerEntry) ete).etfu$getWasSendingVelUpdates()) {
-						ete.sendVelocityUpdates = false;
-					} else if (flying) {
-						if (!ete.sendVelocityUpdates) {
-							((IElytraEntityTrackerEntry) ete).etfu$setWasSendingVelUpdates(true);
-						}
-						ete.sendVelocityUpdates = true;
-					}
-				}
-			}
-		}
-
 		if (ConfigMixins.enableDoWeatherCycle && e.phase == TickEvent.Phase.END && e.side == Side.SERVER) {
 			DoWeatherCycle.INSTANCE.isWorldTickInProgress = false;
 		}
 	}
 
 	private void doConcreteTracking(World world) {
-		for (Iterator<EntityFallingBlock> iterator = fallingConcreteBlocks.iterator(); iterator.hasNext(); ) {
+		Set<EntityFallingBlock> tracked = fallingConcreteBlocks.get(world);
+		if (tracked == null) return;
+		for (Iterator<EntityFallingBlock> iterator = tracked.iterator(); iterator.hasNext(); ) {
 			EntityFallingBlock block = iterator.next();
-			if (block.worldObj != world) continue;
+			if (block.worldObj != world) {
+				iterator.remove();
+				continue;
+			}
 			if (!block.isDead) {
 				int i = MathHelper.floor_double(block.posX);
 				int j = MathHelper.floor_double(block.posY);

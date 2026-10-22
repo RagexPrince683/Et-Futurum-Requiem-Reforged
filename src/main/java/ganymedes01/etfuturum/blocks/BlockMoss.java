@@ -32,9 +32,7 @@ public class BlockMoss extends BaseBlock implements IGrowable {
 	 */
 	@Override
 	public boolean func_149851_a(World world, int x, int y, int z, boolean isClient) {
-		// Implement your logic for whether the block can grow here.
-		// For example, return true if growth conditions are met.
-		return true;
+		return world.isAirBlock(x, y + 1, z);
 	}
 
 	/**
@@ -42,8 +40,6 @@ public class BlockMoss extends BaseBlock implements IGrowable {
 	 */
 	@Override
 	public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
-		// Implement your logic for the random chance of growth here.
-		// For example, return true based on a random chance.
 		return true;
 	}
 
@@ -60,78 +56,22 @@ public class BlockMoss extends BaseBlock implements IGrowable {
 	 */
 	@Override
 	public void func_149853_b(World world, Random rand, int xCoord, int yCoord, int zCoord) {
-		int l = 0;
-		int maxHeight = world.getHeight();
-
-		while (l < 128) {
-			int i1 = xCoord;
-			int j1 = yCoord - 1; // Decrease Y to check below the current block
-			int k1 = zCoord;
-			int l1 = 0;
-
-			while (true) {
-				if (l1 < l / 16) {
-					i1 += rand.nextInt(3) - 1;
-					j1 += (rand.nextInt(3) - 1) * rand.nextInt(3) / 2;
-					k1 += rand.nextInt(3) - 1;
-
-					if (j1 >= maxHeight) {
-						// Ensure we're not above the world height
-						break;
-					}
-
-					Block blockBelow = world.getBlock(i1, j1, k1);
-					Block blockAtPos = world.getBlock(i1, j1 + 1, k1); // Check the block above
-
-					if ((blockBelow != Blocks.grass && blockBelow != Blocks.stone && blockBelow != Blocks.dirt && blockBelow != ModBlocks.MOSS_BLOCK.get()) &&
-							!blockAtPos.isNormalCube()) {
-						++l1;
-						continue;
-					} else {
-						if (blockAtPos instanceof BlockBush || blockAtPos == Blocks.air) {
-							// Check if the block above is a plant block (e.g., flowers) or air
-							// Replace the block below with the full moss block
-							world.setBlock(i1, j1, k1, ModBlocks.MOSS_BLOCK.get(), 0, 2);
-						}
-
-						if (blockAtPos == Blocks.air) {
-							// Randomly choose what to place on top based on weighting percentages
-							int randomOption = rand.nextInt(
-									AZALEA_BUSH_WEIGHT + FLOWERING_AZALEA_WEIGHT + DOUBLE_TALL_GRASS_WEIGHT +
-											MOSS_CARPET_WEIGHT + TALL_GRASS_WEIGHT + AIR_WEIGHT
-							);
-
-							if (randomOption < AZALEA_BUSH_WEIGHT) {
-								if (ModBlocks.AZALEA.get().canBlockStay(world, i1, j1 + 1, k1)) {
-									world.setBlock(i1, j1 + 1, k1, ModBlocks.AZALEA.get(), 0, 2);
-								}
-							} else if (randomOption < AZALEA_BUSH_WEIGHT + FLOWERING_AZALEA_WEIGHT) {
-								if (ModBlocks.AZALEA.get().canBlockStay(world, i1, j1 + 1, k1)) {
-									world.setBlock(i1, j1 + 1, k1, ModBlocks.AZALEA.get(), 1, 2);
-								}
-							} else if (randomOption < AZALEA_BUSH_WEIGHT + FLOWERING_AZALEA_WEIGHT + DOUBLE_TALL_GRASS_WEIGHT) {
-								// Double Tall Grass
-								if (Blocks.double_plant.canBlockStay(world, i1, j1 + 1, k1)) {
-									Blocks.double_plant.func_149889_c(world, i1, j1 + 1, k1, 2, 2);
-								}
-							} else if (randomOption < AZALEA_BUSH_WEIGHT + FLOWERING_AZALEA_WEIGHT + DOUBLE_TALL_GRASS_WEIGHT + MOSS_CARPET_WEIGHT) {
-								// Place Moss Carpet
-								if (ModBlocks.MOSS_CARPET.get().canBlockStay(world, i1, j1 + 1, k1)) {
-									world.setBlock(i1, j1 + 1, k1, ModBlocks.MOSS_CARPET.get(), 0, 2);
-								}
-							} else if (randomOption < AZALEA_BUSH_WEIGHT + FLOWERING_AZALEA_WEIGHT + DOUBLE_TALL_GRASS_WEIGHT + MOSS_CARPET_WEIGHT + TALL_GRASS_WEIGHT) {
-								// Place Tall Grass
-								if (Blocks.tallgrass.canBlockStay(world, i1, j1 + 1, k1)) {
-									world.setBlock(i1, j1 + 1, k1, Blocks.tallgrass, 1, 3);
-								}
-							}
-						}
-					}
-					++l1;
-				} else {
-					++l;
-					break;
-				}
+		if (world.isRemote || !world.isAirBlock(xCoord, yCoord + 1, zCoord)) return;
+		for (int attempt = 0; attempt < 128; attempt++) {
+			int x = xCoord + rand.nextInt(7) - 3, z = zCoord + rand.nextInt(7) - 3;
+			for (int y = Math.min(world.getHeight() - 2, yCoord + 2); y >= Math.max(1, yCoord - 2); y--) {
+				if (!world.blockExists(x, y, z)) break;
+				Block ground = world.getBlock(x, y, z), above = world.getBlock(x, y + 1, z);
+				if (ground != Blocks.grass && ground != Blocks.dirt && ground != Blocks.stone && ground != this && (!ModBlocks.DEEPSLATE.isEnabled() || ground != ModBlocks.DEEPSLATE.get())) continue;
+				if (!above.isAir(world, x, y + 1, z) && !(above instanceof BlockBush)) continue;
+				world.setBlock(x, y, z, this, 0, 2);
+				if (!world.isAirBlock(x, y + 1, z)) break;
+				int choice = rand.nextInt(AZALEA_BUSH_WEIGHT + FLOWERING_AZALEA_WEIGHT + DOUBLE_TALL_GRASS_WEIGHT + MOSS_CARPET_WEIGHT + TALL_GRASS_WEIGHT + AIR_WEIGHT);
+				if (choice < 3) world.setBlock(x, y + 1, z, ModBlocks.AZALEA.get(), choice == 2 ? 1 : 0, 2);
+				else if (choice == 3 && world.isAirBlock(x, y + 2, z)) Blocks.double_plant.func_149889_c(world, x, y + 1, z, 2, 2);
+				else if (choice < 14) world.setBlock(x, y + 1, z, ModBlocks.MOSS_CARPET.get(), 0, 2);
+				else if (choice < 21) world.setBlock(x, y + 1, z, Blocks.tallgrass, 1, 2);
+				break;
 			}
 		}
 	}

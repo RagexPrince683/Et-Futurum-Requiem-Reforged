@@ -10,7 +10,6 @@ package ganymedes01.etfuturum.core.utils;
  * <http://www.gnu.org/licenses/>.
  */
 
-import codechicken.nei.ItemStackSet;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterators;
 import net.minecraft.init.Items;
@@ -54,7 +53,6 @@ public class ItemStackMap<T> extends AbstractMap<ItemStack, T> {
 	private final boolean NBTSensitive;
 
 	static ItemStack newItemStack(Item item, int size, int damage, NBTTagCompound tag) {
-		ItemStackSet set = null;
 		ItemStack stack = new ItemStack(item, size, damage);
 		stack.stackTagCompound = tag;
 		return stack;

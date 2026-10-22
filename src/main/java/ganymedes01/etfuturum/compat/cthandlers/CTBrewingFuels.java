@@ -2,20 +2,16 @@ package ganymedes01.etfuturum.compat.cthandlers;
 
 import ganymedes01.etfuturum.api.BrewingFuelRegistry;
 import ganymedes01.etfuturum.compat.CompatCraftTweaker;
-import ganymedes01.etfuturum.core.utils.ItemStackMap;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;
 import minetweaker.api.item.IItemStack;
-import minetweaker.mc1710.item.MCItemStack;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import java.util.List;
-import java.util.Map;
 
-import static ganymedes01.etfuturum.compat.CompatCraftTweaker.getInternal;
 
 @ZenClass("mods.etfuturum.brewingFuel")
 public class CTBrewingFuels {
@@ -23,26 +19,22 @@ public class CTBrewingFuels {
 	@ZenMethod
 	public static void remove(IIngredient fuel) {
 
-		Object internal = getInternal(fuel);
-
-		if (((internal instanceof String && BrewingFuelRegistry.isFuel((String) internal)) || (internal instanceof ItemStack && BrewingFuelRegistry.isFuel((ItemStack) internal)))) {
-			final ItemStackMap<Integer> toRemove = new ItemStackMap<>();
-			for (Map.Entry<ItemStack, Integer> fuelEntry : BrewingFuelRegistry.getFuels().entrySet()) {
-				if (fuel.matches(new MCItemStack(fuelEntry.getKey()))) {
-					toRemove.put(fuelEntry.getKey(), fuelEntry.getValue());
-				}
-			}
-			MineTweakerAPI.apply(new RemoveAction(toRemove));
-		} else {
-			MineTweakerAPI.logWarning("No brewing fuels for " + fuel);
+		if (fuel == null || fuel.getItems() == null) {
+			MineTweakerAPI.logError("Cannot resolve brewing fuel " + fuel);
+			return;
 		}
+		MineTweakerAPI.apply(new RemoveAction(CompatCraftTweaker.getItemStacks(fuel.getItems())));
 	}
 
 	@ZenMethod
 	public static void addFuel(IIngredient fuel, int count) {
-		List<IItemStack> items = fuel.getItems();
+		List<IItemStack> items = fuel == null ? null : fuel.getItems();
 		if (items == null) {
 			MineTweakerAPI.logError("Cannot turn " + fuel + " into a brewing fuel");
+			return;
+		}
+		if (count <= 0) {
+			MineTweakerAPI.logError("Brewing fuel must supply at least one cycle");
 			return;
 		}
 
@@ -56,15 +48,17 @@ public class CTBrewingFuels {
 
 	private static class RemoveAction implements IUndoableAction {
 
-		private final ItemStackMap<Integer> items;
+		private final ItemStack[] items;
+		private BrewingFuelRegistry.State previous;
 
-		public RemoveAction(ItemStackMap<Integer> items) {
+		public RemoveAction(ItemStack[] items) {
 			this.items = items;
 		}
 
 		@Override
 		public void apply() {
-			for (ItemStack item : items.keySet()) {
+			previous = BrewingFuelRegistry.snapshot();
+			for (ItemStack item : items) {
 				BrewingFuelRegistry.remove(item);
 			}
 		}
@@ -76,19 +70,17 @@ public class CTBrewingFuels {
 
 		@Override
 		public void undo() {
-			for (Map.Entry<ItemStack, Integer> entry : items.entrySet()) {
-				BrewingFuelRegistry.registerFuel(entry.getKey(), entry.getValue());
-			}
+			BrewingFuelRegistry.restore(previous);
 		}
 
 		@Override
 		public String describe() {
-			return "Removing " + items.size() + " brewing fuels";
+			return "Removing " + items.length + " brewing fuels";
 		}
 
 		@Override
 		public String describeUndo() {
-			return "Restoring " + items.size() + " brewing fuels";
+			return "Restoring " + items.length + " brewing fuels";
 		}
 
 		@Override
@@ -102,6 +94,7 @@ public class CTBrewingFuels {
 		private final IIngredient ingredient;
 		private final ItemStack[] fuels;
 		private final int count;
+		private BrewingFuelRegistry.State previous;
 
 		public AddAction(IIngredient ingredient, ItemStack[] fuels, int count) {
 			this.ingredient = ingredient;
@@ -111,6 +104,7 @@ public class CTBrewingFuels {
 
 		@Override
 		public void apply() {
+			previous = BrewingFuelRegistry.snapshot();
 			for (ItemStack inputStack : fuels) {
 				BrewingFuelRegistry.registerFuel(inputStack, count);
 			}
@@ -123,9 +117,7 @@ public class CTBrewingFuels {
 
 		@Override
 		public void undo() {
-			for (ItemStack inputStack : fuels) {
-				BrewingFuelRegistry.remove(inputStack);
-			}
+			BrewingFuelRegistry.restore(previous);
 		}
 
 		@Override

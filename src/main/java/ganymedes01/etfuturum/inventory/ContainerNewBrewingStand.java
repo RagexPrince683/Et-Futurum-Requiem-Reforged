@@ -11,13 +11,27 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
-import ganymedes01.etfuturum.api.tags.helpers.ItemTags;
+import ganymedes01.etfuturum.api.BrewingFuelRegistry;
 
 public class ContainerNewBrewingStand extends Container {
 
 	private final TileEntityNewBrewingStand tile;
 	private final Slot ingredientSlot;
 	private int prevBrewTime, prevFuel, prevCurrentFuel;
+	private int fuelLow, currentFuelLow;
+
+	@Override
+	public void addCraftingToCrafters(ICrafting crafter) {
+		super.addCraftingToCrafters(crafter);
+		crafter.sendProgressBarUpdate(this, 0, tile.getBrewTime());
+		sendFuel(crafter, 1, 3, tile.getFuel());
+		sendFuel(crafter, 2, 4, tile.getCurrentFuel());
+	}
+
+	private void sendFuel(ICrafting crafter, int lowId, int highId, int value) {
+		crafter.sendProgressBarUpdate(this, lowId, value & 0xffff);
+		crafter.sendProgressBarUpdate(this, highId, value >>> 16);
+	}
 
 	public ContainerNewBrewingStand(InventoryPlayer playerInvt, TileEntityNewBrewingStand tile) {
 		this.tile = tile;
@@ -43,9 +57,9 @@ public class ContainerNewBrewingStand extends Container {
 			if (prevBrewTime != tile.getBrewTime())
 				crafter.sendProgressBarUpdate(this, 0, tile.getBrewTime());
 			if (prevFuel != tile.getFuel())
-				crafter.sendProgressBarUpdate(this, 1, tile.getFuel());
+				sendFuel(crafter, 1, 3, tile.getFuel());
 			if (prevCurrentFuel != tile.getCurrentFuel())
-				crafter.sendProgressBarUpdate(this, 2, tile.getCurrentFuel());
+				sendFuel(crafter, 2, 4, tile.getCurrentFuel());
 		}
 		prevBrewTime = tile.getBrewTime();
 		prevFuel = tile.getFuel();
@@ -56,10 +70,14 @@ public class ContainerNewBrewingStand extends Container {
 	public void updateProgressBar(int id, int value) {
 		if (id == 0)
 			tile.func_145938_d(value); // setBrewTime
-		else if (id == 1)
-			tile.setFuel(value);
-		else if (id == 2)
-			tile.setCurrentFuel(value);
+		else if (id == 1) {
+			fuelLow = value & 0xffff;
+			tile.setFuel(fuelLow);
+		} else if (id == 2) {
+			currentFuelLow = value & 0xffff;
+			tile.setCurrentFuel(currentFuelLow);
+		} else if (id == 3) tile.setFuel(fuelLow | (value & 0xffff) << 16);
+		else if (id == 4) tile.setCurrentFuel(currentFuelLow | (value & 0xffff) << 16);
 	}
 
 	@Override
@@ -134,7 +152,7 @@ public class ContainerNewBrewingStand extends Container {
 
 		@Override
 		public boolean isItemValid(ItemStack stack) {
-			return ItemTags.hasTag(stack.getItem(), stack.getItemDamage(), "minecraft:brewing_fuel");
+			return BrewingFuelRegistry.isFuel(stack);
 		}
 	}
 

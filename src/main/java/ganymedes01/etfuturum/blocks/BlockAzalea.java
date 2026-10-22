@@ -3,10 +3,14 @@ package ganymedes01.etfuturum.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ganymedes01.etfuturum.EtFuturum;
+import ganymedes01.etfuturum.ModBlocks;
 import ganymedes01.etfuturum.client.sound.ModSounds;
 import ganymedes01.etfuturum.core.utils.Utils;
 import ganymedes01.etfuturum.lib.RenderIDs;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.Block;
+import net.minecraft.block.IGrowable;
+import net.minecraft.init.Blocks;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -21,8 +25,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 
 import java.util.List;
+import java.util.Random;
+import net.minecraft.world.gen.feature.WorldGenTrees;
+import net.minecraftforge.event.terraingen.TerrainGen;
 
-public class BlockAzalea extends BlockBush implements ISubBlocksBlock {
+public class BlockAzalea extends BlockBush implements ISubBlocksBlock, IGrowable {
 
 	public IIcon[] sideIcons;
 	public IIcon[] topIcons;
@@ -39,6 +46,43 @@ public class BlockAzalea extends BlockBush implements ISubBlocksBlock {
 		setBlockTextureName("azalea");
 		setCreativeTab(EtFuturum.creativeTabBlocks);
 		setBlockBounds(0, 0, 0, 1, 1, 1);
+	}
+
+	@Override
+	public boolean func_149851_a(World world, int x, int y, int z, boolean client) {
+		return ModBlocks.AZALEA_LEAVES.isEnabled();
+	}
+
+	@Override
+	public boolean func_149852_a(World world, Random random, int x, int y, int z) {
+		return random.nextFloat() < 0.45F;
+	}
+
+	@Override
+	public void func_149853_b(World world, Random random, int x, int y, int z) {
+		if (world.isRemote || !ModBlocks.AZALEA_LEAVES.isEnabled()
+				|| !world.checkChunksExist(x - 2, y, z - 2, x + 2, y + 8, z + 2)
+				|| !TerrainGen.saplingGrowTree(world, random, x, y, z)) return;
+		int plantMeta = world.getBlockMetadata(x, y, z);
+		Block soil = world.getBlock(x, y - 1, z);
+		int soilMeta = world.getBlockMetadata(x, y - 1, z);
+		world.setBlock(x, y, z, Blocks.air, 0, 4);
+		// The native oak generator requires sapling soil; azalea can also be planted on clay.
+		if (soil.getMaterial() == Material.clay) world.setBlock(x, y - 1, z, Blocks.dirt, 0, 4);
+		WorldGenTrees tree = new WorldGenTrees(true, 4, 0, 0, false) {
+			@Override
+			protected void setBlockAndNotifyAdequately(World target, int tx, int ty, int tz, Block block, int meta) {
+				if (block == Blocks.leaves) {
+					block = ModBlocks.AZALEA_LEAVES.get();
+					meta = random.nextInt(4) == 0 ? 1 : 0;
+				}
+				super.setBlockAndNotifyAdequately(target, tx, ty, tz, block, meta);
+			}
+		};
+		if (!tree.generate(world, random, x, y, z)) {
+			world.setBlock(x, y - 1, z, soil, soilMeta, 4);
+			world.setBlock(x, y, z, this, plantMeta, 3);
+		}
 	}
 
 	@Override

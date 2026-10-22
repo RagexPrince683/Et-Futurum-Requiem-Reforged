@@ -1,0 +1,101 @@
+# Vanilla mob coverage â€” Java 1.8 through 1.21.11
+
+The content ceiling is the **released Java Edition 1.21.11**, not snapshots or later releases. This catalog describes the maintained Forge **1.7.10** implementation. All 53 eligible mob entries now have maintained implementations, including elder/juvenile variants and the command-only Illusioner. **Partial** rows below identify remaining concrete differences; this is not a claim of complete modern parity.
+
+Status means source implementation coverage, separately from runtime acceptance. **Fully implemented** means the essential survival/AI path was found in the maintained implementation, with the stated legacy adaptations. **Partial** identifies a concrete missing mechanic. Runtime acceptance is reported separately and is not inferred from this classification. **Missing** means no maintained implementation was found. New entity classes alone do not qualify as complete.
+
+## Catalog
+
+Class names refer to `src/main/java/ganymedes01/etfuturum/entities/`. Numeric IDs are EFR-local entity IDs, not world-assigned global spawn-egg IDs. Existing identities 0â€“34 retain their meanings. An elder guardian uses the existing guardian class and persisted `Elder` state.
+
+| First release | Mob | Status | Implementation, survival path and remaining work |
+|---|---|---|---|
+| 1.8 | Rabbit | Fully implemented | `EntityRabbit`, ID 3: biome variants, breeding, jumping, crops, drops, killer variant and renderer. |
+| 1.8 | Endermite | Fully implemented | `EntityEndermite`, ID 1: pearl acquisition, finite lifetime, persisted player-spawned flag and enderman aggression. Legacy silverfish sounds. |
+| 1.8 | Guardian | Partial | `EntityGuardian`, ID 34: saved monument spawning, charged beam, thorns, swimming and prismarine/fish drops. Retains the native bounded water navigator; modern obstacle avoidance and beam presentation are not equivalent. |
+| 1.8 | Elder Guardian | Partial | Guardian `Elder` NBT: three persistent monument elders, size/health, fatigue and wet sponge. Shares guardian navigation/presentation limitations. |
+| 1.9 | Shulker | Fully implemented | `EntityShulker`, ID 16; projectile 17: attachment, shell armor, teleportation, levitation, shells and projectile-induced reproduction. Existing implementation retained. |
+| 1.10 | Husk | Fully implemented | `EntityHusk`, ID 4: desert replacement, hunger, sunlight immunity and persisted underwater conversion to an ordinary zombie. |
+| 1.10 | Stray | Partial | `EntityStray`, ID 5: snowy replacement, slowness arrows and overlay. Powder-snow conversion remains unavailable because powder snow is not implemented. |
+| 1.10 | Polar Bear | Fully implemented | `EntityPolarBear`, ID 23: snowy spawning, cub defense, standing, combat and fish. Existing `polarBearRealism=true` intentionally makes adults hostile. No player breeding, matching vanilla. |
+| 1.11 | Evoker | Fully implemented | `EntityEvoker`, ID 48: native raid/outpost-lodge acquisition, delayed fang lines, vex summons and totem drop. Mansion generation and sheep-color spell are absent. |
+| 1.11 | Vindicator | Fully implemented | `EntityVindicator`, ID 47: raid/outpost-lodge acquisition, axe melee, native door breaking and Johnny targeting. |
+| 1.11 | Vex | Fully implemented | `EntityVex`, ID 49: phasing flight, owner targeting and finite summoned lifetime; owner/lifetime saved. |
+| 1.11 | Llama | Fully implemented | `EntityLlama`, ID 59: mountain/savanna spawning, riding-based taming, saved strength, 3×strength chest inventory, carpet equipment, spit, breeding and caravans. |
+| 1.12 | Illusioner | Fully implemented | `EntityIllusioner`, ID 50: command/egg-only released mob, bow combat, blindness, invisibility and four rendered illusions. No invented natural spawning. |
+| 1.13 | Cod | Fully implemented | `EntityCod`, ID 35: schooling, fleeing, collision-tested water steering, flopping, fish drops and persistent bucket. |
+| 1.13 | Salmon | Fully implemented | `EntitySalmon`, ID 36: river/cold-ocean spawning, schooling, buckets and three saved size variants. |
+| 1.13 | Tropical Fish | Fully implemented | `EntityTropicalFish`, ID 37: school appearance, packed shape/pattern/color variants, bucket persistence and retained pattern layers. |
+| 1.13 | Pufferfish | Fully implemented | `EntityPufferfish`, ID 38: threat inflation, staged deflation, poison/contact damage, buckets and three models. |
+| 1.13 | Dolphin | Fully implemented | `EntityDolphin`, ID 39: air/moisture, player assistance and Dolphin’s Grace, item play, retaliation and fish feeding. Guides to nearby saved monuments as the legacy treasure adaptation. |
+| 1.13 | Turtle | Fully implemented | `EntityTurtle`, ID 40: beach spawning, seagrass breeding, home/pregnancy NBT, nesting, clustered eggs/hatching, scutes and shell helmet. Home navigation stays inside loaded terrain. |
+| 1.13 | Drowned | Fully implemented | `EntityDrowned`, ID 41: water spawning, native land/water combat, tridents, shell drops and zombie conversion. Modern offhand presentation is not available. |
+| 1.13 | Phantom | Fully implemented | `EntityPhantom`, ID 42: saved insomnia, capped exposed-player night spawning, circling/diving, cat avoidance, sunlight and membranes. |
+| 1.14 | Pillager | Fully implemented | `EntityPillager`, ID 46: crossbows, captains, bounded patrols, saved outposts and finite raids using native villages. Captain banner rendering is absent. |
+| 1.14 | Ravager | Fully implemented | `EntityRavager`, ID 51: raid acquisition, strong melee, native riders and blocking-induced stun/roar. Native sword blocking substitutes for unavailable shields. |
+| 1.14 | Wandering Trader | Fully implemented | `EntityWanderingTrader`, ID 61: periodic player-local spawning, native merchant offers, night invisibility, no breeding and saved timed despawn. |
+| 1.14 | Trader Llama | Fully implemented | `EntityTraderLlama`, ID 60: paired trader acquisition/leashes, llama equipment/storage, defense and saved timed despawn. |
+| 1.14 | Panda | Fully implemented | `EntityPanda`, ID 58: bamboo-jungle ecology, saved dominant/recessive genes, personalities, bamboo-dependent breeding, eating, playing, thunder fear and baby sneezes/slime. |
+| 1.14 | Cat | Partial | `EntityCat`, ID 57: native village/swamp population checks, eleven variants, taming/owner/sit AI, collar dyeing, breeding and gifts. Modern bed-sleeping poses are absent. |
+| 1.14 | Fox | Fully implemented | `EntityFox`, ID 22: trust, variants, pouncing, sleeping, food/item handling, fish/baby-turtle prey, polar-bear avoidance, sweet/glow berries and native night village visits. |
+| 1.15 | Bee | Fully implemented | `EntityBee`, ID 21: flight, pollination, crop growth, hives, honey, breeding, anger/stings and saved hive/flower state. Existing compatibility behavior retained. |
+| 1.16 | Piglin | Fully implemented | `EntityPiglin`, ID 26: gold recognition/admiration, supported barter table, anger, crossbow/melee switching, hoglin hunting, group retaliation and zombification. Babies intentionally stay babies, matching released vanilla. |
+| 1.16 | Piglin Brute | Partial | `EntityPiglinBrute`, ID 27: bastion placement, permanent aggression, group retaliation and zombification. Modern bastion-home memories are not implemented. |
+| 1.16 | Hoglin | Fully implemented | `EntityHoglin`, ID 28: crimson spawning, breeding, adult knockback/baby damage, fungus repulsion, piglin herd retreat and conversion. |
+| 1.16 | Zoglin | Fully implemented | `EntityZoglin`, ID 29: conversion, undead aggression, adult knockback, baby damage and drops. |
+| 1.16 | Strider | Fully implemented | `EntityStrider`, ID 30: native lava spawning/navigation, saddle/control item, boost, breeding, cold appearance and temperature-dependent movement. |
+| 1.17 | Axolotl | Fully implemented | `EntityAxolotl`, ID 43: hunting, play dead/regeneration, player assistance, tropical-fish-bucket breeding, blue offspring, variants and persistent buckets; native water steering. |
+| 1.17 | Glow Squid | Partial | `EntityGlowSquid`, ID 44: dark underground water spawning, squid movement, damage-induced dimming, glow ink and full-bright appearance. Glow-sign and glow-frame applications are not implemented. |
+| 1.17 | Goat | Fully implemented | `EntityGoat`, ID 24: mountain spawning, milk, breeding, screaming variant, long jumps, ramming, saved horns and horn acquisition. Existing horn item/renderer retained. |
+| 1.19 | Allay | Fully implemented | `EntityAllay`, ID 62: saved sample/owner/inventory, matching-item collection and delivery, note-block targeting, jukebox dancing, amethyst duplication/cooldown and outpost cages. |
+| 1.19 | Warden | Partial | `EntityWarden`, ID 63: natural dungeon shriekers, emergence/digging, blindness, wool-occluded local movement/damage vibrations, bounded saved anger, scent, sonic boom and darkness. Vibration coverage does not include every modern game event. |
+| 1.19 | Frog | Fully implemented | `EntityFrog`, ID 32: biome variants, slime breeding, frogspawn and small-slime/magma-cube hunting/froglights. Native navigation and retained models replace modern brain/animation APIs. |
+| 1.19 | Tadpole | Fully implemented | `EntityTadpole`, ID 33: frogspawn, growth/climate variant, slime feeding/age acceleration and saved bucket. |
+| 1.20 | Camel | Fully implemented | `EntityCamel`, ID 64: native sandy spawning, two passengers, saddle, sitting, dash and cactus breeding; extra passengers use registered native seat entities. |
+| 1.20 | Sniffer | Fully implemented | `EntitySniffer`, ID 66: dungeon egg acquisition, moss-accelerated hatching, growth, sniffing/digging, bounded saved explored sites, torchflower/pitcher crops and egg-based breeding. |
+| 1.20.5 | Armadillo | Fully implemented | `EntityArmadillo`, ID 67: savanna/mesa spawning, threat detection/rolling, brushing, timed scutes, breeding and owner-equipped wolf armor with damage absorption, repair and removal. |
+| 1.21 | Breeze | Fully implemented | `EntityBreeze`, ID 56: finite fights in converted native dungeons, bounded jumps, wind charges/block interactions, arrow deflection and rod drops. Full Trial Chambers are not ported. |
+| 1.21 | Bogged | Fully implemented | `EntityBogged`, ID 53: native swamp/dungeon spawning, slower poison arrows, shearing and mushroom drops. Sheared mushrooms do not regrow, matching the released implementation. |
+| 1.21.4 | Creaking | Partial | `EntityCreaking`, ID 31: saved heart association, gaze freezing, resin and heart destruction; retained native model. Modern visibility/combat edge cases remain imperfect. |
+| 1.21.6 | Happy Ghast | Fully implemented | `EntityHappyGhast`, ID 69: dried-ghast crafting/dungeon loot, adjacent-water hydration, ghastling growth, sixteen harnesses, four passengers, server flight/steering, regeneration and standable top. |
+| 1.21.9 | Copper Golem | Fully implemented | `EntityCopperGolem`, ID 68: pumpkin/copper construction, loaded-chest indexing and bounded sorting, held-stack persistence, oxidation, wax/scrape, statue poses and revival. Copper chest remains a separate native inventory. |
+| 1.21.11 | Nautilus | Fully implemented | `EntityNautilus`, ID 70: native aquatic population, pufferfish taming/breeding, saddle/dash, hunting, breath protection, five armor materials and saved equipment. |
+| 1.21.11 | Zombie Nautilus | Fully implemented | `EntityZombieNautilus`, ID 71: nocturnal aquatic spawning, undead behavior, trident-drowned rider, warm-water coral variant, taming and equipment; cannot breed. |
+| 1.21.11 | Camel Husk | Fully implemented | `EntityCamelHusk`, ID 65: nocturnal desert spawning, undead two-seat mount with spear-husk/parched riders and equipment; cannot breed. |
+| 1.21.11 | Parched | Fully implemented | `EntityParched`, ID 54: desert spawning, slower weakness arrows, camel-husk jockeys and daylight/weakness immunity. |
+
+## Existing species, technical entities and exclusions
+
+Zombie villagers, zombified piglins, wither skeletons, horses/donkeys/mules, skeleton/zombie horses, ocelots, wolves and mooshrooms already existed in 1.7.10. Later registry separation or renaming does not make them newly introduced species. EFR's zombie-villager and brown-mooshroom replacements are retained. New cold/warm animal appearances and wolf variants are variant work, not additional species. Zombie-horse natural jockey acquisition added in 1.21.11 remains outside this new-species implementation; the existing horse entities are preserved.
+
+Armor stands, boats/chest boats, rafts, minecarts, display/interaction entities, projectiles, item frames/glow item frames, markers, Mannequins (1.21.9), the fishing bobber and dropped items are **deliberately excluded from the mob count**. Required mob projectiles/equipment are dependencies, not excuses to add unrelated technical entities. Illusioners are included above because they are a released AI mob. Giants predate 1.7.10. Creaking Transient was a removed snapshot type, not a separate eligible released mob. Post-cutoff content, canceled mob-vote candidates and Bedrock-only NPC/agent types are excluded.
+
+## Native acquisition and structures
+
+Structure and biome distribution is adapted to the destination version. Modern spawn-rate fidelity does not justify replacing 1.7.10 terrain, cave or village systems.
+
+Outposts are small, chunk-contained towers with pillagers and allay cages; some include a ground lodge for evokers/vindicators. They are **not Woodland Mansions**. Patrols and traders use bounded player-local attempts. Ominous bottles start saved, finite raids at existing native villages, with difficulty-dependent waves and rewards; the villager engine is retained.
+
+**Full Trial Chambers are not ported.** With `enableMobDungeonContent`, one in six successful newly generated vanilla dungeons replaces its ordinary spawner with a finite Breeze or Bogged spawner. It spawns six mobs, at most two active together, then gives a reward and enters a thirty-minute cooldown. There are no chamber rooms, chamber layout, vaults or trial keys. This is an adapted survival path for the mobs and their drops. Some remaining dungeons below Y=30 receive naturally summoning shriekers instead; player-placed shriekers do not summon Wardens. No deep-dark biome or cave-generation replacement is added.
+
+Sniffer eggs and dried ghasts use native dungeon loot; dried ghasts also have their released crafting recipe. Copper/iron nautilus armor uses dungeons, gold/diamond armor uses native structure chests, and netherite armor uses the existing enabled smithing chain. No unrelated material substitutes are used for disabled prerequisites.
+
+## Save, equipment and runtime boundaries
+
+Existing local entity IDs 0–34 retain their meanings. New IDs append at 35–75 and remain registered when their new spawning switches are off. Technical entities 45 (trident), 52 (fangs), 55 (wind charge), 72 (passenger seat), 73 (spit), 74 (status arrow) and 75 (crossbow bolt) have no spawn eggs. No existing packet discriminator, biome identity or saved item meaning changes. Existing Stage B Nether/Pale Garden registration gates remain.
+
+Fish and axolotl buckets preserve variant/name/health/age state as applicable; native bucket permissions and Forge events remain authoritative. Nether evaporation does not release an animal. Equipment, genes, owners, passengers, explored positions, raid progress and conversion timers use additive bounded NBT. Native registered seat entities preserve additional passengers through the ordinary Riding save path. Chest discovery tracks loaded chunk/tile lifecycle; neither sorting nor AI searches load distant chunks.
+
+The ordinary owning server thread handles movement, equipment, inventory, combat, conversion and interactions. Native rider inputs steer mounts; no additional packet protocol is introduced. Happy-ghast harnesses can be sheared off; nautilus armor can be removed by sneaking with an empty hand. Sneaking with a tamed chested llama opens its strength-sized native inventory.
+
+Water navigation uses bounded, collision-tested 3D steering instead of modern brain/navigation APIs. Natural water populations have separate caps. There is no modern player-swimming pose, waterlogging, cave-biome system, world-height expansion or renderer overhaul. Dolphin’s Grace adjusts existing horizontal water drag; Breath of the Nautilus pauses oxygen consumption without refilling it.
+
+Crossbows support saved charging, arrows, Quick Charge, Multishot and Piercing. Firework loading is absent. Tridents preserve the thrown stack and implement Loyalty, Channeling, Impaling and wet Riptide movement. They return an item on ordinary impact instead of embedding for pickup; Riptide does not implement modern swept spinning contact damage. Spears provide native server-authoritative extended thrust/mounted velocity damage without changing global player reach; Lunge is absent. Native sword blocking supplies the ravager stun interaction because shields are not part of this stage.
+
+Retained native model geometry, textures, variants/equipment layers and core animation states are provided for the new mobs. Official ambient/hurt/death events use the existing AssetDirector path. Modern keyframe animation, every action sound, captain banners and offhand player poses are not reproduced completely. These presentation limits are independent of source-level survival mechanics.
+
+## Reference boundary
+
+Behavior and retained model geometry were inspected in Mojang’s official **1.21.11** client archive using its official client mappings. Textures are copied from that archive; sounds use the existing MCLib AssetDirector integration.
+
+Release references: [Update Aquatic](https://www.minecraft.net/en-us/article/update-aquatic-out-java), [1.20.5](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-20-5), [1.21](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21), [1.21.4](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21-4), [1.21.6](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21-6), [1.21.9](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21-9), and [1.21.11](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21-11). In particular Copper Golems, Camel Husks and Parched are within the cutoff. These references do not certify EFR runtime parity.

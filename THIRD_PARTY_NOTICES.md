@@ -1,5 +1,9 @@
 # Third-party notices
 
+## Minecraft reference content
+
+The additional pale oak, resin, frog, guardian, banner-pattern and Nether entity textures, bastion structure NBT, bastion template pools and degradation processors are reference content from Mojang's official Minecraft Java Edition 1.21.11 client archive. These assets remain Mojang/Microsoft content and are not relicensed by this project's code license. The project already contains Minecraft asset adaptations and uses MCLib AssetDirector for additional Mojang resources. No post-1.21.11 reference assets are included in this addition.
+
 ## HogUtils-derived components
 
 The Et Futurum tag containers, block/item metadata utilities, recipe helper,
@@ -34,3 +38,7 @@ HogUtils is distributed under the following license:
 
 The xoshiro256** implementation retains its upstream public-domain notice in
 `FastRandom.java`.
+
+## Stage B7 mob reference assets
+
+The modern mob textures and retained box/pivot model definitions are adapted from Mojang’s official Java Edition 1.21.11 client, using its official mappings as a behavioral reference. These Minecraft assets and adapted vanilla code retain Mojang’s rights; the project license does not relicense them. Sounds are resolved from Mojang’s asset service through the existing MCLib AssetDirector integration rather than bundled as audio files.

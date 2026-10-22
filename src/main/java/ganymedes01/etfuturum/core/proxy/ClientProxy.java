@@ -155,6 +155,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockDoubleCubeRenderer(15, RenderIDs.HONEY_BLOCK));
 		RenderingRegistry.registerBlockHandler(new BlockChainRenderer(RenderIDs.CHAIN));
 		RenderingRegistry.registerBlockHandler(new BlockAzaleaRenderer(RenderIDs.AZALEA));
+		RenderingRegistry.registerBlockHandler(new BlockLightningRodRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockMangroveRootsRenderer(RenderIDs.MANGROVE_ROOTS));
 		RenderingRegistry.registerBlockHandler(new BlockPinkPetalsRenderer(RenderIDs.PINK_PETALS));
 		RenderingRegistry.registerBlockHandler(new BlockBambooRenderer(RenderIDs.BAMBOO));
@@ -168,6 +169,32 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	private void registerEntityRenderers() {
+		ModernMobRenderer.register();
+		ganymedes01.etfuturum.client.renderer.tileentity.CopperMobBlockRenderer.register();
+		MinecraftForge.EVENT_BUS.register(new ganymedes01.etfuturum.client.renderer.entity.MobVisualEffects());
+		RenderingRegistry.registerEntityRenderingHandler(EntityCod.class, new AquaticMobRenderer(0));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySalmon.class, new AquaticMobRenderer(1));
+		RenderingRegistry.registerEntityRenderingHandler(EntityTropicalFish.class, new AquaticMobRenderer(2));
+		RenderingRegistry.registerEntityRenderingHandler(EntityPufferfish.class, new AquaticMobRenderer(10));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDolphin.class, new AquaticMobRenderer(7));
+		RenderingRegistry.registerEntityRenderingHandler(EntityTurtle.class, new AquaticMobRenderer(9));
+		RenderingRegistry.registerEntityRenderingHandler(EntityAxolotl.class, new AquaticMobRenderer(8));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDrowned.class, new DrownedRenderer());
+		RenderingRegistry.registerEntityRenderingHandler(EntityPhantom.class, new PhantomRenderer());
+		RenderingRegistry.registerEntityRenderingHandler(EntityTrident.class, new TridentRenderer());
+		RenderingRegistry.registerEntityRenderingHandler(EntityGlowSquid.class, new net.minecraft.client.renderer.entity.RenderSquid(new net.minecraft.client.model.ModelSquid(), .7F) {
+			private final net.minecraft.util.ResourceLocation texture = new net.minecraft.util.ResourceLocation("etfuturum", "textures/entity/squid/glow_squid.png");
+			@Override protected net.minecraft.util.ResourceLocation getEntityTexture(net.minecraft.entity.Entity entity) { return texture; }
+		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityGuardian.class, new ganymedes01.etfuturum.client.renderer.entity.GuardianRenderer());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, new AmphibianRenderer(false));
+		RenderingRegistry.registerEntityRenderingHandler(EntityTadpole.class, new AmphibianRenderer(true));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCreaking.class, new NetherMobRenderer(3, "creaking"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityPiglin.class, new NetherMobRenderer(0, "piglin"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityPiglinBrute.class, new NetherMobRenderer(0, "piglin_brute"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityHoglin.class, new NetherMobRenderer(1, "hoglin"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityZoglin.class, new NetherMobRenderer(1, "zoglin"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityStrider.class, new NetherMobRenderer(2, "strider"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityArmourStand.class, new ArmourStandRenderer());
 		RenderingRegistry.registerEntityRenderingHandler(EntityEndermite.class, new EndermiteRenderer());
 		RenderingRegistry.registerEntityRenderingHandler(EntityRabbit.class, new RabbitRenderer());

@@ -61,6 +61,8 @@ public class ModRecipes {
 	static final boolean[] modernWoodTypesEnabled = new boolean[5];
 
 	public static void init() {
+		MobRecipes.init();
+		GameRegistry.addRecipe(ModItems.TURTLE_HELMET.newItemStack(), "sss", "s s", 's', ModItems.TURTLE_SCUTE.get());
 		if (ConfigBlocksItems.enableBanners) {
 			RecipeSorter.register(Tags.MOD_ID + ".RecipeDuplicatePattern", RecipeDuplicatePattern.class, Category.SHAPELESS, "after:minecraft:shapeless");
 			RecipeSorter.register(Tags.MOD_ID + ".RecipeAddPattern", RecipeAddPattern.class, Category.SHAPED, "after:minecraft:shaped");
@@ -75,6 +77,16 @@ public class ModRecipes {
 		ModTagging.registerOreDictionary();
 		ModTagging.registerHogTags();
 		registerRecipes();
+		RecipeHelper.addShapelessRecipe(RecipeHelper.Priority.HIGH, ModItems.WARPED_FUNGUS_ON_A_STICK.newItemStack(), new ItemStack(Items.fishing_rod), ModBlocks.NETHER_FUNGUS.newItemStack(1, 1));
+		PaleGardenRecipes.init();
+		StonecuttingRecipes.init();
+		if (ModItems.BANNER_PATTERN.isEnabled()) {
+			int pattern = 0;
+			for (ganymedes01.etfuturum.tileentities.TileEntityBanner.EnumBannerPattern value : ganymedes01.etfuturum.items.ItemBannerPattern.patterns()) {
+				RecipeHelper.addShapelessRecipe(RecipeHelper.Priority.NORMAL, ModItems.BANNER_PATTERN.newItemStack(1, pattern++),
+						new ItemStack(Items.paper), value.getCraftingStack());
+			}
+		}
 		tweakRecipes();
 		registerLoot();
 		if(ModsList.IRON_CHEST.isLoaded() && !ModsList.GTNH.isLoaded()) {
@@ -2024,6 +2036,10 @@ public class ModRecipes {
 		list.add(ModBlocks.LILY_OF_THE_VALLEY.newItemStack());
 		list.add(ModBlocks.CORNFLOWER.newItemStack());
 		list.add(ModBlocks.WITHER_ROSE.newItemStack());
+		if (ModBlocks.EYEBLOSSOM.isEnabled()) {
+			list.add(ModBlocks.EYEBLOSSOM.newItemStack(1, 0));
+			list.add(ModBlocks.EYEBLOSSOM.newItemStack(1, 1));
+		}
 
 		return list;
 	}

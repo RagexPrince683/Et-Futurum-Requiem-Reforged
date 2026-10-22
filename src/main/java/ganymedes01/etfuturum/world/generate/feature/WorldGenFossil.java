@@ -35,6 +35,8 @@ public class WorldGenFossil extends WorldGenerator {
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 		Pair<NBTStructure, NBTStructure> fossilPair = fossils.get(rand.nextInt(fossils.size()));
 		ForgeDirection dir = ForgeDirection.getOrientation(rand.nextInt(4) + 2);
+		BlockPos size = fossilPair.getLeft().getSize(dir);
+		if (!world.checkChunksExist(x, y, z, x + size.getX(), y + size.getY(), z + size.getZ())) return false;
 		if (!canFossilGenerateHere(world, x, y, z, fossilPair.getLeft().getSize(dir))) return false;
 		fossilPair.getLeft().placeStructure(world, rand, x, y, z, dir, 0.9F);
 		fossilPair.getRight().placeStructure(world, rand, x, y, z, dir, 0.1F);

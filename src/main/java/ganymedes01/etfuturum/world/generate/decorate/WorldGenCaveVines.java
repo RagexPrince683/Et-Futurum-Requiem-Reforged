@@ -20,6 +20,7 @@ public class WorldGenCaveVines extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random rand, int x, int y, int z) {
+		if (!world.blockExists(x, y, z)) return false;
         if (world.isAirBlock(x, y, z) && world.getSavedLightValue(Sky, x, y, z) <= 3 && world.getBlock(x, y + 1, z).isSideSolid(world, x, y, z, ForgeDirection.DOWN)) {
 
             world.setBlock(x, y, z, caveVines);

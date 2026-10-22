@@ -38,6 +38,9 @@ public class EntityPlacedEndCrystal extends EntityEnderCrystal {
 			timer = 20 + rand.nextInt(20);
 			List<? extends EntityPlacedEndCrystal> crystals = worldObj.getEntitiesWithinAABB(getClass(), AxisAlignedBB.getBoundingBox(blockX - 6, blockY, blockZ - 6, blockX + 6, blockY + 1, blockZ + 6));
 			if (crystals.size() == 4) {
+				// A completed portal remains in the legacy fight; it must not permit overlapping dragons.
+				if (!worldObj.getEntitiesWithinAABB(net.minecraft.entity.boss.EntityDragon.class,
+						AxisAlignedBB.getBoundingBox(blockX - 256, 0, blockZ - 256, blockX + 257, worldObj.getActualHeight(), blockZ + 257)).isEmpty()) return;
 				for (EntityPlacedEndCrystal crystal : crystals)
 					if (crystal.isDead || !crystal.isOnSuitablePlace())
 						return;

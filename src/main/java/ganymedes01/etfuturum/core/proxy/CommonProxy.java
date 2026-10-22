@@ -15,7 +15,6 @@ import ganymedes01.etfuturum.client.gui.inventory.*;
 import ganymedes01.etfuturum.compat.ModsList;
 import ganymedes01.etfuturum.configuration.configs.*;
 import ganymedes01.etfuturum.core.handlers.EntityEventHandler;
-import ganymedes01.etfuturum.core.handlers.SculkEventHandler;
 import ganymedes01.etfuturum.core.handlers.ServerEventHandler;
 import ganymedes01.etfuturum.core.handlers.SpectatorEventHandler;
 import ganymedes01.etfuturum.core.handlers.WorldEventHandler;
@@ -49,6 +48,10 @@ public class CommonProxy implements IGuiHandler {
 	}
 
 	public void registerEvents() {
+		MinecraftForge.EVENT_BUS.register(ganymedes01.etfuturum.core.handlers.MobContentEvents.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ganymedes01.etfuturum.core.handlers.MobContentEvents.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ganymedes01.etfuturum.world.end.EndGatewayProgress.EVENTS);
+		MinecraftForge.EVENT_BUS.register(ganymedes01.etfuturum.core.handlers.NetherContentEvents.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ServerPacketExecutor.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EntityEventHandler.INSTANCE);
 		if (ConfigMixins.enableSpectatorMode) {
@@ -61,10 +64,7 @@ public class CommonProxy implements IGuiHandler {
 		FMLCommonHandler.instance().bus().register(WorldEventHandler.INSTANCE);
 		MinecraftForge.TERRAIN_GEN_BUS.register(WorldEventHandler.INSTANCE);
 
-		if (ModBlocks.SCULK_CATALYST.isEnabled()) {
-			FMLCommonHandler.instance().bus().register(SculkEventHandler.INSTANCE);
-			MinecraftForge.EVENT_BUS.register(SculkEventHandler.INSTANCE);
-		}
+		// Catalyst spreading is incomplete. Keep block/save identities without intercepting XP.
 
 		if (ModItems.DEBUGGING_TOOL.isEnabled()) {
 			MinecraftForge.EVENT_BUS.register(ModItems.DEBUGGING_TOOL.get());
@@ -72,6 +72,30 @@ public class CommonProxy implements IGuiHandler {
 	}
 
 	public void registerEntities() {
+		if (ConfigEntities.enableGuardians) {
+			ganymedes01.etfuturum.world.structure.MonumentSpawning.init();
+			ModEntityList.registerEntity(EntityGuardian.class, "guardian", 34, EtFuturum.instance, 80, 3, true, 0x5A8272, 0xF17D30);
+		}
+		if (ConfigEntities.enableFrogs) {
+			ModEntityList.registerEntity(EntityFrog.class, "frog", 32, EtFuturum.instance, 80, 3, true, 0xD07444, 0xFFC77C);
+			ModEntityList.registerEntity(EntityTadpole.class, "tadpole", 33, EtFuturum.instance, 64, 3, true, 0x6D533D, 0x160A00);
+			EntityRegistry.addSpawn(EntityFrog.class, 10, 2, 5, EnumCreatureType.creature, BiomeDictionary.getBiomesForType(Type.SWAMP));
+		}
+		if (ConfigExperiments.enablePaleGarden) {
+			GameRegistry.registerTileEntity(TileEntityCreakingHeart.class, Utils.getUnlocalisedName("creaking_heart"));
+			ModEntityList.registerEntity(EntityCreaking.class, "creaking", 31, EtFuturum.instance, 80, 3, true, 0x5F5F4C, 0xFC7812);
+		}
+		if (ConfigEntities.enableNetherMobs) {
+			ganymedes01.etfuturum.world.nether.NetherSpawning.init();
+			ModEntityList.registerEntity(EntityPiglin.class, "piglin", 26, EtFuturum.instance, 80, 3, true, 0x995F40, 0xF9F3A4);
+			ModEntityList.registerEntity(EntityPiglinBrute.class, "piglin_brute", 27, EtFuturum.instance, 80, 3, true, 0x592A10, 0xF9F3A4);
+			ModEntityList.registerEntity(EntityHoglin.class, "hoglin", 28, EtFuturum.instance, 80, 3, true, 0xC66E55, 0x5F6464);
+			ModEntityList.registerEntity(EntityZoglin.class, "zoglin", 29, EtFuturum.instance, 80, 3, true, 0xC66E55, 0xE6E6E6);
+			ModEntityList.registerEntity(EntityStrider.class, "strider", 30, EtFuturum.instance, 80, 3, true, 0x9C3436, 0x4D494D);
+			EntityRegistry.addSpawn(EntityPiglin.class, 15, 2, 4, EnumCreatureType.monster, BiomeGenBase.hell);
+		}
+		if (ModBlocks.LIGHTNING_ROD.isEnabled())
+			GameRegistry.registerTileEntity(TileEntityLightningRod.class, Utils.getUnlocalisedName("lightning_rod"));
 		if (ModBlocks.BREWING_STAND.isEnabled()) {
 			GameRegistry.registerTileEntity(TileEntityNewBrewingStand.class, Utils.getUnlocalisedName("brewing_stand"));
 		}
@@ -90,7 +114,7 @@ public class CommonProxy implements IGuiHandler {
 		if (ModBlocks.BLAST_FURNACE.isEnabled()) {
 			GameRegistry.registerTileEntity(TileEntityBlastFurnace.class, Utils.getUnlocalisedName("blast_furnace"));
 		}
-		if (ConfigBlocksItems.enableVanillaSigns) {
+		if (ConfigBlocksItems.enableVanillaSigns || ConfigBlocksItems.enableNewSigns) {
 			GameRegistry.registerTileEntity(TileEntityWoodSign.class, Utils.getUnlocalisedName("sign"));
 		}
 		if (ModBlocks.SCULK_CATALYST.isEnabled()) {
@@ -266,11 +290,23 @@ public class CommonProxy implements IGuiHandler {
 		//make magmas slightly more common, hopefully.
 		EntityRegistry.removeSpawn(EntityMagmaCube.class, EnumCreatureType.monster, BiomeGenBase.hell);
 		EntityRegistry.addSpawn(EntityMagmaCube.class, 2, 4, 4, EnumCreatureType.monster, BiomeGenBase.hell);
+		ganymedes01.etfuturum.world.surface.SurfaceBiomeManager.finishSpawns();
+		ganymedes01.etfuturum.world.MobSpawning.init();
+		ganymedes01.etfuturum.world.ModernMobs.init();
 	}
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		if (ID == GUIIDs.LLAMA) return world.getEntityByID(x) instanceof EntityLlama llama && llama.isUseableByPlayer(player) ? new ContainerLlama(player.inventory, llama) : null;
+		if (ID >= GUIIDs.STONECUTTER && ID <= GUIIDs.CARTOGRAPHY_TABLE) {
+			ModBlocks table = ID == GUIIDs.STONECUTTER ? ModBlocks.STONECUTTER : ID == GUIIDs.LOOM ? ModBlocks.LOOM : ModBlocks.CARTOGRAPHY_TABLE;
+			if (!table.isEnabled() || !world.blockExists(x, y, z) || world.getBlock(x, y, z) != table.get()
+					|| player.getDistanceSq(x + .5, y + .5, z + .5) > 64) return null;
+		}
 		return switch (ID) {
+			case GUIIDs.STONECUTTER -> new ContainerStonecutter(player.inventory, world, x, y, z);
+			case GUIIDs.LOOM -> new ContainerLoom(player.inventory, world, x, y, z);
+			case GUIIDs.CARTOGRAPHY_TABLE -> new ContainerCartography(player.inventory, world, x, y, z);
 			case GUIIDs.ENCHANTING_TABLE -> new ContainerEnchantment(player.inventory, world, x, y, z);
 			case GUIIDs.ANVIL -> new ContainerAnvil(player, world, x, y, z);
 			case GUIIDs.BREWING_STAND ->
@@ -283,14 +319,21 @@ public class CommonProxy implements IGuiHandler {
 					new ContainerBlastFurnace(player.inventory, (TileEntityBlastFurnace) world.getTileEntity(x, y, z));
 			case GUIIDs.SHULKER_BOX ->
 					new ContainerChestGeneric(player.inventory, (TileEntityShulkerBox) world.getTileEntity(x, y, z), ((TileEntityShulkerBox) world.getTileEntity(x, y, z)).getRowSize(), ((TileEntityShulkerBox) world.getTileEntity(x, y, z)).getSizeInventory() != 27);
-			case GUIIDs.SMITHING_TABLE -> new ContainerSmithingTable(player.inventory, world);
+			case GUIIDs.SMITHING_TABLE -> world.blockExists(x, y, z)
+					&& world.getBlock(x, y, z) == ModBlocks.SMITHING_TABLE.get()
+					&& player.getDistanceSq(x + 0.5, y + 0.5, z + 0.5) <= 64
+					? new ContainerSmithingTable(player.inventory, world, x, y, z) : null;
 			default -> null;
 		};
 	}
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		if (ID == GUIIDs.LLAMA) return world.getEntityByID(x) instanceof EntityLlama llama && llama.hasChest() ? new GuiLlama(new ContainerLlama(player.inventory, llama)) : null;
 		return switch (ID) {
+			case GUIIDs.STONECUTTER -> new GuiWorkstation(new ContainerStonecutter(player.inventory, world, x, y, z));
+			case GUIIDs.LOOM -> new GuiWorkstation(new ContainerLoom(player.inventory, world, x, y, z));
+			case GUIIDs.CARTOGRAPHY_TABLE -> new GuiWorkstation(new ContainerCartography(player.inventory, world, x, y, z));
 			case GUIIDs.ENCHANTING_TABLE -> new GuiEnchantment(player.inventory, world, null);
 			case GUIIDs.ANVIL -> new GuiAnvil(player, world, x, y, z);
 			case GUIIDs.BREWING_STAND ->
@@ -301,7 +344,7 @@ public class CommonProxy implements IGuiHandler {
 					new GuiBlastFurnace(player.inventory, (TileEntityBlastFurnace) world.getTileEntity(x, y, z));
 			case GUIIDs.SHULKER_BOX ->
 					new GuiShulkerBox(player.inventory, (TileEntityShulkerBox) world.getTileEntity(x, y, z));
-			case GUIIDs.SMITHING_TABLE -> new GuiSmithingTable(new ContainerSmithingTable(player.inventory, world));
+			case GUIIDs.SMITHING_TABLE -> new GuiSmithingTable(new ContainerSmithingTable(player.inventory, world, x, y, z));
 			default -> null;
 		};
 	}

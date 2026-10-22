@@ -22,6 +22,7 @@ public class EntityHusk extends EntityZombie {
 	 * what other code sees when it gets the entity brightness.
 	 */
 	private boolean ignoreSunlight;
+	private int wetTicks, conversionTicks = -1;
 
 	public EntityHusk(final World p_i1745_1_) {
 		super(p_i1745_1_);
@@ -59,7 +60,10 @@ public class EntityHusk extends EntityZombie {
 		ignoreSunlight = true;
 		super.onLivingUpdate();
 		ignoreSunlight = false;
+		if (!worldObj.isRemote) { wetTicks = isInsideOfMaterial(net.minecraft.block.material.Material.water) ? Math.min(600, wetTicks + 1) : 0; if (wetTicks == 600 && conversionTicks < 0) conversionTicks = 300; if (conversionTicks >= 0 && --conversionTicks <= 0) { net.minecraft.nbt.NBTTagCompound saved = new net.minecraft.nbt.NBTTagCompound(); writeToNBT(saved); EntityZombie zombie = new EntityZombie(worldObj); zombie.readFromNBT(saved); if (worldObj.spawnEntityInWorld(zombie)) { for (int slot = 0; slot < 5; slot++) setCurrentItemOrArmor(slot, null); setDead(); } } }
 	}
+	@Override public void writeEntityToNBT(net.minecraft.nbt.NBTTagCompound tag) { super.writeEntityToNBT(tag); tag.setInteger("HuskWetTicks", wetTicks); tag.setInteger("HuskConversion", conversionTicks); }
+	@Override public void readEntityFromNBT(net.minecraft.nbt.NBTTagCompound tag) { super.readEntityFromNBT(tag); wetTicks = net.minecraft.util.MathHelper.clamp_int(tag.getInteger("HuskWetTicks"), 0, 600); conversionTicks = tag.hasKey("HuskConversion") ? net.minecraft.util.MathHelper.clamp_int(tag.getInteger("HuskConversion"), -1, 300) : -1; }
 
 	@Override
 	public float getBrightness(float p_70013_1_) {

@@ -1,6 +1,7 @@
 package ganymedes01.etfuturum.world.nether.biome.utils;
 
 import ganymedes01.etfuturum.ModBlocks;
+import ganymedes01.etfuturum.core.utils.RegistrySafety;
 import ganymedes01.etfuturum.configuration.configs.ConfigExperiments;
 import ganymedes01.etfuturum.configuration.configs.ConfigWorld;
 import ganymedes01.etfuturum.world.nether.biome.BiomeBasaltDeltas;
@@ -21,16 +22,16 @@ public class NetherBiomeManager {
 
 	public static void init() {
 		if (ConfigWorld.crimsonForestID != -1 && ConfigExperiments.enableCrimsonBlocks) {
-			crimsonForest = new BiomeCrimsonForest(ConfigWorld.crimsonForestID).setBiomeName("Crimson Forest");
+			crimsonForest = new BiomeCrimsonForest(RegistrySafety.requireVacant(BiomeGenBase.getBiomeGenArray(), ConfigWorld.crimsonForestID, "Crimson Forest")).setBiomeName("Crimson Forest");
 		}
 		if (ConfigWorld.warpedForestID != -1 && ConfigExperiments.enableWarpedBlocks) {
-			warpedForest = new BiomeWarpedForest(ConfigWorld.warpedForestID).setBiomeName("Warped Forest");
+			warpedForest = new BiomeWarpedForest(RegistrySafety.requireVacant(BiomeGenBase.getBiomeGenArray(), ConfigWorld.warpedForestID, "Warped Forest")).setBiomeName("Warped Forest");
 		}
 		if (ConfigWorld.soulSandValleyID != -1) {
-			soulSandValley = new BiomeSoulSandValley(ConfigWorld.soulSandValleyID).setBiomeName("Soul Sand Valley");
+			soulSandValley = new BiomeSoulSandValley(RegistrySafety.requireVacant(BiomeGenBase.getBiomeGenArray(), ConfigWorld.soulSandValleyID, "Soul Sand Valley")).setBiomeName("Soul Sand Valley");
 		}
 		if (ConfigWorld.basaltDeltasID != -1 && ModBlocks.BASALT.isEnabled() && ModBlocks.BLACKSTONE.isEnabled()) {
-			basaltDeltas = new BiomeBasaltDeltas(ConfigWorld.basaltDeltasID).setBiomeName("Basalt Deltas");
+			basaltDeltas = new BiomeBasaltDeltas(RegistrySafety.requireVacant(BiomeGenBase.getBiomeGenArray(), ConfigWorld.basaltDeltasID, "Basalt Deltas")).setBiomeName("Basalt Deltas");
 		}
 
 		BiomeGenBase.hell.topBlock = Blocks.netherrack;

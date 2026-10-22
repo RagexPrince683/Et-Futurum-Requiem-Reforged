@@ -6,6 +6,7 @@ import net.minecraftforge.common.config.Property;
 import java.io.File;
 
 public class ConfigBlocksItems extends ConfigBase {
+	public static boolean masterNetherToggle;
 
 	public static boolean enableArmourStand;
 	public static int netheriteToolDurability;
@@ -219,7 +220,7 @@ public class ConfigBlocksItems extends ConfigBase {
 			enableNetherwartBlock = true;
 		}
 
-		boolean masterNetherToggle = getBoolean("masterNetherToggle", catBlockNatural, true,
+		masterNetherToggle = getBoolean("masterNetherToggle", catBlockNatural, true,
 				"NOTE: Currently the content below is referring to some things which are behind an experimental toggle." +
 						"\nAdditionally the new nether is NOT compatible with Netherlicious yet. The comment below refers to the plans for when the features below are complete." +
 						"\n" +
@@ -262,7 +263,7 @@ public class ConfigBlocksItems extends ConfigBase {
 		enableShulkerBoxes = getBoolean("enableShulkerBoxes", catBlockFunc, true, "If Shulkers are disabled, a custom recipe will be required to obtain Shulker shells.");
 		enablePotionCauldron = getBoolean("enablePotionCauldron", catBlockFunc, true, "A port of potion cauldrons from Bedrock Edition. Used to make tipped arrows and store potions.");
 		//Note the above option has an extra check in preInit to ensure Iron Chests is loaded. We can't do this here because Loader doesn't even exist yet since we initialize these configs while Mixins and ASM are being applied.
-		enableStonecutter = getBoolean("enableStonecutter", catBlockFunc, true, "Currently DOES NOT HAVE ANY FUNCTIONALITY. Decoration ONLY!");
+		enableStonecutter = getBoolean("enableStonecutter", catBlockFunc, true, "Enables the stonecutter and its material-cutting recipes.");
 		enableSmithingTable = getBoolean("enableSmithingTable", catBlockFunc, true, "If this is disabled, netherite items will not be craftable unless added by CraftTweaker. This introduces the smithing GUI from versions prior to 1.20. It is compatible with CraftTweaker." +
 				"\nThe mod prefix is \"mods.etfuturum.smithingTable\", and the functions are \"addRecipe\" or \"addRecipeNoNBT\". \"addRecipe\" will copy all NBT data from the first slot to the output. (and damage if the first slot and output are damageable items) You can remove recipes using the \"remove\" function and an ItemStack." +
 				"\nCurrently CraftTweaker support is limited, so some features from CraftTweaker may not work. .noReturn() and .anyDamage().onlyDamaged() are known to not work." +
@@ -282,8 +283,8 @@ public class ConfigBlocksItems extends ConfigBase {
 				"\n\nAdditionally the bone meal drop when harvesting a full composting bin can be changed. It drops one item from the \"composting\" loot table, and can be modified with CraftTweaker's \"addChestLoot\" function." +
 				"\nBy default bone meal is the only item in this loot table, with a weight of 10. You can learn more about CraftTweaker loot table modification here: https://www.mcdrama.net/archiveformal/MineTweaker3/wiki/tutorials/1710/loot_and_seeds.html"
 		);
-		enableCartographyTable = getBoolean("enableCartographyTable", catBlockFunc, true, "Currently DOES NOT HAVE ANY FUNCTIONALITY. Decoration ONLY!");
-		enableLoom = getBoolean("enableLoom", catBlockFunc, true, "Currently DOES NOT HAVE ANY FUNCTIONALITY. Decoration ONLY!");
+		enableCartographyTable = getBoolean("enableCartographyTable", catBlockFunc, true, "Enables map copying, scaling and locking at the cartography table.");
+		enableLoom = getBoolean("enableLoom", catBlockFunc, true, "Enables the loom for applying banner patterns with one dye.");
 		enableDyedBeds = getBoolean("enableDyedBeds", catBlockFunc, true, "Ability to craft differently colored beds out of wool. Mixed wool colors = red bed");
 
 		enableEnchantingTable = getBoolean("enableNewEnchantingTable", catBlockFunc, true, "Adds lapis payment, enchant previews and adjusted level costs to the vanilla enchanting table. It is compatible with CraftTweaker for adding and removing fuels." +
@@ -292,7 +293,7 @@ public class ConfigBlocksItems extends ConfigBase {
 				"\nmods.etfuturum.enchantingFuel.addFuel(<etfuturum:amethyst_shard>); //(Adds amethyst shards as an enchanting fuel)" +
 				"\nmods.etfuturum.enchantingFuel.remove(<minecraft:dye:4>); //(Removes lapis lazuli as an enchanting fuel)");
 		enableAnvil = getBoolean("enableNewAnvil", catBlockFunc, true, "Enables new anvil behavior, such as less expensive item renaming");
-		enableBrewingStands = getBoolean("enableNewBrewingStand", catBlockFunc, true, "Makes the brewing stand have a fuel slot like in 1.9+. The fuel slot takes blaze powder by default. Blaze powder can brew 20 potion cycles. One cycle brews up to three potions. Custom fuel counts and removal through the legacy CraftTweaker fuel API are currently unsupported.");
+		enableBrewingStands = getBoolean("enableNewBrewingStand", catBlockFunc, true, "Makes the brewing stand have a fuel slot like in 1.9+. Blaze powder brews 20 cycles; one cycle brews up to three potions. mods.etfuturum.brewingFuel.addFuel(ingredient, cycles) and remove(ingredient) support custom counts, wildcard metadata and undo. Counts must be positive. Tag-only fuels supply 20 cycles.");
 		enableColourfulBeacons = getBoolean("enableNewBeacon", catBlockFunc, true, "Beacon beam can be colored using stained glass");
 		enableInvertedDaylightSensor = getBoolean("enableInvertedSensor", catBlockFunc, true, "Inverted Daylight Sensor");
 		enableOldBaseDaylightSensor = getBoolean("enableOldBaseDaylightSensor", catBlockFunc, false, "Enable the old Et Futurum daylight sensor block. Should be enabled if you still have the old Et Futurum copy of the non-inverted daylight detector that need to be converted.");
