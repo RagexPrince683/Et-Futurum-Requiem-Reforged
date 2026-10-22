@@ -4,7 +4,7 @@ plugins {
 
 // Write the next planned version here. This will be used instead of the previous tag version for CI builds and other "dirty" builds.
 // If left blank, the previous tag name will be used. At the moment, this will not apply at all if there is no tag in the repository.
-String stagingVersion = "3.0.0"
+String stagingVersion = "4.0.0"
 stagingVersion = stagingVersion.trim()
 def details = versionDetails()
 // Commit distance isn't 0, last tag isn't empty and there are no unpushed commits.

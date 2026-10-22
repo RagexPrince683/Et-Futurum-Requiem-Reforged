@@ -20,7 +20,14 @@ public class EntityNautilus extends EntityRideableMob {
 	@Override public double getMountedYOffset() { return 1.05; }
 	@Override protected boolean aquaticMount() { return true; }
 	@Override public boolean isCreatureType(EnumCreatureType type, boolean forSpawnCount) { return type == ganymedes01.etfuturum.world.MobSpawning.NAUTILUS; }
-	@Override public boolean getCanSpawnHere() { return worldObj.provider.dimensionId == 0 && posY > 20 && posY < 62 && isInWater() && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && worldObj.checkNoEntityCollision(boundingBox) && (!(this instanceof EntityZombieNautilus) || ganymedes01.etfuturum.configuration.configs.ConfigEntities.enableModernHostileSpawning && worldObj.difficultySetting != net.minecraft.world.EnumDifficulty.PEACEFUL && !worldObj.isDaytime()); }
+	@Override public boolean getCanSpawnHere() {
+		int x = MathHelper.floor_double(posX), y = MathHelper.floor_double(posY), z = MathHelper.floor_double(posZ);
+		// Natural admission precedes the entity's first water-movement update.
+		return worldObj.provider.dimensionId == 0 && y > 20 && y < 62 && worldObj.blockExists(x, y + 1, z)
+				&& worldObj.getBlock(x, y, z).getMaterial() == net.minecraft.block.material.Material.water && worldObj.getBlock(x, y + 1, z).getMaterial() == net.minecraft.block.material.Material.water
+				&& worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && worldObj.checkNoEntityCollision(boundingBox)
+				&& (!(this instanceof EntityZombieNautilus) || ganymedes01.etfuturum.configuration.configs.ConfigEntities.enableModernHostileSpawning && worldObj.difficultySetting != net.minecraft.world.EnumDifficulty.PEACEFUL && !worldObj.isDaytime());
+	}
 	@Override protected boolean canDespawn() { return !isTamed() && !hasCustomNameTag(); }
 	@Override public boolean canBreatheUnderwater() { return true; }
 	@Override protected boolean mayRide(EntityPlayer player) { return isTamed() && super.mayRide(player); }

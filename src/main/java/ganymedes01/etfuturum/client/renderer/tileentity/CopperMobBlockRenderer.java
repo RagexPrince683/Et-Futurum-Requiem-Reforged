@@ -19,10 +19,12 @@ public class CopperMobBlockRenderer extends TileEntitySpecialRenderer implements
 	public CopperMobBlockRenderer(boolean statue) { this.statue = statue; poses = statue ? new ModelModernMob[]{new ModelModernMob("copper_golem"), new ModelModernMob("copper_statue_running"), new ModelModernMob("copper_statue_sitting"), new ModelModernMob("copper_statue_star")} : null; }
 	@Override public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partial) { int meta = tile.hasWorldObj() ? tile.getBlockMetadata() : 0; float lid = tile instanceof TileEntityCopperChest copper ? copper.prevLidAngle + (copper.lidAngle - copper.prevLidAngle) * partial : 0; draw(x, y, z, meta, lid); }
 	private void draw(double x, double y, double z, int meta, float lid) {
-		GL11.glPushMatrix(); GL11.glTranslated(x + .5, y + (statue ? 1.5 : 1), z + .5); GL11.glScalef(1, -1, -1); GL11.glColor4f(1, 1, 1, 1);
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_CURRENT_BIT); GL11.glPushMatrix();
+		try {
+		GL11.glTranslated(x + .5, y + (statue ? 1.5 : 1), z + .5); GL11.glScalef(1, -1, -1); GL11.glColor4f(1, 1, 1, 1);
 		if (statue) { Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("etfuturum:textures/entity/copper_golem/oxidized_copper_golem.png")); poses[meta & 3].render(null, 0, 0, 0, 0, 0, .0625F); }
 		else { Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("etfuturum:textures/entity/chest/copper.png")); GL11.glRotatef((meta & 3) * 90, 0, 1, 0); GL11.glTranslatef(-.5F, 0, -.5F); lid = 1 - lid; chest.chestLid.rotateAngleX = -(1 - lid * lid * lid) * (float) Math.PI / 2; chest.renderAll(); }
-		GL11.glPopMatrix();
+		} finally { GL11.glPopMatrix(); GL11.glPopAttrib(); }
 	}
 	@Override public boolean handleRenderType(ItemStack stack, ItemRenderType type) { return true; }
 	@Override public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack stack, ItemRendererHelper helper) { return true; }

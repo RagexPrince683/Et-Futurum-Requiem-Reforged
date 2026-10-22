@@ -35,8 +35,17 @@ public class EntityDrowned extends EntityZombie implements IRangedAttackMob {
 	@Override public boolean canBreatheUnderwater() { return true; }
 	@Override public boolean getCanSpawnHere() {
 		int x = MathHelper.floor_double(posX), y = MathHelper.floor_double(posY), z = MathHelper.floor_double(posZ);
-		return worldObj.provider.dimensionId == 0 && worldObj.difficultySetting != EnumDifficulty.PEACEFUL && y < 63 && worldObj.getBlock(x, y, z).getMaterial() == net.minecraft.block.material.Material.water
-				&& worldObj.getBlockLightValue(x, y, z) <= 7 && worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty();
+		net.minecraft.world.biome.BiomeGenBase biome = worldObj.getBiomeGenForCoords(x, z);
+		boolean river = net.minecraftforge.common.BiomeDictionary.isBiomeOfType(biome, net.minecraftforge.common.BiomeDictionary.Type.RIVER);
+		boolean ocean = net.minecraftforge.common.BiomeDictionary.isBiomeOfType(biome, net.minecraftforge.common.BiomeDictionary.Type.OCEAN);
+		// Released Java rules: rivers are less rare, ocean spawns stay five blocks below sea level.
+		// Darkness is evaluated here only; conversion, eggs and commands never call this natural predicate.
+		return worldObj.provider.dimensionId == 0 && worldObj.difficultySetting != EnumDifficulty.PEACEFUL && (river || ocean) && y < (river ? 63 : 58)
+				&& worldObj.blockExists(x, y + 1, z) && worldObj.getBlock(x, y, z).getMaterial() == net.minecraft.block.material.Material.water
+				&& worldObj.getBlock(x, y + 1, z).getMaterial() == net.minecraft.block.material.Material.water
+				&& worldObj.getSavedLightValue(EnumSkyBlock.Block, x, y, z) == 0 && worldObj.getBlockLightValue(x, y, z) <= 7
+				&& (!worldObj.isDaytime() || y < 58 || worldObj.getSavedLightValue(EnumSkyBlock.Sky, x, y, z) == 0)
+				&& rand.nextInt(river ? 15 : 40) == 0 && worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty();
 	}
 	@Override public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) { super.onSpawnWithEgg(data); setVillager(false); if (rand.nextFloat() < .0625F) { setCurrentItemOrArmor(0, ModItems.TRIDENT.newItemStack()); equipmentDropChances[0] = .085F; } else setCurrentItemOrArmor(0, null); carriesShell = rand.nextFloat() < .03F; return data; }
 	@Override public void attackEntityWithRangedAttack(EntityLivingBase target, float distance) {

@@ -59,6 +59,10 @@ Modern mobs include aquatic life, illagers and raids, allays, sniffers, wardens,
 
 See [the content catalog](CONTENT_CATALOG.md) for supported content, survival paths, deliberate exclusions and experimental limitations. Biome presence does not imply complete modern terrain, ecology or gameplay parity.
 
+Aquatic spawning uses per-species budgets plus shared animal/hostile and local-density limits in `entities.cfg`. Named, tamed and bucket-released animals retain their persistence. `limitVanillaSquid=false` leaves ordinary vanilla squid admission unchanged; enable it for optional strict natural squid limits. Netherite uses this fork's existing two-input smithing progression, with recipes and usages available in NEI; smithing templates are not implemented.
+
+Operators can use `/efr_audit aquatic` to inspect loaded natural populations and spawn/rejection counters, or `/efr_audit aquatic reset` to start a measurement interval. `/efr_audit biomes surface 20261022 4096 16` samples the real configured biome pipeline for that seed across an 8192×8192 region at a 16-block stride. Replace `surface` with `nether` to sample the configured Nether manager. Sampling advances one row per server tick and does not generate chunks; `/efr_audit cancel` stops it. Results are also written to the server log.
+
 ## Polar bears
 
 Adult polar bears are hostile to players by default when `polarBearRealism` is enabled in the neutral entity configuration. Set this option to `false` to restore the modern neutral behavior, where adults attack players only while defending nearby cubs.
@@ -82,6 +86,10 @@ From versions 2.4.1 to 2.6.0, the mod came in two flavors:
 
 From those versions, mixin code will also not work if you do not
 add `--tweakClass org.spongepowered.asm.launch.MixinTweaker --mixin mixins.etfuturum.json` to your program arguments.
+# Potion allocation
+
+Potion IDs are allocated automatically on new installations. Keep `config/legacy-potion-ids.properties` with your saves and distribute the same file to clients and server. Existing configured IDs are preserved, including reservations for disabled effects. Updated Farmer's Delight Legacy 1.7.10 cooperates with the same allocator. Conflicting saved IDs or mismatched network mappings fail explicitly; see [configuration guidance](CONFIGURATION_AUDIT.md#persistent-potion-allocation-on-1710) before upgrading an existing pack.
+
 # Vanilla functional-block compatibility
 
 EFR augments the Minecraft 1.7.10 enchanting table, brewing stand, beacon, and anvil when their corresponding feature toggles are enabled. Normal recipes and placement therefore retain the vanilla block identity expected by legacy mods. The historical EFR replacement blocks and tile entities remain registered and functional for save compatibility.

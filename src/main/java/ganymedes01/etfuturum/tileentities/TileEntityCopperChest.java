@@ -10,7 +10,13 @@ public class TileEntityCopperChest extends TileEntity implements IInventory {
 	private int users;
 	@Override public void validate() { super.validate(); if (worldObj != null) ganymedes01.etfuturum.world.MobChestIndex.add(worldObj, xCoord, yCoord, zCoord); }
 	@Override public void invalidate() { if (worldObj != null) ganymedes01.etfuturum.world.MobChestIndex.remove(worldObj, xCoord, yCoord, zCoord); super.invalidate(); }
-	@Override public void updateEntity() { prevLidAngle = lidAngle; lidAngle = Math.max(0, Math.min(1, lidAngle + (users > 0 ? .1F : -.1F))); }
+	@Override public void updateEntity() {
+		prevLidAngle = lidAngle;
+		if (!worldObj.isRemote && users > 0 && lidAngle == 0) sound("open");
+		lidAngle = Math.max(0, Math.min(1, lidAngle + (users > 0 ? .1F : -.1F)));
+		if (!worldObj.isRemote && users == 0 && prevLidAngle >= .5F && lidAngle < .5F) sound("close");
+	}
+	private void sound(String event) { worldObj.playSoundEffect(xCoord + .5, yCoord + .5, zCoord + .5, ganymedes01.etfuturum.Tags.MC_ASSET_VER + ":block.copper_chest." + event, .5F, worldObj.rand.nextFloat() * .1F + .9F); }
 	@Override public boolean receiveClientEvent(int id, int value) { if (id == 1) { users = value; return true; } return super.receiveClientEvent(id, value); }
 	@Override public int getSizeInventory() { return 27; }
 	@Override public ItemStack getStackInSlot(int slot) { return inventory.getStackInSlot(slot); }

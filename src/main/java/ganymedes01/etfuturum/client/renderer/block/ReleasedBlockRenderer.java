@@ -1,0 +1,40 @@
+package ganymedes01.etfuturum.client.renderer.block;
+
+import com.gtnewhorizons.angelica.api.ThreadSafeISBRH;
+import ganymedes01.etfuturum.blocks.*;
+import ganymedes01.etfuturum.lib.RenderIDs;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.world.IBlockAccess;
+import org.lwjgl.opengl.GL11;
+
+@ThreadSafeISBRH(perThread = false)
+public final class ReleasedBlockRenderer extends BlockModelBase {
+	public ReleasedBlockRenderer() { super(RenderIDs.RELEASED_BLOCK); }
+	private ReleasedBlockModel model(Block block, int meta) {
+		if (block instanceof BlockSculkShrieker shrieker) return shrieker.getReleasedModel(meta);
+		if (block instanceof BlockTrialSpawner spawner) return spawner.getReleasedModel(meta);
+		if (block instanceof BlockTurtleEgg egg) return egg.getReleasedModel(meta);
+		if (block instanceof BlockSnifferCrop crop) return crop.getReleasedModel(meta);
+		if (block instanceof BlockSnifferEgg egg) return egg.getReleasedModel(meta);
+		if (block instanceof BlockDriedGhast ghast) return ghast.getReleasedModel(meta);
+		if (block instanceof BlockFrogspawn frogspawn) return frogspawn.getReleasedModel(meta);
+		return ((BlockSnifferPlant) block).getReleasedModel(meta);
+	}
+	@Override public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int id, RenderBlocks renderer) {
+		model(block, world.getBlockMetadata(x, y, z)).render(block, world, x, y, z, renderer.hasOverrideBlockTexture() ? renderer.overrideBlockTexture : null);
+		return true;
+	}
+	@Override public void renderInventoryBlock(Block block, int meta, int id, RenderBlocks renderer) {
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_CURRENT_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glPushMatrix();
+		try {
+			GL11.glEnable(GL11.GL_ALPHA_TEST); GL11.glAlphaFunc(GL11.GL_GREATER, .1F);
+			GL11.glTranslatef(-.5F, -.5F, -.5F);
+			Tessellator.instance.startDrawingQuads();
+			model(block, meta).render(block, null, 0, 0, 0, null);
+			Tessellator.instance.draw();
+		} finally { GL11.glPopMatrix(); GL11.glPopAttrib(); }
+	}
+}

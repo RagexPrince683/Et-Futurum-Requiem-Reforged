@@ -42,3 +42,5 @@ The xoshiro256** implementation retains its upstream public-domain notice in
 ## Stage B7 mob reference assets
 
 The modern mob textures and retained box/pivot model definitions are adapted from Mojang’s official Java Edition 1.21.11 client, using its official mappings as a behavioral reference. These Minecraft assets and adapted vanilla code retain Mojang’s rights; the project license does not relicense them. Sounds are resolved from Mojang’s asset service through the existing MCLib AssetDirector integration rather than bundled as audio files.
+
+The released irregular-block element/UV definitions under `assets/etfuturum/models/block`, tall-seagrass textures, and five pillager-outpost templates under `data/structure/pillager_outpost` are also adapted from that same official 1.21.11 client. Model parent inheritance is resolved in the supplied definitions for the native 1.7.10 tessellator. Outpost block states and banners are translated at placement to existing legacy identities; modern entity NBT is not imported.

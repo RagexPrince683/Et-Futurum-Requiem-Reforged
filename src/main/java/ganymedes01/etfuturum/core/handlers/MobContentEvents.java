@@ -66,12 +66,17 @@ public final class MobContentEvents {
 		if (zombie.worldObj.spawnEntityInWorld(drowned)) { for (int slot = 0; slot < 5; slot++) zombie.setCurrentItemOrArmor(slot, null); zombie.setDead(); }
 	}
 	@SubscribeEvent public void bonemeal(BonemealEvent event) {
+		if (event.block == ModBlocks.SEAGRASS.get()) return; // IGrowable owns tall-seagrass growth.
 		if (event.block.getMaterial() != Material.water || event.world.getBlockMetadata(event.x, event.y, event.z) != 0 || !ModBlocks.SEAGRASS.get().canPlaceBlockAt(event.world, event.x, event.y, event.z)) return;
 		if (!event.world.isRemote) event.world.setBlock(event.x, event.y, event.z, ModBlocks.SEAGRASS.get(), 0, 2);
 		event.setResult(Event.Result.ALLOW);
 	}
-	@SubscribeEvent public void worldTick(TickEvent.WorldTickEvent event) { if (event.phase == TickEvent.Phase.END && !event.world.isRemote && event.world.provider.dimensionId == 0 && event.world.getTotalWorldTime() % 20 == 0) RaidProgress.get(event.world).tick(event.world); }
-	@SubscribeEvent public void unload(WorldEvent.Unload event) { MobChestIndex.unload(event.world); }
+	@SubscribeEvent public void worldTick(TickEvent.WorldTickEvent event) {
+		if (event.phase != TickEvent.Phase.END || event.world.isRemote) return;
+		ganymedes01.etfuturum.command.CommandGameplayAudit.tick(event.world);
+		if (event.world.provider.dimensionId == 0 && event.world.getTotalWorldTime() % 20 == 0) RaidProgress.get(event.world).tick(event.world);
+	}
+	@SubscribeEvent public void unload(WorldEvent.Unload event) { MobChestIndex.unload(event.world); AquaticPopulation.unload(event.world); ganymedes01.etfuturum.command.CommandGameplayAudit.unload(event.world); }
 	@SubscribeEvent public void loadChunk(ChunkEvent.Load event) { if (!event.world.isRemote) for (Object object : event.getChunk().chunkTileEntityMap.values()) if (object instanceof net.minecraft.tileentity.TileEntity tile && MobChestIndex.chest(tile)) MobChestIndex.add(event.world, tile.xCoord, tile.yCoord, tile.zCoord); }
 	@SubscribeEvent public void unloadChunk(ChunkEvent.Unload event) { MobChestIndex.unload(event.world, event.getChunk().xPosition, event.getChunk().zPosition); }
 	@SubscribeEvent(priority = cpw.mods.fml.common.eventhandler.EventPriority.LOWEST) public void place(BlockEvent.PlaceEvent event) {

@@ -195,3 +195,23 @@
 - Add retained native models, released textures, equipment/variant layers, core state animations and AssetDirector sound events. Preserve existing compatibility boundaries and avoid modern player swimming, waterlogging, cave-engine replacement or world-height changes.
 - Complete related husk conversion, fox food/village behavior, piglin crossbows/social combat, hoglin herd retreat, zoglin knockback and tadpole feeding. Index loaded chest lifecycle for bounded copper sorting, and allow adjacent chest transfers without requiring a path into the chest block.
 - Release raid-owned mobs back to normal despawning when a raid ends or is abandoned, preventing permanent escaped raider accumulation. Document the full mob inventory, survival adaptations, configuration identities and remaining mechanic/presentation differences in the existing coverage and configuration documents.
+
+## 2026-10-21 22:08 — Persist automatic potion allocations
+
+- Replace fixed potion defaults with persistent namespaced allocation coordinated with Farmer's Delight Legacy 1.7.10. Reserve existing explicit allocations during construction before choosing free live registry slots, retain disabled-effect reservations, and reject collisions or later overwrites. Preserve native potion behavior and entity registrations.
+- Persist allocations atomically in config/legacy-potion-ids.properties and verify saved-world snapshots before gameplay. Compare active mappings in Forge's early network handshake before saved potion packets are sent; reject mismatched installations without changing registry state on network threads.
+- Preserve existing configured IDs as migration inputs. The former Breath of the Nautilus/Comfort and Dolphin's Grace/Nourishment default collisions caused Farmer's Delight's pre-initialization failure; Log4j then masked the original registration exception with a secondary Potion lookup failure. Document explicit repair for installations blocked on their first combined startup and keep saved allocations stable.
+
+## 2026-10-21 22:33 — Fix production world-loading spawn-stage injection
+
+- Remap the vanilla animal-spawning invocation and select the exact chunk-population method signature in the modern loading-screen Mixin so the spawn-stage marker resolves in both development and production namespaces.
+- Keep the marker immediately before world-generation animal spawning without relaxing injection requirements, changing terrain generation or altering saved data.
+
+## 2026-10-22 02:08 — Stabilize modern rendering, aquatic spawning and progression
+
+- Replace placeholder irregular block rendering with retained released 1.21.11 geometry and UVs for shriekers, trial spawners, turtle/sniffer eggs, pitcher crops/plants, dried ghasts and frogspawn. Preserve transparent terrain faces, native cutout rendering and Angelica chunk-worker safety. Restore shared inventory-renderer GL/bounds state and native door rendering.
+- Bound natural aquatic admission through a loaded-entity lifecycle index, per-species and shared budgets, local school density and loaded-chunk guards. Skip full native spawn categories early, preserve persistent/bucket/tamed animals and add optional exact-vanilla-squid admission limits. Correct first-spawn nautilus water checks and restrict natural drowned by biome, difficulty, darkness and depth without changing conversions or direct spawning.
+- Restore pitcher textures and two-part growth, farmland/bonemeal progression and single-drop harvesting. Prevent ordinary seagrass stacking and support native tall-seagrass growth under the existing identity. Display existing smithing upgrades with ingredient/result slots in NEI without changing their two-input progression; correct charged crossbow icons and held transforms.
+- Dispatch copper chest lid sounds from server-owned transitions and use released block, egg, crossbow and mechanical sound events through AssetDirector. Add missing frogspawn hatch and dried-ghast transition playback.
+- Add operator aquatic counters and reproducible, bounded seeded biome sampling. Keep climate selection weights and biome identities; prevent the legacy cherry decorator from competing with enabled Cherry Grove generation.
+- Replace new outpost generation with released tower geometry, native palette/orientation/loot, pillagers/captains and saved chunk-contained surrounding pieces including allay cages. Preserve old structures and avoid retrogen or forced neighboring chunk loads.

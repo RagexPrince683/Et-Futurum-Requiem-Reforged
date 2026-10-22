@@ -240,3 +240,160 @@ New monument placement supersedes whole-footprint rejection for this structure o
 The final compile/package/archive result is recorded below. Experimental placement and simplified native rendering/AI remain classified in CONTENT_CATALOG.md; future ports must preserve documented adaptations without inferring exact modern parity from compilation or startup.
 
 Final checkpoint: pinned offline build succeeded with final Java compilation, shadow packaging and reobfJar. compileTestJava/test were NO-SOURCE; there is no automated-test pass to claim. Production artifact `etfuturum-3.0.0-master.125-c9701f3e14-dirty.jar` is 6258235 bytes, SHA-256 `ee3f15c6b15df6f71261fd4ba441cd97e55cb53337667b599d011d2abeecd6b6`. Archive inspection found 1202 EFR classes, all Java 8 major 52, all required workstations/guardian/monument/gateway classes, 167 bastion templates, 60 pools, 12 processor lists and remapped new Mixin owners. Removed dependency implementation packages are absent. This is a remapped archive inspection and development-server check, not a packaged Forge launch or client visual acceptance.
+
+
+## Gameplay stabilization and vanilla fidelity — 2026-10-22
+
+Scope: maintained Forge 1.7.10 only, bounded by released Java 1.21.11. Existing dirty potion-allocation and loading-Mixin work was preserved. No version migration, dependency/toolchain change, new packet ID, commit or test source was introduced. Released model elements/UVs and five outpost structures were read from Mojang's official client distribution; THIRD_PARTY_NOTICES.md records attribution.
+
+### Findings, implementation and evidence
+
+| Reported issue | Confirmed cause and change | Observed evidence / limits |
+| --- | --- | --- |
+| Shriekers / trial spawners | Cube-style placeholder rendering and full-cube properties did not represent the recessed/cage geometry. Added retained released elements, explicit UVs, cutout/native tessellation, correct opacity and state selection. | Real Angelica client rendered isolated models, stone/glass neighbors and paired blocks at x=47/48 across a chunk boundary. Supporting terrain remained visible. This is focused visual acceptance, not every graphics-driver/shader combination. |
+| Turtle eggs / other irregular blocks | Placeholder geometry/UVs did not represent egg count/cracks; related sniffer eggs, dried ghasts and frogspawn also used simplified shapes. | All eight migrated families appeared in the live adjacency matrix, including mature pitcher crops. Static inspection resolved all 34 models and 514 faces to existing textures with explicit UVs. |
+| Doors | Custom renderer used ordinary neighbor-face culling and partial state/bounds handling. Replaced its world path with native renderBlockDoor. | Both halves of the tested cherry doors rendered in the Angelica matrix. Other supported door families share the path but were not individually photographed. |
+| Shared renderer state | Shared inventory rendering leaked matrix/blend/bounds state; copper tile/item rendering did not fully scope changed state. | Restored state in finally blocks. Prepared world-model renderer is stateless, annotated for Angelica and emits tessellator data without GL calls or mutable render bounds on chunk workers. No GPU profiler claim. |
+| Pitcher plant / crop | References named textures that do not exist in the released atlas; inherited wheat behavior did not implement two-part pitcher growth/harvesting. | Native bonemeal produced lower/upper metadata 2/0, 4/0, 5/13, 7/15. Correct released textures/models rendered. Mature 7/15 survived complete dedicated restart and loading a copy in an integrated server. Soil, height and upper-half checks and single-item drops are implemented. Sniffer's existing dig completion still drops pods/seeds; a full survival Sniffer-to-pod journey was not played. |
+| Seagrass stacking | Water-material vegetation could support or replace itself without explicit ordinary/tall states. | Native placement rejected stacking; native growth produced lower=1, upper=2. Source-water/support checks, paired survival, water restoration and sheared drops use the existing block identity. |
+| Netherite recipes | The authoritative smithing registry already contained all eleven upgrades; NEI had no smithing handler. | Native GUI showed a damaged, named Efficiency III diamond pickaxe plus netherite producing the expected netherite result with damage/NBT retained. Final GTNH NEI displayed all eleven pages with visible ingredient/result slots. Usage lookup returned one recipe for that source pickaxe and eleven for the ingot. Full repeated shift-transfer/ingredient-consumption journeys were not separately exercised. |
+| Smithing progression | Templates are not implemented/configured in this maintained progression. | Preserved the existing two-input registry; no crafting-table shortcut or invented template prerequisite was added. Feature gates and ore alternatives remain authoritative. |
+| Crossbow held appearance | Generic bow-style hand transforms and stack-icon lookup did not represent charged crossbows consistently. | Native first-person screenshot showed the charged crossbow horizontally. Added equipped sprite extrusion, charged inventory/nonplayer icons and biped/pillager poses; scoped GL/glint state. Existing firing implementation remains. Complete charging/fire/reload and all third-person/dropped poses remain a runtime matrix gap. |
+| Copper chest / mechanical sounds | Copper lid transitions had no exact server-side sound dispatch; several new blocks used generic material sounds or lacked mechanical events. | Final dedicated server delivered the exact minecraft_1.21.11:block.copper_chest.open sound packet to the real client. Close is implemented at the descending lid transition, but its packet was not positively isolated from background entity sounds. Released egg, shrieker, trial, frogspawn and dried-ghast events are registered through AssetDirector; no custom sound networking. Human audio listening and a second-observer audibility matrix were not performed. |
+| Aquatic populations | Independent native categories lacked shared/local admission; repeated full-cap candidate walks were expensive. A freshly constructed nautilus tested an uninitialized in-water flag. | Lifecycle index, per-species/shared loaded-chunk budgets, local school density, persistent-entity exemptions and strict per-candidate admission now own natural EFR spawning. Full categories skip the native chunk walk early. Natural nautiluses appeared after direct water-block checks replaced the fresh flag. Measurements below are observations, not a TPS benchmark. |
+| Vanilla squid | Stock water-creature admission can overshoot during one native category pass; the observed exact-vanilla population fluctuated into the hundreds. | Optional limitVanillaSquid defaults false and caps only exact vanilla squid admission, preserving subclasses/other mods' category accounting. Existing squid are never deleted. Enabled-mode long-session behavior was not runtime-certified. |
+| Drowned | Natural predicate lacked complete biome/light/depth/daytime restrictions. | Controlled native predicate trials: exposed shallow river at noon 0/1000; midnight 64/1000; deep ocean at noon 20/1000, midnight 22/1000; Peaceful 0/1000 at both depths. A glowstone-lit shallow setup also rejected 1000/1000. The controlled river case temporarily selected the actual registered river biome for one test column and restored it in finally. Conversions/eggs/direct joins bypass natural admission; their existing paths were inspected, not each replayed. |
+| Cherry trees in hills | Legacy mountain-tag decoration deliberately allowed cherry trees independently of the newer Cherry Grove generator. | Legacy fallback now runs only when native Cherry Grove generation is disabled; modern trees check their own biome at the placement point. Existing trees/saves are preserved. A full fresh terrain decoration survey remains outstanding. |
+| Missing Nether biomes | Original local test configuration had the experimental Nether provider disabled; registration alone does not replace the active manager. | Disposable configuration enabled the intended gates. Actual configured manager selected all four modern biomes for all three seeds. Generated vegetation/material/mob distribution is separate from the manager sampling and was not comprehensively accepted. |
+| Basic outposts | Previous custom tower was a crude approximation and acquisition code also generated an unrelated small illager lodge. | New generation uses released 15x21x15 watchtower silhouette/palette/floors/stairs/balcony/roof plus saved cages/tent/logs/targets, native metadata rotations, bounded foundations/loot and pillager/captain/allay placement. Removed the unrelated lodge path; raids retain evoker/vindicator acquisition. Native tower placement returned true on prepared flat loaded terrain and was photographed. Natural multi-piece frequency, every rotation/loot roll and allay release journeys remain unverified. Existing structures are not retrogened. |
+
+### Aquatic observation windows
+
+One real networked player remained in Ocean near (-12,2040), seed 20261022, noon frozen, normal difficulty, view distance 6 and optional squid mitigation OFF. Debugger work used only short owning-thread callbacks. Counts cover loaded nonpersistent indexed animals, including entities outside the current spawning area. Shrinking eligible area or loading saved entities can put existing counts above current admission budgets; they are preserved.
+
+These are **before/after measurements of the last controller iteration**, not an original-unmodified-JAR baseline. The earlier controller was observed for 3,609 ticks (180.45 simulated seconds); the corrected controller for approximately 6,194 ticks (309.70 simulated seconds), following a saved-world restart. The windows differ in loaded population and eligible area (282 versus 277 chunks at their endpoints), so they are observational comparisons, not controlled performance benchmarks. The later audio/NEI-only edits did not change the measured aquatic code.
+
+| Species | Earlier endpoint count | Corrected endpoint count | Earlier attempts / success | Corrected attempts / success | Corrected habitat / cap / density rejection |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Cod | 14 | 25 | 1,223,870 / 17 | 2,772 / 20 | 700 / 2,052 / 0 |
+| Salmon | 8 | 2 | 520,894 / 6 | 1,310 / 12 | 259 / 1,039 / 0 |
+| Dolphin | 12 | 15 | 325,580 / 12 | 1,458 / 8 | 243 / 1,207 / 0 |
+| Axolotl | 5 | 6 | 1,808,518 / 6 | 3,092 / 11 | 183 / 2,898 / 0 |
+| Glow squid | 5 | 3 | 1,874,796 / 0 | 192,166 / 5 | 192,160 / 1 / 0 |
+| Nautilus | 0 | 6 | 1,721,826 / 0 | 3,273 / 9 | 800 / 2,464 / 0 |
+| Drowned | 16 | 20 | 1,434,200 / 13 | 7,046 / 32 | 6,863 / 149 / 2 |
+| Vanilla squid (unmanaged) | 32 | 287 | not instrumented | not instrumented | mitigation disabled |
+
+Tropical fish, pufferfish and guardians had zero counts/attempts in this ocean observation; this is not acceptance of their own habitats. All recorded joins succeeded. Normalized cod attempts declined from about 339,116 to 448 per 1,000 ticks; glow squid still spent about 31,025 attempts per 1,000 ticks searching for rare suitable dark habitat while below cap. No frame-rate/TPS gain is inferred. Longer multi-player, bucket/name/tame/save migration and multi-hour population observations remain required for extended-session acceptance.
+
+### Seeded biome selection
+
+Reproduction: /efr_audit biomes surface <seed> 8192 16 and /efr_audit biomes nether <seed> 8192 16, seeds 1, 8675309 and 20261022. Each job queried one block-resolution manager row per owning server tick without loading/generating chunks. Each region was [-8192,8192) on both axes: 268,435,456 blocks squared and 1,048,576 sampled locations. Per dimension totals are 805,306,368 blocks squared across seeds and 3,145,728 sampled locations. A smaller exploratory radius-4096 job is excluded from the aggregates.
+
+Every enabled modern surface identity and all four modern Nether identities appeared. Surface weight 3 applies inside its registered climate pool; it is not a global area probability. Native special-climate selection, oceans (29.3095% here), rivers, shores, hills and mutations all reduce or transform global frequencies. Cold mountain identities were consequently much rarer than ordinary forest/plains families. Existing weights/IDs were preserved.
+
+Nether selection weights are 30:10:10:10:10 (raw weighted-draw probabilities 42.8571% / 14.2857% each). Final observed areas are below. The retained zoom layer uses majority/mode selection, which favors an already common biome, so raw draw probabilities are not exact final-area targets. Nether Wastes ranged 45.8411–47.2021% by seed; modern biomes ranged 12.6177–14.0310%. The modest consistent Wastes excess is compatible with that smoothing architecture; a significance level was not calculated. Nearby samples and cells are spatially correlated, so a naive binomial test over millions of points would be invalid. These results establish selection coverage, not exact released-vanilla distribution or physical decoration acceptance.
+
+| Nether biome | Sample count | Aggregate frequency |
+| --- | ---: | ---: |
+| Nether Wastes (Hell) | 1,461,671 | 46.4653% |
+| Crimson Forest | 416,314 | 13.2343% |
+| Warped Forest | 424,661 | 13.4996% |
+| Soul Sand Valley | 420,058 | 13.3533% |
+| Basalt Deltas | 423,024 | 13.4476% |
+
+| Surface biome | Sample count | Aggregate frequency |
+| --- | ---: | ---: |
+| Ocean | 97,089 | 3.0864% |
+| Plains | 250,751 | 7.9712% |
+| Desert | 108,317 | 3.4433% |
+| Extreme Hills | 198,417 | 6.3075% |
+| Forest | 247,824 | 7.8781% |
+| Taiga | 115,836 | 3.6823% |
+| Swampland | 102,469 | 3.2574% |
+| River | 113,159 | 3.5972% |
+| FrozenOcean | 96,798 | 3.0771% |
+| FrozenRiver | 3,690 | 0.1173% |
+| Ice Plains | 71,914 | 2.2861% |
+| Ice Mountains | 22,273 | 0.7080% |
+| MushroomIsland | 1,732 | 0.0551% |
+| MushroomIslandShore | 1,118 | 0.0355% |
+| Beach | 97,688 | 3.1054% |
+| DesertHills | 29,921 | 0.9512% |
+| ForestHills | 65,088 | 2.0691% |
+| TaigaHills | 24,090 | 0.7658% |
+| Jungle | 30,455 | 0.9681% |
+| JungleHills | 10,992 | 0.3494% |
+| JungleEdge | 2,798 | 0.0889% |
+| Deep Ocean | 91,932 | 2.9224% |
+| Stone Beach | 15,193 | 0.4830% |
+| Cold Beach | 8,386 | 0.2666% |
+| Birch Forest | 75,240 | 2.3918% |
+| Birch Forest Hills | 19,445 | 0.6181% |
+| Roofed Forest | 75,493 | 2.3999% |
+| Cold Taiga | 18,506 | 0.5883% |
+| Cold Taiga Hills | 3,752 | 0.1193% |
+| Mega Taiga | 28,375 | 0.9020% |
+| Mega Taiga Hills | 12,920 | 0.4107% |
+| Extreme Hills+ | 44,847 | 1.4256% |
+| Savanna | 69,108 | 2.1969% |
+| Savanna Plateau | 17,203 | 0.5469% |
+| Mesa | 21,009 | 0.6679% |
+| Mesa Plateau F | 10,658 | 0.3388% |
+| Mesa Plateau | 4,655 | 0.1480% |
+| Sunflower Plains | 16,165 | 0.5139% |
+| Desert M | 3,340 | 0.1062% |
+| Extreme Hills M | 8,434 | 0.2681% |
+| Flower Forest | 14,847 | 0.4720% |
+| Taiga M | 5,660 | 0.1799% |
+| Swampland M | 4,001 | 0.1272% |
+| Ice Plains Spikes | 2,362 | 0.0751% |
+| Jungle M | 907 | 0.0288% |
+| Birch Forest M | 3,792 | 0.1205% |
+| Birch Forest Hills M | 1,844 | 0.0586% |
+| Roofed Forest M | 3,328 | 0.1058% |
+| Cold Taiga M | 929 | 0.0295% |
+| Mega Spruce Taiga | 2,854 | 0.0907% |
+| Extreme Hills+ M | 5,569 | 0.1770% |
+| Savanna M | 3,473 | 0.1104% |
+| Savanna Plateau M | 2,033 | 0.0646% |
+| Mesa (Bryce) | 837 | 0.0266% |
+| Mesa Plateau F M | 353 | 0.0112% |
+| Cherry Grove | 41,277 | 1.3122% |
+| Mangrove Swamp | 29,712 | 0.9445% |
+| Pale Garden | 25,513 | 0.8110% |
+| Meadow | 35,769 | 1.1371% |
+| Grove | 6,062 | 0.1927% |
+| Snowy Slopes | 5,048 | 0.1605% |
+| Jagged Peaks | 8,645 | 0.2748% |
+| Frozen Peaks | 8,258 | 0.2625% |
+| Stony Peaks | 28,218 | 0.8970% |
+| Bamboo Jungle | 31,153 | 0.9903% |
+| Warm Ocean | 97,833 | 3.1100% |
+| Lukewarm Ocean | 91,829 | 2.9192% |
+| Cold Ocean | 95,325 | 3.0303% |
+| Deep Lukewarm Ocean | 172,189 | 5.4737% |
+| Deep Cold Ocean | 88,915 | 2.8265% |
+| Deep Frozen Ocean | 90,086 | 2.8638% |
+| Mesa Plateau M | 27 | 0.0009% |
+
+### Production and runtime checkpoint
+
+- Final existing offline build after the NEI slot edit: BUILD SUCCESSFUL in 36 seconds; compileJava, shadowJar and reobfJar passed. compileTestJava/test were NO-SOURCE. No automated test-suite pass is claimed.
+- Final production artifact: build/libs/etfuturum-3.0.0-master.126-2347fcff28-dirty.jar, 6,829,504 bytes; SHA-256 9681685e9a9b04f65810ae5cb42092a9fdc0433f5907d72c16adca814a134d60. Final archive inspection found 1,331 EFR classes, all Java 8 major 52, 34 released block models and five outpost templates. Aquatic/crossbow refmap owners were inspected before the final NEI-only edit; the final artifact was rebuilt/reobfuscated and launched afterward.
+- Actual production runtime: Java 8, Forge 10.13.4.1614, UniMixins 0.3.1. Dedicated server stayed localhost-only on port 25586 with EULA accepted. Final JAR reached Done and a real network client joined; repeated complete saved-world restarts succeeded. The dedicated instance stopped normally at 02:28 EDT, saving Overworld, Nether and End.
+- Client used Angelica 2.1.29 and GTNHLib 0.11.4. NEI 2.8.114-GTNH, CodeChickenCore 1.4.16 and CodeChickenLib 1.2.0 were added only to the disposable client. Angelica rejected the initially tried old compile-only CodeChickenCore; runtime dependencies were corrected without changing project dependencies. Native game-frame screenshots include cutout-adjacency-matrix.png, smithing-native-gui.png and nei-smithing-slots-final.png under the disposable client's screenshots directory.
+- Final client also loaded a copy of the previously generated dedicated save through the actual integrated-server launch path. The integrated server admitted the local player and retained mature pitcher lower/upper metadata 7/15. A fresh integrated-world run was not completed.
+- Source review retained existing entity/item/block/biome identities and the seven existing packet registrations/directions/discriminators. Render IDs append only client rendering state; new outpost pending-piece saved data is additive. Existing potion-ID changes predated this pass.
+- Final diff whitespace check passed with the repository's CRLF convention recognized. Generated jars, logs, screenshots and disposable worlds were not added to the repository. No source test classes, fake mods or benchmark infrastructure were created.
+- Remaining gaps: original-JAR controlled population baseline, multi-hour/multi-player population soak, enabled squid mitigation soak, fresh integrated world, full Nether terrain/vegetation/ecology survey, every door/model state/view, complete crossbow/survival progression journeys, all structure rotations/pending-piece save/release paths, exhaustive original-EFR regressions and human audio/second-observer verification. Focused callbacks and screenshots are not substitutes for those acceptance layers.
+
+### Reusable runtime-testing instructions
+
+Build the final remapped production artifact with the repository's pinned tooling, record its filename/hash, and stage that exact JAR in isolated disposable client and server instances outside the repository. Copy required configs/registry allocations; preserve the user's normal instances. Use the exact supported Forge/Java/UniMixins stack, include Angelica for rendering and compatible production NEI dependencies for recipe checks. Accept the server EULA, bind test networking to localhost and record all optional-mod versions.
+
+Launch a real client and real dedicated server, connect them, and verify fresh/saved worlds separately. Also launch the native integrated server. Exercise production interactions with actual player inventories, containers, blocks, entities and packets. When direct UI automation is impractical, use an in-memory JShell/JDI session: break at a normal server tick or client frame, invoke the real production callback only on its owning thread, disable the breakpoint before invocation and always resume/delete requests in finally. Never mutate worlds from the debugger's arbitrary/network threads or add fake mods/test Java files solely for validation. Label callback checks separately from full player journeys.
+
+Capture the actual game framebuffer with native ScreenshotHelper, inspect the saved images, and test isolated blocks, opaque/transparent neighbors and chunk boundaries. Check server-to-client sound packets and actual assets; distinguish packet delivery from human listening. Use seeded quantitative sampling and explicit population counter windows with ticks, habitat, loaded area, configs and rejection categories recorded. Compare matched baseline/final conditions where feasible; never label an intermediate iteration as an original baseline. Exclude debugger pauses from timing claims.
+
+Save and restart the native worlds to verify persistence. After the last production edit, rebuild and repeat the affected final runtime checks against that exact artifact. Stop/save disposable servers normally and report compilation, automated tests, remapping/package inspection, dedicated/integrated startup, native callbacks, screenshots and remaining gameplay gaps separately.

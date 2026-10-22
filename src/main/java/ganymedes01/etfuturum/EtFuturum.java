@@ -92,6 +92,12 @@ public class EtFuturum {
 
 	public static SimpleNetworkWrapper networkWrapper;
 
+	@cpw.mods.fml.common.network.NetworkCheckHandler
+	public boolean checkNetwork(java.util.Map<String, String> remote, Side side) {
+		if (!remote.containsKey(Tags.MOD_ID)) return side == Side.SERVER;
+		return Tags.VERSION.equals(remote.get(Tags.MOD_ID)) && ModPotions.IDS.matches(remote);
+	}
+
 	@EventHandler
 	public void serverStopped(FMLServerStoppedEvent event) {
 		ServerPacketExecutor.stop();
@@ -172,6 +178,7 @@ public class EtFuturum {
 		}
 
 		ConfigBase.onConstructing();
+		ModPotions.reserveIds();
 		MCLib.init();
 
 		ADConfig config = new ADConfig();
@@ -218,6 +225,7 @@ public class EtFuturum {
 		ExternalWoodCompat.initContent();
 		ModEnchantments.init();
 		ModPotions.init();
+		MinecraftForge.EVENT_BUS.register(ModPotions.IDS);
 		SpectatorMode.init();
 
 		for (ModBlocks block : ModBlocks.values()) {
@@ -439,6 +447,7 @@ public class EtFuturum {
 	@EventHandler
 	@SuppressWarnings("unchecked")
 	public void onLoadComplete(FMLLoadCompleteEvent e) {
+		ModPotions.IDS.verify();
 		for (ModBlocks block : ModBlocks.values()) {
 			if (block.isEnabled() && block.get() instanceof IInitAction) {
 				((IInitAction) block.get()).onLoadAction();
@@ -524,6 +533,7 @@ public class EtFuturum {
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 		ServerPacketExecutor.start();
+		event.registerServerCommand(new ganymedes01.etfuturum.command.CommandGameplayAudit());
 		if (ConfigFunctions.enableFillCommand) {
 			event.registerServerCommand(new CommandFill());
 		}
@@ -660,6 +670,9 @@ public class EtFuturum {
 			config.addSoundEvent(ver, "entity." + mob + ".death", "neutral");
 		}
 		for (String sound : new String[]{"puffer_fish.blow_up", "puffer_fish.blow_out", "puffer_fish.sting", "dolphin.ambient_water", "dolphin.eat", "turtle.ambient_land", "axolotl.idle_air", "axolotl.idle_water", "glow_squid.ambient", "phantom.ambient", "phantom.bite", "phantom.swoop", "drowned.ambient", "drowned.ambient_water", "drowned.shoot"}) config.addSoundEvent(ver, "entity." + sound, "neutral");
+		for (String sound : new String[]{"copper_chest.open", "copper_chest.close", "sculk_shrieker.shriek", "sniffer_egg.crack", "sniffer_egg.hatch", "frogspawn.hatch", "trial_spawner.spawn_mob", "trial_spawner.eject_item", "trial_spawner.open_shutter", "trial_spawner.close_shutter", "dried_ghast.transition"}) config.addSoundEvent(ver, "block." + sound, "block");
+		for (String sound : new String[]{"egg_break", "egg_crack", "egg_hatch"}) config.addSoundEvent(ver, "entity.turtle." + sound, "block");
+		for (String sound : new String[]{"loading_start", "loading_middle", "loading_end", "shoot"}) config.addSoundEvent(ver, "item.crossbow." + sound, "player");
 		config.addObject(ver, "minecraft/sounds/ambient/cave/cave14.ogg");
 		config.addObject(ver, "minecraft/sounds/ambient/cave/cave15.ogg");
 		config.addObject(ver, "minecraft/sounds/ambient/cave/cave16.ogg");

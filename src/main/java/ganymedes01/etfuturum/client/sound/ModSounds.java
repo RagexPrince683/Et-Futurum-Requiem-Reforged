@@ -71,6 +71,20 @@ public class ModSounds {
 	public static final SoundType soundTuffBricks = new CustomSound("tuff_bricks");
 	public static final SoundType soundSculk = new CustomSound("sculk").setDisabledSound(soundSlime);
 	public static final SoundType soundSculkCatalyst = new CustomSound("sculk_catalyst");
+	public static final SoundType soundSculkShrieker = new CustomSound("sculk_shrieker", true);
+	public static final SoundType soundTrialSpawner = new CustomSound("trial_spawner", true);
+	public static final SoundType soundTurtleEgg = new CustomSound("turtle_egg", true) {
+		@Override public String getBreakSound() { return Tags.MC_ASSET_VER + ":entity.turtle.egg_break"; }
+		@Override public String getStepResourcePath() { return Block.soundTypeSand.getStepResourcePath(); }
+		@Override public String func_150496_b() { return Block.soundTypeSand.func_150496_b(); }
+	};
+	public static final SoundType soundSnifferEgg = new CustomSound("sniffer_egg", true) {
+		@Override public String getBreakSound() { return Block.soundTypeStone.getBreakSound(); }
+		@Override public String getStepResourcePath() { return Block.soundTypeStone.getStepResourcePath(); }
+		@Override public String func_150496_b() { return Tags.MC_ASSET_VER + ":block.sniffer_egg.plop"; }
+	};
+	public static final SoundType soundDriedGhast = new CustomSound("dried_ghast", true);
+	public static final SoundType soundFrogspawn = new CustomSound("frogspawn", true);
 	public static final SoundType soundVines = new CustomSound("vine").setDisabledSound(Block.soundTypeGrass);
 	public static final SoundType soundCalcite = new CustomSound("calcite", true);
 	public static final SoundType soundAmethystBlock = new CustomSound("amethyst_block", true);

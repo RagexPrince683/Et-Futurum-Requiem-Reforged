@@ -144,7 +144,10 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 			caveVineGen = new WorldGenCaveVines(ModBlocks.CAVE_VINE.get());
 		}
         
-		if (ModBlocks.CHERRY_LOG.isEnabled() && ModBlocks.LEAVES.isEnabled()) {
+		// Preserve the legacy mountain decorator only when the native cherry biome path is disabled.
+		// Modern Cherry Grove owns its own trees and flowers; running both leaks extra trees into hills.
+		if (ModBlocks.CHERRY_LOG.isEnabled() && ModBlocks.LEAVES.isEnabled()
+				&& !(ConfigWorld.enableSurfaceBiomes && ConfigWorld.generatesSurfaceBiome("Cherry Grove") && ganymedes01.etfuturum.world.surface.SurfaceBiomeManager.cherryGrove != null)) {
 			BiomeGenBase[] cherryBiomeArray = BiomeDictionary.getBiomesForType(Type.MOUNTAIN);
 			cherryBiomeArray = Utils.excludeBiomesFromTypesWithDefaults(cherryBiomeArray, Type.SNOWY, Type.HOT, Type.SANDY, Type.MESA, Type.SPARSE, Type.JUNGLE);
 			for(BiomeGenBase biome : cherryBiomeArray) {

@@ -109,7 +109,7 @@ public class BiomeModernSurface extends BiomeGenBase {
 		int count = !treesAllowed ? 0 : kind == Kind.PALE ? 8 : kind == Kind.MANGROVE ? 7 : kind == Kind.CHERRY ? 5 : kind == Kind.GROVE || kind == Kind.BAMBOO ? 6 : kind == Kind.MEADOW && random.nextInt(100) == 0 ? 1 : 0;
 		for (int i = 0; i < count; i++) {
 			int x = chunkX + 8 + random.nextInt(16), z = chunkZ + 8 + random.nextInt(16);
-			if (!world.blockExists(x, 0, z)) continue;
+			if (!world.blockExists(x, 0, z) || world.getBiomeGenForCoords(x, z) != this) continue;
 			int y = world.getHeightValue(x, z);
 			if (tree.generate(world, random, x, y, z)) {
 				if ((kind == Kind.MEADOW || kind == Kind.CHERRY && random.nextInt(20) == 0) && ModBlocks.BEE_NEST.isEnabled()) ganymedes01.etfuturum.core.handlers.WorldEventHandler.tryPlaceBeeNest(world, x, y, z, random, 3);

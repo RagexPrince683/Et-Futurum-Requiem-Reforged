@@ -66,6 +66,7 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 		initConfigs();
 
 		List<String> mixins = new ArrayList<>();
+		mixins.add("potionids.MixinHandshakeModList");
 
 		// Core APIs owned by Et Futurum: metadata-aware tags and nested generation tracking.
 		mixins.add("tags.MixinBlock");
@@ -258,13 +259,18 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 		if (ganymedes01.etfuturum.configuration.configs.ConfigExperiments.endDimensionProvider) mixins.add("endgateway.MixinEntityDragon");
 		{
 			mixins.add("nethermobs.MixinSpawnerAnimals");
+			mixins.add("nethermobs.MixinWorldAquaticPopulation");
 			mixins.add("nethermobs.MixinBiomeGenBase");
 			mixins.add("nethermobs.MixinRiderInput");
 			mixins.add("nethermobs.MixinNautilusBreath");
 			mixins.add("nethermobs.MixinDolphinGrace");
 			mixins.add("nethermobs.MixinMobDungeons");
 			mixins.add("nethermobs.MixinChestLifecycle");
-			if (side == MixinEnvironment.Side.CLIENT) mixins.add("nethermobs.MixinWolfArmor");
+			if (side == MixinEnvironment.Side.CLIENT) {
+				mixins.add("nethermobs.MixinWolfArmor");
+				mixins.add("nethermobs.MixinCrossbowItemRenderer");
+				mixins.add("nethermobs.MixinCrossbowModel");
+			}
 		}
 		if (ganymedes01.etfuturum.configuration.configs.ConfigEnchantsPotions.enableSoulSpeed) mixins.add("soulspeed.MixinBlockSoulSand");
 		if (ConfigMixins.soulFire) {

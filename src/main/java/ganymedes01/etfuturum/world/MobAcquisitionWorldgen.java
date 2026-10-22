@@ -1,50 +1,26 @@
 package ganymedes01.etfuturum.world;
 
 import cpw.mods.fml.common.IWorldGenerator;
-import ganymedes01.etfuturum.ModItems;
 import ganymedes01.etfuturum.configuration.configs.ConfigEntities;
 import ganymedes01.etfuturum.entities.*;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.init.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.*;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.BiomeDictionary;
 import java.util.Random;
 
-/** Small native outposts fit inside their generating chunk; they never request distant terrain. */
+/** Native acquisition in newly populated chunks; outpost pieces never request distant terrain. */
 public final class MobAcquisitionWorldgen implements IWorldGenerator {
 	@Override public void generate(Random random, int cx, int cz, World world, IChunkProvider generator, IChunkProvider provider) {
-		if (!ConfigEntities.enableOutposts || world.provider.dimensionId != 0 || random.nextInt(600) != 0 || !world.getWorldInfo().isMapFeaturesEnabled()) return;
+		if (!ConfigEntities.enableOutposts || world.provider.dimensionId != 0 || !world.getWorldInfo().isMapFeaturesEnabled()) return;
+		OutpostStructures.populatePending(world, random, cx, cz);
+		if (random.nextInt(600) != 0) return;
 		int x = cx * 16 + 7, z = cz * 16 + 7;
 		if (!BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(x, z), BiomeDictionary.Type.PLAINS) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(x, z), BiomeDictionary.Type.SAVANNA) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(x, z), BiomeDictionary.Type.SANDY) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(x, z), BiomeDictionary.Type.FOREST)) return;
 		int y = world.getTopSolidOrLiquidBlock(x, z);
 		if (y < 60 || y > 230 || world.villageCollectionObj.findNearestVillage(x, y, z, 80) != null) return;
-		for (int dx = -4; dx <= 6; dx++) for (int dz = -4; dz <= 4; dz++) {
-			if (!world.blockExists(x + dx, y, z + dz) || Math.abs(world.getTopSolidOrLiquidBlock(x + dx, z + dz) - y) > 3 || world.getBlock(x + dx, y - 1, z + dz).getMaterial().isLiquid()) return;
-		}
-		for (int dx = -3; dx <= 3; dx++) for (int dz = -3; dz <= 3; dz++) for (int dy = -3; dy <= 11; dy++) {
-			boolean edge = Math.abs(dx) == 3 || Math.abs(dz) == 3;
-			if (dy < 0) world.setBlock(x + dx, y + dy, z + dz, Blocks.cobblestone, 0, 2);
-			else if (dy == 0 || dy == 5 || dy == 10) world.setBlock(x + dx, y + dy, z + dz, Blocks.planks, 1, 2);
-			else if (edge && dy < 10) world.setBlock(x + dx, y + dy, z + dz, Math.abs(dx) == 3 && Math.abs(dz) == 3 ? Blocks.log : dy % 5 == 2 ? Blocks.air : Blocks.planks, 1, 2);
-			else world.setBlockToAir(x + dx, y + dy, z + dz);
-		}
-		world.setBlockToAir(x, y + 1, z - 3); world.setBlockToAir(x, y + 2, z - 3);
-		for (int dy = 1; dy < 11; dy++) world.setBlock(x + 2, y + dy, z + 2, Blocks.ladder, 2, 2);
-		world.setBlock(x - 1, y + 11, z, Blocks.chest, 0, 2);
-		if (world.getTileEntity(x - 1, y + 11, z) instanceof TileEntityChest chest) {
-			chest.setInventorySlotContents(0, ModItems.CROSSBOW.newItemStack()); chest.setInventorySlotContents(1, new ItemStack(Items.arrow, 16)); chest.setInventorySlotContents(2, new ItemStack(Items.wheat, 8));
-		}
-		for (int dx = 4; dx <= 6; dx++) for (int dz = -1; dz <= 1; dz++) for (int dy = 0; dy <= 3; dy++) world.setBlock(x + dx, y + dy, z + dz, dy == 0 || dy == 3 ? Blocks.planks : dx == 4 || dx == 6 || Math.abs(dz) == 1 ? Blocks.iron_bars : Blocks.air, 0, 2);
-		for (int i = 0; i < 2; i++) place(world, new EntityAllay(world), x + 5, y + 1, z);
-		for (int i = 0; i < 3; i++) { EntityPillager pillager = new EntityPillager(world); pillager.setCaptain(i == 0); place(world, pillager, x + i - 1, y + 6, z); }
-		if (random.nextInt(4) == 0) { place(world, new EntityEvoker(world), x, y + 1, z); place(world, new EntityVindicator(world), x + 1, y + 1, z); }
-		RaidProgress.get(world).addOutpost(cx, cz);
+		OutpostStructures.tower(world, random, cx, cz);
 	}
-	private static void place(World world, EntityLiving mob, int x, int y, int z) { mob.setLocationAndAngles(x + .5, y, z + .5, world.rand.nextFloat() * 360, 0); mob.onSpawnWithEgg(null); mob.func_110163_bv(); world.spawnEntityInWorld(mob); }
 	public static void playerSpawns(net.minecraft.entity.player.EntityPlayer player) {
 		World world = player.worldObj;
 		if (world.provider.dimensionId != 0 || world.difficultySetting == EnumDifficulty.PEACEFUL || !world.getGameRules().getGameRuleBooleanValue("doMobSpawning") || player.capabilities.disableDamage) return;

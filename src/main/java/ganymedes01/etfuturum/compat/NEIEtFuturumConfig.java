@@ -24,6 +24,10 @@ public class NEIEtFuturumConfig implements IConfigureNEI {
 
 	@Override
 	public void loadConfig() {
+		if (ModBlocks.SMITHING_TABLE.isEnabled()) {
+			API.registerRecipeHandler(new ganymedes01.etfuturum.compat.nei.SmithingHandler());
+			API.registerUsageHandler(new ganymedes01.etfuturum.compat.nei.SmithingHandler());
+		}
 		if (ModBlocks.LOOM.isEnabled() && ModBlocks.BANNER.isEnabled()) {
 			API.registerRecipeHandler(new ganymedes01.etfuturum.compat.nei.LoomHandler());
 			API.registerUsageHandler(new ganymedes01.etfuturum.compat.nei.LoomHandler());

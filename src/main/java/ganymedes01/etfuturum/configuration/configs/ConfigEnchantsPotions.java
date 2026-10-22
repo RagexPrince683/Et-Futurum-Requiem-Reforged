@@ -34,9 +34,10 @@ public class ConfigEnchantsPotions extends ConfigBase {
 
 	@Override
 	protected void syncConfigOptions() {
-		dolphinGraceID = getInt("dolphinGraceID", catPotions, 31, 0, Short.MAX_VALUE, "Dolphins temporarily reduce horizontal water drag. Keep stable.");
-		darknessID = getInt("darknessID", catPotions, 29, 0, Short.MAX_VALUE, "Warden darkness. Keep stable; occupied or out-of-range IDs fail explicitly.");
-		nautilusBreathID = getInt("nautilusBreathID", catPotions, 30, 0, Short.MAX_VALUE, "Breath of the Nautilus pauses oxygen consumption without replenishing air. Keep stable.");
+		String allocation = " -1 uses the persistent automatic allocation; existing explicit IDs are imported and preserved. Keep config/legacy-potion-ids.properties with saves and identical on clients/server.";
+		dolphinGraceID = getInt("dolphinGraceID", catPotions, -1, -1, Short.MAX_VALUE, "Dolphins temporarily reduce horizontal water drag." + allocation);
+		darknessID = getInt("darknessID", catPotions, -1, -1, Short.MAX_VALUE, "Warden darkness." + allocation);
+		nautilusBreathID = getInt("nautilusBreathID", catPotions, -1, -1, Short.MAX_VALUE, "Breath of the Nautilus pauses oxygen consumption without replenishing air." + allocation);
 		quickChargeID = getInt("quickChargeID", catEnchants, 204, 0, Short.MAX_VALUE, "Keep stable; occupied IDs fail explicitly.");
 		multishotID = getInt("multishotID", catEnchants, 205, 0, Short.MAX_VALUE, "Keep stable; occupied IDs fail explicitly.");
 		piercingID = getInt("piercingID", catEnchants, 206, 0, Short.MAX_VALUE, "Keep stable; occupied IDs fail explicitly.");
@@ -55,8 +56,8 @@ public class ConfigEnchantsPotions extends ConfigBase {
 		swiftSneakID = getInt("swiftSneakID", catEnchants, 202, 0, Short.MAX_VALUE, "");
 
 		//potions
-		levitationID = getInt("levitationID", catPotions, 27, 0, Short.MAX_VALUE, "Since this is essential for Shulkers, this is tied to Shulkers being enabled instead of having its own option.");
-		glowingID = getInt("glowingID", catPotions, 28, 0, Short.MAX_VALUE, "");
+		levitationID = getInt("levitationID", catPotions, -1, -1, Short.MAX_VALUE, "Tied to Shulkers being enabled." + allocation);
+		glowingID = getInt("glowingID", catPotions, -1, -1, Short.MAX_VALUE, allocation);
 	}
 
 }

@@ -133,6 +133,7 @@ public class ClientProxy extends CommonProxy {
 		}
 
 		RenderingRegistry.registerBlockHandler(new BlockExtendedCrossedSquaresRenderer());
+		RenderingRegistry.registerBlockHandler(new ReleasedBlockRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockNewFenceRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockTrapDoorRenderer(RenderIDs.TRAPDOOR));
 		RenderingRegistry.registerBlockHandler(new BlockDoorRenderer(RenderIDs.DOOR));
@@ -169,6 +170,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	private void registerEntityRenderers() {
+		MinecraftForgeClient.registerItemRenderer(ModItems.CROSSBOW.get(), new ItemCrossbowRenderer());
 		ModernMobRenderer.register();
 		ganymedes01.etfuturum.client.renderer.tileentity.CopperMobBlockRenderer.register();
 		MinecraftForge.EVENT_BUS.register(new ganymedes01.etfuturum.client.renderer.entity.MobVisualEffects());

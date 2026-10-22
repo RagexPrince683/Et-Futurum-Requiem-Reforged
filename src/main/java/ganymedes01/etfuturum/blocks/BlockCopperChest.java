@@ -6,7 +6,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 public class BlockCopperChest extends BlockContainer {
-	public BlockCopperChest() { super(Material.iron); setBlockName("etfuturum.copper_chest"); setBlockTextureName("copper_block"); setHardness(2.5F); setCreativeTab(ganymedes01.etfuturum.EtFuturum.creativeTabBlocks); }
+	public BlockCopperChest() { super(Material.iron); setBlockName("etfuturum.copper_chest"); setBlockTextureName("copper_block"); setHardness(2.5F); setStepSound(ganymedes01.etfuturum.client.sound.ModSounds.soundCopper); setBlockBounds(.0625F, 0, .0625F, .9375F, .875F, .9375F); setCreativeTab(ganymedes01.etfuturum.EtFuturum.creativeTabBlocks); }
 	@Override public int getRenderType() { return -1; }
 	@Override public boolean isOpaqueCube() { return false; }
 	@Override public boolean renderAsNormalBlock() { return false; }

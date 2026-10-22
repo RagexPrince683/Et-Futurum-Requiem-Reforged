@@ -28,6 +28,11 @@ public abstract class BlockModelBase implements ISimpleBlockRenderingHandler {
 	@Override
 	public void renderInventoryBlock(Block block, int meta, int modelID, RenderBlocks renderer) {
 		final Tessellator tessellator = Tessellator.instance;
+		double minX = renderer.renderMinX, minY = renderer.renderMinY, minZ = renderer.renderMinZ;
+		double maxX = renderer.renderMaxX, maxY = renderer.renderMaxY, maxZ = renderer.renderMaxZ;
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_CURRENT_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glPushMatrix();
+		try {
 		if (block.getRenderBlockPass() == 1) {
 			OpenGLHelper.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			OpenGLHelper.enableBlend();
@@ -38,8 +43,10 @@ public abstract class BlockModelBase implements ISimpleBlockRenderingHandler {
 		renderInventoryModel(block, meta, modelID, renderer, block.getBlockBoundsMinX(), block.getBlockBoundsMinY(), block.getBlockBoundsMinZ(), block.getBlockBoundsMaxX(), block.getBlockBoundsMaxY(), block.getBlockBoundsMaxZ());
 		tessellator.draw();
 
-		OpenGLHelper.translate(0.5F, 0.5F, 0.5F);
-		OpenGLHelper.disableBlend();
+		} finally {
+			renderer.setRenderBounds(minX, minY, minZ, maxX, maxY, maxZ);
+			GL11.glPopMatrix(); GL11.glPopAttrib();
+		}
 	}
 
 	protected void renderInventoryModel(Block block, int meta, int modelId, RenderBlocks renderer, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {

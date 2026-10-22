@@ -25,11 +25,8 @@ public class BlockDoorRenderer extends BlockModelBase {
 			return false;
 		}
 
-		if ((meta & 8) != 0) {
-			renderer.uvRotateTop = meta % 6;
-		}
-		boolean flag = renderer.renderStandardBlock(block, x, y, z);
-		renderer.uvRotateTop = 0;
-		return flag;
+		// The native door renderer resolves both halves, hinge UVs and state-dependent bounds.
+		// renderStandardBlock uses stale bounds and ordinary neighbor-face culling here.
+		return renderer.renderBlockDoor(block, x, y, z);
 	}
 }

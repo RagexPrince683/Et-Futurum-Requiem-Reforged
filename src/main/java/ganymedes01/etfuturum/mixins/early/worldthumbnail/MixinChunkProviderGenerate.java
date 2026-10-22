@@ -1,6 +1,5 @@
 package ganymedes01.etfuturum.mixins.early.worldthumbnail;
 
-import ganymedes01.etfuturum.client.SpawnChunkProgress;
 import ganymedes01.etfuturum.client.loading.LoadingScreenChunkStage;
 import ganymedes01.etfuturum.client.loading.LoadingScreenWorldGenTracker;
 import net.minecraft.block.Block;
@@ -95,12 +94,12 @@ public class MixinChunkProviderGenerate {
         LoadingScreenWorldGenTracker.markStage(chunkX, chunkZ, LoadingScreenChunkStage.FEATURES);
     }
 
+    // Both the enclosing method and this vanilla call must be remapped to SRG in production.
     @Inject(
-            method = "populate",
+            method = "populate(Lnet/minecraft/world/chunk/IChunkProvider;II)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/SpawnerAnimals;performWorldGenSpawning(Lnet/minecraft/world/World;Lnet/minecraft/world/biome/BiomeGenBase;IIIILjava/util/Random;)V",
-                    remap = false
+                    target = "Lnet/minecraft/world/SpawnerAnimals;performWorldGenSpawning(Lnet/minecraft/world/World;Lnet/minecraft/world/biome/BiomeGenBase;IIIILjava/util/Random;)V"
             )
     )
     private void etfu$markSpawn(IChunkProvider provider, int chunkX, int chunkZ, CallbackInfo ci) {

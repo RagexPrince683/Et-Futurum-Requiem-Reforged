@@ -37,4 +37,5 @@ public class RenderIDs {
 
 	public static final int EXTENDED_CROSSED_SQUARES = RenderingRegistry.getNextAvailableRenderId();
 	public static final int FENCE = RenderingRegistry.getNextAvailableRenderId();
+	public static final int RELEASED_BLOCK = RenderingRegistry.getNextAvailableRenderId();
 }

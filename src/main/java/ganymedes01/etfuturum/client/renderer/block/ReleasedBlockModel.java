@@ -1,0 +1,104 @@
+package ganymedes01.etfuturum.client.renderer.block;
+
+import com.google.gson.*;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+
+/** Released vanilla elements prepared once per atlas reload, emitted through the native chunk tessellator. */
+public final class ReleasedBlockModel {
+	private static final String[] SIDES = {"down", "up", "north", "south", "west", "east"};
+	private final List<Face> faces = new ArrayList<>();
+	public final IIcon particle;
+
+	public ReleasedBlockModel(IIconRegister atlas, String name) {
+		try (Reader reader = new InputStreamReader(Minecraft.getMinecraft().getResourceManager().getResource(
+				new ResourceLocation("etfuturum", "models/block/" + name + ".json")).getInputStream(), StandardCharsets.UTF_8)) {
+			JsonObject model = new JsonParser().parse(reader).getAsJsonObject();
+			JsonObject textures = model.getAsJsonObject("textures");
+			particle = atlas.registerIcon(texture(textures, "#particle"));
+			for (JsonElement value : model.getAsJsonArray("elements")) {
+				JsonObject element = value.getAsJsonObject();
+				double[] from = vector(element.getAsJsonArray("from")), to = vector(element.getAsJsonArray("to"));
+				JsonObject definitions = element.getAsJsonObject("faces");
+				for (int side = 0; side < SIDES.length; side++) if (definitions.has(SIDES[side])) {
+					JsonObject definition = definitions.getAsJsonObject(SIDES[side]);
+					JsonArray uv = definition.getAsJsonArray("uv");
+					if (uv == null) throw new IllegalArgumentException("Explicit UV required: " + name);
+					double[][] vertices = vertices(side, from, to);
+					if (element.has("rotation")) rotate(vertices, element.getAsJsonObject("rotation"));
+					int cull = -1;
+					if (definition.has("cullface")) cull = Arrays.asList(SIDES).indexOf(definition.get("cullface").getAsString());
+					float shade = element.has("shade") && !element.get("shade").getAsBoolean() ? 1 : side == 0 ? .5F : side == 1 ? 1 : side < 4 ? .8F : .6F;
+					faces.add(new Face(vertices, uv, definition.has("rotation") ? definition.get("rotation").getAsInt() / 90 : 0,
+							atlas.registerIcon(texture(textures, definition.get("texture").getAsString())), side, cull, shade));
+				}
+			}
+		} catch (IOException exception) { throw new IllegalStateException("Cannot load released block model " + name, exception); }
+	}
+	private static String texture(JsonObject textures, String key) {
+		for (int depth = 0; key.startsWith("#") && depth < 16; depth++) key = textures.get(key.substring(1)).getAsString();
+		if (key.startsWith("#")) throw new IllegalArgumentException("Cyclic block texture " + key);
+		return key.replace("minecraft:", "").replace("block/", "");
+	}
+	private static double[] vector(JsonArray values) { return new double[]{values.get(0).getAsDouble() / 16, values.get(1).getAsDouble() / 16, values.get(2).getAsDouble() / 16}; }
+	private static double[][] vertices(int side, double[] a, double[] b) {
+		double x = a[0], y = a[1], z = a[2], X = b[0], Y = b[1], Z = b[2];
+		return switch (side) {
+			case 0 -> new double[][]{{x,y,Z},{x,y,z},{X,y,z},{X,y,Z}};
+			case 1 -> new double[][]{{X,Y,Z},{X,Y,z},{x,Y,z},{x,Y,Z}};
+			case 2 -> new double[][]{{X,Y,z},{X,y,z},{x,y,z},{x,Y,z}};
+			case 3 -> new double[][]{{x,Y,Z},{x,y,Z},{X,y,Z},{X,Y,Z}};
+			case 4 -> new double[][]{{x,Y,z},{x,y,z},{x,y,Z},{x,Y,Z}};
+			default -> new double[][]{{X,Y,Z},{X,y,Z},{X,y,z},{X,Y,z}};
+		};
+	}
+	private static void rotate(double[][] vertices, JsonObject rotation) {
+		double[] origin = vector(rotation.getAsJsonArray("origin"));
+		double angle = Math.toRadians(rotation.get("angle").getAsDouble()), sin = Math.sin(angle), cos = Math.cos(angle);
+		int axis = "xyz".indexOf(rotation.get("axis").getAsString());
+		int a = (axis + 1) % 3, b = (axis + 2) % 3;
+		for (double[] vertex : vertices) {
+			double va = vertex[a] - origin[a], vb = vertex[b] - origin[b];
+			vertex[a] = origin[a] + va * cos - vb * sin; vertex[b] = origin[b] + va * sin + vb * cos;
+		}
+	}
+	public void render(Block block, IBlockAccess world, int x, int y, int z, IIcon override) {
+		Tessellator tess = Tessellator.instance;
+		if (world != null) tess.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
+		for (Face face : faces) {
+			if (world != null && face.cull >= 0) {
+				ForgeDirection direction = ForgeDirection.getOrientation(face.cull);
+				if (world.getBlock(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ).isOpaqueCube()) continue;
+			}
+			if (world == null) { ForgeDirection normal = ForgeDirection.getOrientation(face.side); tess.setNormal(normal.offsetX, normal.offsetY, normal.offsetZ); }
+			tess.setColorOpaque_F(face.shade, face.shade, face.shade);
+			IIcon icon = override == null ? face.icon : override;
+			for (int i = 0; i < 4; i++) {
+				int uv = (i + face.rotation) & 3;
+				double u = uv < 2 ? face.uv[0] : face.uv[2], v = uv == 0 || uv == 3 ? face.uv[1] : face.uv[3];
+				tess.addVertexWithUV(x + face.vertices[i][0], y + face.vertices[i][1], z + face.vertices[i][2], icon.getInterpolatedU(u), icon.getInterpolatedV(v));
+			}
+		}
+	}
+	private static final class Face {
+		final double[][] vertices;
+		final double[] uv;
+		final IIcon icon;
+		final int side, cull, rotation;
+		final float shade;
+		Face(double[][] vertices, JsonArray uv, int rotation, IIcon icon, int side, int cull, float shade) {
+			this.vertices = vertices; this.uv = new double[4]; for (int i = 0; i < 4; i++) this.uv[i] = uv.get(i).getAsDouble();
+			this.rotation = rotation; this.icon = icon; this.side = side; this.cull = cull; this.shade = shade;
+		}
+	}
+}

@@ -21,11 +21,11 @@ public final class MobSpawning {
 	private MobSpawning() { }
 	public static void init() {
 		FISH = EnumHelper.addCreatureType("EFR_FISH", EntityFish.class, ConfigEntities.fishPopulation, Material.water, true, false);
-		DOLPHINS = EnumHelper.addCreatureType("EFR_DOLPHIN", EntityDolphin.class, 5, Material.water, true, false);
-		AXOLOTLS = EnumHelper.addCreatureType("EFR_AXOLOTL", EntityAxolotl.class, 5, Material.water, true, false);
-		GLOW_SQUID = EnumHelper.addCreatureType("EFR_GLOW_SQUID", EntityGlowSquid.class, 5, Material.water, true, false);
+		DOLPHINS = EnumHelper.addCreatureType("EFR_DOLPHIN", EntityDolphin.class, ConfigEntities.dolphinPopulation, Material.water, true, false);
+		AXOLOTLS = EnumHelper.addCreatureType("EFR_AXOLOTL", EntityAxolotl.class, ConfigEntities.axolotlPopulation, Material.water, true, false);
+		GLOW_SQUID = EnumHelper.addCreatureType("EFR_GLOW_SQUID", EntityGlowSquid.class, ConfigEntities.glowSquidPopulation, Material.water, true, false);
 		DROWNED = EnumHelper.addCreatureType("EFR_DROWNED", EntityDrowned.class, ConfigEntities.drownedPopulation, Material.water, false, false);
-		NAUTILUS = EnumHelper.addCreatureType("EFR_NAUTILUS", EntityNautilus.class, 5, Material.water, true, false);
+		NAUTILUS = EnumHelper.addCreatureType("EFR_NAUTILUS", EntityNautilus.class, ConfigEntities.nautilusPopulation, Material.water, true, false);
 		nautilus = Arrays.asList(new BiomeGenBase.SpawnListEntry(EntityNautilus.class, 5, 1, 2), new BiomeGenBase.SpawnListEntry(EntityZombieNautilus.class, 1, 1, 1));
 		cod = Collections.singletonList(new BiomeGenBase.SpawnListEntry(EntityCod.class, 15, 3, 6));
 		salmon = Collections.singletonList(new BiomeGenBase.SpawnListEntry(EntitySalmon.class, 15, 1, 5));

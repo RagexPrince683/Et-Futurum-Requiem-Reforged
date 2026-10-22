@@ -18,6 +18,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 
 public class ModPotions extends Potion {
+	public static final PotionIdRegistry IDS = new PotionIdRegistry("etfuturum");
 
 	private final ResourceLocation icon;
 
@@ -30,16 +31,35 @@ public class ModPotions extends Potion {
 	public static Potion glowing;
 	public static Potion darkness, nautilusBreath, dolphinGrace;
 
+	public static void reserveIds() {
+		java.util.Map<String, Integer> requests = new java.util.TreeMap<>();
+		requests.put("dolphins_grace", ConfigEnchantsPotions.dolphinGraceID);
+		requests.put("darkness", ConfigEnchantsPotions.darknessID);
+		requests.put("breath_of_the_nautilus", ConfigEnchantsPotions.nautilusBreathID);
+		requests.put("levitation", ConfigEnchantsPotions.levitationID);
+		requests.put("glowing", ConfigEnchantsPotions.glowingID);
+		java.util.Set<String> enabled = new java.util.HashSet<>(requests.keySet());
+		if (!ConfigEntities.enableShulker) enabled.remove("levitation");
+		if (!ConfigBlocksItems.enableSpectralArrows) enabled.remove("glowing");
+		IDS.reserve(requests, enabled);
+	}
+
 	public static void init() {
-		dolphinGrace = new ModPotions("dolphins_grace", ConfigEnchantsPotions.dolphinGraceID, false, 0x88A3BE).setPotionName("potion.dolphins_grace");
-		darkness = new ModPotions("darkness", ConfigEnchantsPotions.darknessID, true, 0x292721).setPotionName("potion.darkness");
-		nautilusBreath = new ModPotions("breath_of_the_nautilus", ConfigEnchantsPotions.nautilusBreathID, false, 0xDA9560).setPotionName("potion.breath_of_the_nautilus");
+		IDS.allocate();
+		dolphinGrace = new ModPotions("dolphins_grace", IDS.id("dolphins_grace"), false, 0x88A3BE).setPotionName("potion.dolphins_grace");
+		darkness = new ModPotions("darkness", IDS.id("darkness"), true, 0x292721).setPotionName("potion.darkness");
+		nautilusBreath = new ModPotions("breath_of_the_nautilus", IDS.id("breath_of_the_nautilus"), false, 0xDA9560).setPotionName("potion.breath_of_the_nautilus");
+		IDS.track("dolphins_grace", dolphinGrace);
+		IDS.track("darkness", darkness);
+		IDS.track("breath_of_the_nautilus", nautilusBreath);
 		if (ConfigEntities.enableShulker) {
-			levitation = new PotionLevitation("levitation", ConfigEnchantsPotions.levitationID, true, 0xFFFFFF);
+			levitation = new PotionLevitation("levitation", IDS.id("levitation"), true, 0xFFFFFF);
+			IDS.track("levitation", levitation);
 		}
 
 		if (ConfigBlocksItems.enableSpectralArrows) {
-			glowing = new PotionGlowing("glowing", ConfigEnchantsPotions.glowingID, false, 9740385);
+			glowing = new PotionGlowing("glowing", IDS.id("glowing"), false, 9740385);
+			IDS.track("glowing", glowing);
 		}
 	}
 
