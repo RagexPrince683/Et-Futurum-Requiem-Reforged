@@ -7,6 +7,7 @@ import ganymedes01.etfuturum.core.utils.structurenbt.NBTStructure;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -38,6 +39,11 @@ public class WorldGenFossil extends WorldGenerator {
 		BlockPos size = fossilPair.getLeft().getSize(dir);
 		if (!world.checkChunksExist(x, y, z, x + size.getX(), y + size.getY(), z + size.getZ())) return false;
 		if (!canFossilGenerateHere(world, x, y, z, fossilPair.getLeft().getSize(dir))) return false;
+		if (ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.reserved(world, new StructureBoundingBox(x, y, z, x + size.getX() - 1, y + size.getY() - 1, z + size.getZ() - 1))) return false;
+		for (int dx = 0; dx < size.getX(); dx++) for (int dz = 0; dz < size.getZ(); dz++) for (int dy = 0; dy < size.getY(); dy++) {
+			Block existing = world.getBlock(x + dx, y + dy, z + dz);
+			if (existing.hasTileEntity(world.getBlockMetadata(x + dx, y + dy, z + dz)) || existing == Blocks.bedrock) return false;
+		}
 		fossilPair.getLeft().placeStructure(world, rand, x, y, z, dir, 0.9F);
 		fossilPair.getRight().placeStructure(world, rand, x, y, z, dir, 0.1F);
 		return true;

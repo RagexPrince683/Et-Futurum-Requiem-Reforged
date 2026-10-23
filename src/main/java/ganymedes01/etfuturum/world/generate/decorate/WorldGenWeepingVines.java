@@ -81,6 +81,7 @@ public class WorldGenWeepingVines extends WorldGenerator {
 
 	public static void placeWeepingVinesColumn(World world, Random rand, int x, int y, int z, int size/*, int minAge, int maxAge*/) {
 		for (int i = 0; i <= size; ++i) {
+			if (y - i <= 0 || !world.isAirBlock(x, y - i, z)) break;
 			if (world.isAirBlock(x, y - i, z)) {
 				if (i == size || !world.isAirBlock(x, y - i - 1, z)) {
 					//My weeping vines don't have an age value. However 1 is no-grow weeping vines, so we use that instead if the age is 25 (max age)

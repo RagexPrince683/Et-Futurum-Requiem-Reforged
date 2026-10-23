@@ -22,6 +22,7 @@ public class WorldGenGlowLichen extends WorldGenerator {
     @Override
     public boolean generate(World world, Random rand, int x, int y, int z)
     {
+		if (ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.reserved(world, new net.minecraft.world.gen.structure.StructureBoundingBox(x - 2, y - 2, z - 2, x + 2, y + 2, z + 2))) return false;
 		if (!world.checkChunksExist(x - 2, 0, z - 2, x + 2, world.getActualHeight() - 1, z + 2)) return false;
         if (world.isAirBlock(x, y, z) && world.getSavedLightValue(Sky, x, y, z) <= 3) {
             for (int side = 0; side < 6; side++) {

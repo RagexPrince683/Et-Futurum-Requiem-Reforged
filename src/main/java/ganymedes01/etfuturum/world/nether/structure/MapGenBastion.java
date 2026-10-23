@@ -31,7 +31,16 @@ public class MapGenBastion extends MapGenStructure {
 		int gx = Math.floorDiv(x, spacing), gz = Math.floorDiv(z, spacing);
 		Random random = new Random(gx * 341873128712L + gz * 132897987541L + worldObj.getSeed() + 30084232L);
 		if (x != gx * spacing + random.nextInt(spacing - 4) || z != gz * spacing + random.nextInt(spacing - 4)) return false;
-		return worldObj.getWorldChunkManager().getBiomeGenAt(x * 16 + 8, z * 16 + 8) != NetherBiomeManager.basaltDeltas;
+		if (worldObj.getWorldChunkManager().getBiomeGenAt(x * 16 + 8, z * 16 + 8) == NetherBiomeManager.basaltDeltas) return false;
+		int radius = (256 + spacing * 16 - 1) / (spacing * 16) + 1;
+		for (int dx = -radius; dx <= radius; dx++) for (int dz = -radius; dz <= radius; dz++) {
+			int nx = gx + dx, nz = gz + dz;
+			if (nx > gx || nx == gx && nz >= gz) continue;
+			Random other = new Random(nx * 341873128712L + nz * 132897987541L + worldObj.getSeed() + 30084232L);
+			int ox = nx * spacing + other.nextInt(spacing - 4), oz = nz * spacing + other.nextInt(spacing - 4);
+			if (Math.abs(ox - x) * 16 < 256 && Math.abs(oz - z) * 16 < 256) return false;
+		}
+		return !ganymedes01.etfuturum.world.structure.NativeStructureReservations.fortress(worldObj, new Start(worldObj, x, z).getBoundingBox());
 	}
 	@Override protected StructureStart getStructureStart(int x, int z) { return new Start(worldObj, x, z); }
 

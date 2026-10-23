@@ -20,6 +20,10 @@ public final class ModernMobs {
 		GameRegistry.registerTileEntity(ganymedes01.etfuturum.tileentities.TileEntityCopperStatue.class, "etfuturum.copper_golem_statue");
 		GameRegistry.registerTileEntity(ganymedes01.etfuturum.tileentities.TileEntityCopperChest.class, "etfuturum.copper_chest");
 		GameRegistry.registerTileEntity(ganymedes01.etfuturum.tileentities.TileEntityTrialSpawner.class, "etfuturum.trial_spawner");
+		GameRegistry.registerTileEntity(ganymedes01.etfuturum.tileentities.TileEntityDriedGhast.class, "etfuturum.dried_ghast");
+		GameRegistry.registerTileEntity(ganymedes01.etfuturum.tileentities.TileEntitySculkSensor.class, "etfuturum.sculk_sensor");
+		GameRegistry.registerTileEntity(ganymedes01.etfuturum.tileentities.TileEntitySculkShrieker.class, "etfuturum.sculk_shrieker");
+		GameRegistry.registerTileEntity(ganymedes01.etfuturum.tileentities.TileEntityVault.class, "etfuturum.vault");
 		GameRegistry.registerWorldGenerator(new MobAcquisitionWorldgen(), 10);
 		if (ConfigEntities.enableModernPassiveSpawning) {
 			spawn(EntityCat.class, 3, 1, 2, Type.PLAINS, Type.SWAMP, Type.SANDY, Type.CONIFEROUS);

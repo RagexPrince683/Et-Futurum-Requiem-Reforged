@@ -23,6 +23,7 @@ public class WorldGenDeepslateLayerBlob extends WorldGenMinable {
 
 	@Override
 	public boolean generate(World world, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_) {
+		if (ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.oreReserved(world, p_76484_3_, p_76484_4_, p_76484_5_, numberOfBlocks)) return false;
 		float f = p_76484_2_.nextFloat() * (float) Math.PI;
 		double d0 = p_76484_3_ + 8 + MathHelper.sin(f) * numberOfBlocks / 8.0F;
 		double d1 = p_76484_3_ + 8 - MathHelper.sin(f) * numberOfBlocks / 8.0F;

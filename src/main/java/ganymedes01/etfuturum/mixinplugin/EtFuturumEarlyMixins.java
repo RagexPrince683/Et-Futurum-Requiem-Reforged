@@ -265,6 +265,12 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 			mixins.add("nethermobs.MixinNautilusBreath");
 			mixins.add("nethermobs.MixinDolphinGrace");
 			mixins.add("nethermobs.MixinMobDungeons");
+			mixins.add("nethermobs.MixinUndergroundDungeons");
+			mixins.add("nethermobs.MixinUndergroundLakes");
+			mixins.add("nethermobs.MixinUndergroundOres");
+			mixins.add("nethermobs.MixinUndergroundSprings");
+			mixins.add("nethermobs.MixinUndergroundFlowers");
+			mixins.add("nethermobs.MixinUndergroundOrientation");
 			mixins.add("nethermobs.MixinChestLifecycle");
 			if (side == MixinEnvironment.Side.CLIENT) {
 				mixins.add("nethermobs.MixinWolfArmor");

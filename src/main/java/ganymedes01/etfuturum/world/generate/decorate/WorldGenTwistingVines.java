@@ -25,14 +25,7 @@ public class WorldGenTwistingVines extends WorldGenerator {
 				int yOff = y + MathHelper.getRandomIntegerInRange(rand, -spreadHeight, spreadHeight);
 				int zOff = z + MathHelper.getRandomIntegerInRange(rand, -spreadWidth, spreadWidth);
 
-				do {
-					yOff--;
-					if (yOff > 0) {
-						break;
-					}
-				} while (world.isAirBlock(xOff, yOff + 1, zOff));
-
-				yOff++;
+				while (yOff > 1 && world.isAirBlock(xOff, yOff - 1, zOff)) yOff--;
 
 				if (/*findFirstAirBlockAboveGround(world, x, y, z) this was moved to above && */!isInvalidPlacementLocation(world, xOff, yOff, zOff)) {
 					int i1 = MathHelper.getRandomIntegerInRange(rand, 1, maxHeight);
@@ -69,6 +62,7 @@ public class WorldGenTwistingVines extends WorldGenerator {
 	//Originally this was named place WEEPING vines column. Mojang getting lazy with copied code without at least renaming it...
 	public static void placeTwistingVinesColumn(World world, Random rand, int x, int y, int z, int size/*, int minAge, int maxAge*/) {
 		for (int i = 0; i <= size; ++i) {
+			if (y + i >= world.getActualHeight() - 1 || !world.isAirBlock(x, y + i, z)) break;
 			if (world.isAirBlock(x, y + i, z)) {
 				if (i == size || !world.isAirBlock(x, y + i + 1, z)) {
 					//My twisting vines don't have an age value. However 1 is no-grow weeping vines, so we use that instead if the age is 25 (max age)

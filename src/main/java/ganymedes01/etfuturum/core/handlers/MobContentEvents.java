@@ -26,11 +26,14 @@ import net.minecraft.init.*;
 public final class MobContentEvents {
 	public static final MobContentEvents INSTANCE = new MobContentEvents();
 	private MobContentEvents() { }
+	@SubscribeEvent public void deepDarkSpawns(net.minecraftforge.event.entity.living.LivingSpawnEvent.CheckSpawn event) {
+		if (!event.world.isRemote && ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.containsCity(event.world, MathHelper.floor_double(event.x), MathHelper.floor_double(event.y), MathHelper.floor_double(event.z))) event.setResult(Event.Result.DENY);
+	}
 	@SubscribeEvent public void playerTick(TickEvent.PlayerTickEvent event) {
 		EntityPlayer player = event.player;
 		if (event.phase != TickEvent.Phase.END || player.worldObj.isRemote || player.ticksExisted % 20 != 0) return;
 		NBTTagCompound data = player.getEntityData();
-		for (String timer : new String[]{"EFRBadOmen", "EFRHeroOfVillage"}) if (data.getInteger(timer) > 0) data.setInteger(timer, Math.max(0, data.getInteger(timer) - 20));
+		for (String timer : new String[]{"EFRBadOmen", "EFRHeroOfVillage", "EFRTrialOmen"}) if (data.getInteger(timer) > 0) data.setInteger(timer, Math.max(0, data.getInteger(timer) - 20));
 		if (ConfigEntities.enableRaids && data.getInteger("EFRBadOmen") > 0 && player.worldObj.difficultySetting != EnumDifficulty.PEACEFUL && !player.capabilities.disableDamage) {
 			net.minecraft.village.Village village = player.worldObj.villageCollectionObj.findNearestVillage(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ), 0);
 			if (village != null && RaidProgress.get(player.worldObj).start(player.worldObj, player, village)) data.setInteger("EFRBadOmen", 0);

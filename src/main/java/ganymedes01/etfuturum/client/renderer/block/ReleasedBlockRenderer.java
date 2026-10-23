@@ -18,11 +18,18 @@ public final class ReleasedBlockRenderer extends BlockModelBase {
 		if (block instanceof BlockTurtleEgg egg) return egg.getReleasedModel(meta);
 		if (block instanceof BlockSnifferCrop crop) return crop.getReleasedModel(meta);
 		if (block instanceof BlockSnifferEgg egg) return egg.getReleasedModel(meta);
+		if (block instanceof BlockStructureDecoration decoration) return decoration.getReleasedModel(meta);
 		if (block instanceof BlockDriedGhast ghast) return ghast.getReleasedModel(meta);
 		if (block instanceof BlockFrogspawn frogspawn) return frogspawn.getReleasedModel(meta);
 		return ((BlockSnifferPlant) block).getReleasedModel(meta);
 	}
 	@Override public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int id, RenderBlocks renderer) {
+		if (block instanceof BlockDriedGhast && net.minecraftforge.client.MinecraftForgeClient.getRenderPass() == 1) {
+			if ((world.getBlockMetadata(x, y, z) & 4) == 0) return false;
+			IBlockAccess previous = renderer.blockAccess;
+			try { renderer.blockAccess = new ContainedWaterAccess(world, x, y, z); return renderer.renderBlockLiquid(net.minecraft.init.Blocks.water, x, y, z); }
+			finally { renderer.blockAccess = previous; }
+		}
 		model(block, world.getBlockMetadata(x, y, z)).render(block, world, x, y, z, renderer.hasOverrideBlockTexture() ? renderer.overrideBlockTexture : null);
 		return true;
 	}

@@ -14,6 +14,7 @@ public class WorldGenDripstone extends WorldGenerator {
 	@Override
 	public boolean generate(World world, Random random, int x, int ignoredY, int z) {
 		if (world.provider.dimensionId != 0 || !world.checkChunksExist(x - 1, 0, z - 1, x + 16, 255, z + 16)) return false;
+		if (ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.reserved(world, new net.minecraft.world.gen.structure.StructureBoundingBox(x, 12, z, x + 15, 50, z + 15))) return false;
 		DoublePerlinNoiseSampler noise = DoublePerlinNoiseSampler.create(new Random(world.getSeed()), -4, 1.0D);
 		Block pointed = ModBlocks.POINTED_DRIPSTONE.get();
 		for (int dx = 0; dx < 16; dx++) for (int dz = 0; dz < 16; dz++) {

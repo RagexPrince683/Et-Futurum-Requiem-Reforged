@@ -144,7 +144,10 @@ public enum ModItems {
 
 	//Debug Item
 	DEBUGGING_TOOL(Reference.DEV_ENVIRONMENT, new DebugTestItem()),
-	BANNER_PATTERN(ConfigBlocksItems.enableBanners, new ItemBannerPattern());
+	BANNER_PATTERN(ConfigBlocksItems.enableBanners, new ItemBannerPattern()),
+	TRIAL_KEY(true, new BaseItem("trial_key")),
+	OMINOUS_TRIAL_KEY(true, new BaseItem("ominous_trial_key")),
+	ECHO_SHARD(ConfigExperiments.enableSculk, new BaseItem("echo_shard"));
 
 	public static final ModItems[] CHEST_BOATS = new ModItems[]{OAK_CHEST_BOAT, SPRUCE_CHEST_BOAT, BIRCH_CHEST_BOAT, JUNGLE_CHEST_BOAT, ACACIA_CHEST_BOAT, DARK_OAK_CHEST_BOAT, CHERRY_CHEST_BOAT, BAMBOO_CHEST_RAFT};
 	public static final ModItems[] BOATS = new ModItems[]{OAK_BOAT, SPRUCE_BOAT, BIRCH_BOAT, JUNGLE_BOAT, ACACIA_BOAT, DARK_OAK_BOAT, CHERRY_BOAT, BAMBOO_RAFT};

@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderGlobal.class)
 public abstract class MixinRenderGlobal {
 	@Unique private static final ResourceLocation etfuturum$END_FLASH =
-			new ResourceLocation(Tags.MC_ASSET_VER + ":textures/environment/end_flash.png");
+			new ResourceLocation("etfuturum:textures/environment/end_flash.png");
 	@Shadow private Minecraft mc;
 	@Shadow private WorldClient theWorld;
 

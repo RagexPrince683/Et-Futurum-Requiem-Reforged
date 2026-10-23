@@ -2462,3 +2462,13 @@ enchantment.channeling=Channeling
 potion.darkness=Darkness
 potion.breath_of_the_nautilus=Breath of the Nautilus
 potion.dolphins_grace=Dolphin's Grace
+
+tile.etfuturum.reinforced_deepslate.name=Reinforced Deepslate
+tile.etfuturum.sculk_sensor.name=Sculk Sensor
+tile.etfuturum.vault.name=Vault
+tile.etfuturum.candle.name=Candle
+tile.etfuturum.decorated_pot.name=Decorated Pot
+tile.etfuturum.heavy_core.name=Heavy Core
+item.etfuturum.trial_key.name=Trial Key
+item.etfuturum.ominous_trial_key.name=Ominous Trial Key
+item.etfuturum.echo_shard.name=Echo Shard

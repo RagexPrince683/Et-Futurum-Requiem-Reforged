@@ -1,0 +1,69 @@
+# Underground structures and ghast progression (Forge 1.7.10)
+
+The content reference is released Java Edition 1.21.11. The runtime, saves, loader and world height remain Minecraft Forge 1.7.10. These are native legacy adaptations, not a claim of complete modern parity.
+
+## Generation and configuration
+
+`world.cfg` provides independent `enableAncientCities` and `enableTrialChambers` switches. Both respect Generate Structures and affect new terrain only. Cities additionally require the existing experimental `enableSculk` gate and deepslate content. Chambers require copper, tuff and cobbled deepslate. Registrations for the new vaults, keys and decorative dependencies remain available when generation is disabled.
+
+The underground generators support the native `ChunkProviderGenerate` Overworld, including EFR's surface-biome selection. Superflat, replacement terrain providers, Nether and End terrain are excluded. No surface biome IDs or chunk formats change. Ancient Cities select elevated native biomes; they create their own local Deep Dark cavern rather than assigning a two-dimensional Deep Dark surface biome across the whole column.
+
+One deterministic candidate occupies each 48-chunk placement region. Its center varies within the central eight chunks; the seed selects a city or chamber. Disabled or unsuitable candidates remain empty rather than changing into another structure. Independent regions have enough separation for the 116-block assembly radius. `/efr_locate ancient_city` and `/efr_locate trial_chambers` search two placement regions in each direction for a saved structure or viable candidate. Searches can return no result. This is an operator command; cartographer exploration-map trades are not implemented.
+
+The canonical layout is built before placement from released jigsaw templates and weighted pools. Connectors must match names, facing and, where applicable, top alignment. Contained decorations are allowed inside their owning room; unrelated piece bounds cannot overlap. Released fallback pools and closed outer connectors terminate rejected branches. Chamber mob-pool aliases are chosen once for the structure. Layouts are bounded to 256 pieces, seven city attachment levels or twenty chamber attachment levels. The legacy height window can reject a branch or a whole candidate; templates themselves are never cropped vertically.
+
+### Height adaptation and terrain
+
+Complete template bounds are translated into Y=8..48. The surrounding two-block terrain boundary occupies Y=6..50 at most, above native bedrock. A candidate must have solid native terrain at least eight blocks above its highest enclosing boundary across its footprint. Terrain checks call the native terrain-noise stage on an independent provider; they neither request chunks nor run population. Native mineshaft and stronghold starts are predicted with their real seeded constructors and reserved first. A city or chamber yields to an intersecting native structure.
+
+Cities deliberately excavate a bounded cavern, retain a deepslate floor and roof, and add surrounding sculk, sensors, catalysts and naturally summoning shriekers. Sculk patches replace natural terrain and leave tile entities, reinforced deepslate and crafted structure blocks intact. Natural creature spawning is suppressed within saved city bounds. Chambers excavate the union of their rooms and connectors and add a solid tuff boundary to seal caves and fluids. Excavation completes before templates and contained decorations are placed, preventing a later room preparation pass from erasing earlier functional content. Lakes, dungeons, geodes, buried fossils, native ore/stone veins and EFR ore/deepslate blobs respect the same saved reservations. Lake checks use the origin after the native downward ground search. Natural spring columns within eight blocks of the reserved horizontal footprint are excluded above/inside the structure so immediate vanilla flow cannot enter through an unpopulated neighboring cave. Underground flowers, glow lichen, cave vines and dripstone also yield to reserved rooms.
+
+Native `MapGenStructure` data owns the start and component identities. Layout, rotations, processors, closed connectors and completed chunks are saved. Only the current population chunk is modified. Loot and processor randomness derives from world seed and block coordinates. Chest and torch orientation comes from the template while it is being placed, including when its neighboring support chunk has not populated yet; ordinary player placement keeps native behavior. A chunk completion ledger prevents repeating placement, refilling loot, or restoring blocks players removed. A new candidate whose footprint includes an existing saved chunk is rejected. Existing areas are not regenerated, and an already saved start retains its original layout after an update.
+
+### Other placement safeguards
+
+New bastions yield to predicted native fortress bounds before either structure is placed. A deterministic region priority reserves sufficient space between bastion candidates. Existing saved bastions and fortresses are retained. Prediction covers native structure algorithms, not arbitrary third-party replacements.
+
+Nether fossils require a loaded footprint, full body clearance and substantial Soul Sand/Soul Soil support. A bounded downward search selects a valid floor; fossils do not excavate walls. Buried Overworld fossils retain their intentional embedding but avoid protected tile entities, bedrock and reserved underground structures. Huge fungi validate their footprint before changing terrain. Twisting vines search down to support correctly; both Nether vine generators stop at obstacles instead of continuing beyond them. These are feature-specific rules: underground rooms are allowed to carve, while exposed bones and vegetation are not allowed to destroy surrounding terrain.
+
+## Gameplay dependencies
+
+| System | Legacy implementation |
+| --- | --- |
+| City layout | All 58 released city templates and seven pool files, central reinforced-deepslate monument, walls, paths, building variants, released degradation rules and loot-container translation. |
+| Deep Dark | City-local cavern and sculk floor; existing Sculk/Catalyst/Warden identities; new retained-model sensor and loaded-shrieker relay index. Sneaking and wool paths suppress walking vibrations; wool occludes the relay. Sensors provide a native redstone pulse. |
+| Shrieking | Existing player warning keys retained, ten-second warning cooldown, gradual warning decay, native Darkness effect and collision/support-tested Warden admission. Player-placed shriekers continue to drop/reset the natural summoning bit. |
+| Chamber layout | All 191 released chamber templates and weighted pool files, entrances, atria, intersections, corridors, staircases, several chamber families, contained platforms/decorations, dispensers, chests, barrels and loot pots. |
+| Trial encounters | Existing trial-spawner tile/identity retained; released normal/ominous mob configuration, per-structure melee/ranged/small-mob pools, participant scaling, persisted outstanding mobs, finite encounters, queued rewards and thirty-minute cooldown. Missing entities in unloaded chunks are not immediately treated as defeated. Legacy converted-dungeon trials keep their original default encounter/reward path. |
+| Vaults | Normal and ominous keys, one unlock per remembered player, persisted reward queues and a bounded 128-player history. Each player receives an independent released-table roll; successfully ejected stacks are removed from the queue. |
+| New dependencies | Reinforced Deepslate, Sculk Sensor, Vault, Trial Key, Ominous Trial Key, Candle, loot-bearing Decorated Pot, Echo Shard and placeable Heavy Core; existing Soul Fire is reused. Existing copper/tuff/deepslate families, records, foods, potions, entities, and sounds are reused. |
+
+The loot evaluator preserves released weights, counts, random-chance pools, nested tables, native enchantments, potion state, bottle amplifiers and stew effects. Missing content is deferred and logged by exact namespaced identity; it is never replaced with an unrelated ingredient or reward. Existing EFR record and glow-berry identities are mapped explicitly.
+
+### Deliberate limitations
+
+- There is no global three-dimensional cave-biome engine, modern negative-Y terrain, or modern jigsaw/codec runtime. The local cavern, candidate distribution, vertical limits and assembly bounds are adaptations.
+- The sensor relay covers moving players, wool and sneaking. It does not implement the complete modern vibration-event/frequency system for all blocks, projectiles and mobs. Existing experimental catalyst XP spreading remains disabled; this pass does not override that gate.
+- Ominous encounters use released mob/reward configurations and existing EFR omen state. Modern airborne item spawners, every equipment/drop rule, modern trial-effect UI and all modern encounter edge cases are not reproduced.
+- Pots retain breakable loot inventories with native cuboid geometry. Pottery sherd designs, insertion interactions and archaeology are not implemented. City Soul Fire reuses the existing vanilla-fire Mixin and soul-sand support, blue textures, damage and non-spreading behavior. When the existing `soulFire` Mixin switch is disabled, city flame markers retain clearance instead of introducing spreading ordinary fire. Candle colors/counts, powder-snow physics and lectern/campfire behavior are adapted or omitted: one candle model is used, powder snow is solid snow, lecterns are decorative bookshelves, and campfire positions retain clearance. Native 1.7.10 stair corners and redstone semantics apply.
+- Armor trims/smithing templates, shields, Swift Sneak, bamboo hanging signs and any other unavailable loot are deferred explicitly. The Heavy Core is placeable, but this pass does not add a mace/combat subsystem. Echo Shards do not introduce a recovery-compass subsystem.
+- Arbitrary replacement terrain/structure generators need their own reservation/terrain adapters. The new generators do not assume such providers use vanilla noise or structure algorithms.
+- The released city `walls/no_corners` pool references `intact_horizontal_wall_stairs_5`, which is absent from the released client. That entry is logged and skipped; the available released wall variants remain in the pool.
+
+## Dried Ghast and Happy Ghast
+
+A Dried Ghast contains source water in metadata bit 2; bits 0..1 remain its hydration stage. Placing it into source water or using a water bucket fills it. An empty bucket removes its contained source. Adjacent water alone does not count as waterlogging. The client renders the contained source in the native translucent water pass. This is a local block adaptation, not generalized waterlogging or a replacement fluid engine.
+
+A server-owned tile counts loaded game ticks. Four 6,000-tick hydration intervals produce the existing Happy Ghast entity at age -24,000: a real Ghastling. Removing water loses one visual stage per 6,000 loaded ticks. Changing wet/dry direction restarts the current interval. Stage, partial hydration/dehydration time and contained water survive saving and chunk unload; unloaded time does not advance growth. Existing stage-only blocks acquire their tile lazily through normal block lookup/random ticks. Breaking drops a fresh stage-zero item and restores contained water when removed by a player. Hydration progress is not copied to the item.
+
+The existing ageable entity owns maturation and its saved age. A Ghastling grows for 24,000 loaded living ticks; a snowball advances approximately ten percent of the remaining time, with server-owned consumption, sound and particles. One stable adult base size now drives age scaling on both sides: 0.95-block Ghastlings and four-block adults. The entity identity, harnesses and passenger behavior remain unchanged.
+
+Honey Blocks already exist under `enableHoney`, with their own renderer, sliding/collision behavior, piston tags, honey-bottle crafting and unpacking recipes. No duplicate Honey Block or recipe identity is introduced.
+
+## Crossbow presentation
+
+The crossbow adapts released item-display transforms after normalizing the legacy Forge hand transforms and correcting the legacy sprite plane by a quarter turn. Player loading uses a separate two-arm motion: the support arm pulls back over the enchantment-adjusted charge duration, then both arms adopt the charged aiming pose. Pillagers synchronize loading ticks from their server-owned attack task, retain charged state in their held stack, and distinguish walking/idle holding, loading and aiming. Their retained model uses its actual arm pivot rather than the legacy biped item transform.
+
+## Reference assets
+
+Templates, pools, processors, encounter configurations, loot tables, retained models and added textures are adapted from the official released 1.21.11 client. Minecraft assets retain Mojang's rights; see `THIRD_PARTY_NOTICES.md`. Release behavior references include [Java 1.21](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21) and [Java 1.21.6](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21-6).

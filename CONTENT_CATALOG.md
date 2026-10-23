@@ -56,13 +56,13 @@ This table records the starting inventory. Later sections supersede its baseline
 | 1.18 | Lush/dripstone cave biomes, height/noise engine replacement | not native EFR surface biomes | excluded; retain existing cave blocks/decorators |
 | 1.19 | Mud/packed mud/bricks, mangrove wood/roots | MUD, PACKED_MUD, MANGROVE_*; wood families | implemented blocks; mangrove propagule growth missing |
 | 1.19 | Mangrove Swamp, frogs/tadpoles/froglights | no biome/frog classes; no froglight registration | approved missing dependency chain |
-| 1.19 | Sculk catalyst/spread, deep dark, warden, recovery compass | SCULK/SCULK_CATALYST and empty catalyst tile | experimental; spreading disabled by Stage A; cave biome excluded |
+| 1.19 | Sculk, local Deep Dark caverns, Ancient Cities and Warden | Released city templates, native saved assembly, sensors/shriekers, existing catalyst/Warden | Experimental Sculk gate; global cave biomes and recovery compass remain unsupported; catalyst spreading stays disabled. See WORLD_GENERATION.md. |
 | 1.19 | Chest boats, disc 5/fragments, allay | chest boats/disc items registered; no allay | boats implemented; disc 5 fragments have existing dungeon/stronghold loot and disc crafting; allay candidate |
 | 1.20 | Cherry wood/trees/petals, Cherry Grove | existing tree and mountain decoration; no grove biome | blocks implemented; biome approved missing |
 | 1.20 | Bamboo wood/mosaics/rafts, chiseled bookshelf | bamboo families registered; no functional chiseled bookshelf | bamboo implemented; bookshelf candidate |
 | 1.20 | Archaeology, sniffer, camel, trims/templates, hanging signs | no complete native implementations located | candidates; preserve existing smithing progression |
 | 1.21 | Copper bulbs/grates/chiseled copper/doors/trapdoors, tuff family | corresponding ModBlocks and recipes | implemented; not missing merely because metadata groups variants |
-| 1.21 | Trial chambers, spawners/vaults, breeze/bogged, mace, new enchants | records have existing dungeon/stronghold loot adaptations; no functional trial subsystem | candidates, not automatic requirements |
+| 1.21 | Trial chambers, spawners/vaults, Breeze/Bogged | Released modular chambers, native encounters, normal/ominous vaults/keys and loot | Height/engine adaptations apply; mace/combat and unavailable trim/enchantment dependencies remain deferred. See WORLD_GENERATION.md. |
 | 1.21.2 | Bundles | no native bundle inventory implementation | candidate |
 | 1.21.4 | Pale Garden, pale oak, pale moss, eyeblossoms, creaking/heart, resin | no native registrations or generators | approved missing |
 | 1.21.5 | Wildflowers, leaf litter, firefly bush, dry grasses/cactus flower, animal variants | no corresponding complete native families | candidates |
@@ -109,9 +109,9 @@ The rows above are the starting inventory. The following describes the additions
 
 ### Deliberate exclusions and pending work
 
-Excluded by the request: cave biomes, general cave overhaul, world-height/noise/chunk-format replacement, generalized waterlogging, swimming/crawling overhaul, renderer/lighting replacement, comprehensive combat overhaul and post-1.21.11 content. Existing cave blocks and local decorators remain.
+The earlier Stage B scope excluded cave biomes and a general cave overhaul; the later structure pass adds only local city caverns. Other exclusions remain: world-height/noise/chunk-format replacement, generalized waterlogging, swimming/crawling overhaul, renderer/lighting replacement, comprehensive combat overhaul and post-1.21.11 content. Existing cave blocks and local decorators remain.
 
-Stage B7 adds the mob, equipment, raid, outpost and aquatic dependencies described in [MOB_COVERAGE.md](MOB_COVERAGE.md), including happy ghasts, copper golems and the 1.21.11 mounts. Full Trial Chambers/vaults/keys, Woodland Mansions, archaeology, armor trims, conduits and a replacement villager-profession engine remain outside these adapted mob acquisition paths. Dungeon trial spawners are not a Trial Chambers structure port.
+Stage B7 adds the mob, equipment, raid, outpost and aquatic dependencies described in [MOB_COVERAGE.md](MOB_COVERAGE.md), including happy ghasts, copper golems and the 1.21.11 mounts. Modular Trial Chambers/vaults/keys and experimental Ancient Cities are described in WORLD_GENERATION.md; converted dungeon spawners remain a separate acquisition path. Woodland Mansions, archaeology, armor trims, conduits and a replacement villager-profession engine remain outside these adaptations.
 
 Established adaptations retained: native 1.7.10 dragon combat rather than modern fight phases; optional totem crafting rather than an added illager subsystem; existing dungeon/stronghold record loot rather than unrelated new source structures. Sculk catalyst spreading remains disabled exactly as decided in Stage A. The new Nether/biome implementations also retain the limitations in the table. Future ports must distinguish these deliberate adaptations from unresolved acceptance checks and must not infer exact modern parity.
 

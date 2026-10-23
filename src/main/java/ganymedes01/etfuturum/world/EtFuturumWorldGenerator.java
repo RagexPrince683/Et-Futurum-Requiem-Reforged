@@ -180,6 +180,7 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 	@Override
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if (!isFlatWorld(chunkGenerator) || world.getWorldInfo().getGeneratorOptions().contains("decoration")) {
+			ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.populate(world, chunkGenerator, chunkX, chunkZ);
 			MobSpawning.seagrass(world, rand, chunkX, chunkZ);
 			if (dripstoneGen != null) dripstoneGen.generate(world, rand, (chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
 			int x;
@@ -189,7 +190,8 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 				x = (chunkX << 4) + rand.nextInt(16) + 8;
 				z = (chunkZ << 4) + rand.nextInt(16) + 8;
 				if (ConfigWorld.amethystRarity == 1 || rand.nextInt(ConfigWorld.amethystRarity) == 0) {
-					amethystGen.generate(world, rand, x, MathHelper.getRandomIntegerInRange(rand, 5, ConfigWorld.amethystMaxY - 5), z);
+					int geodeY = MathHelper.getRandomIntegerInRange(rand, 5, ConfigWorld.amethystMaxY - 5);
+					if (!ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.reserved(world, new net.minecraft.world.gen.structure.StructureBoundingBox(x - 8, geodeY - 8, z - 8, x + 8, geodeY + 8, z + 8))) amethystGen.generate(world, rand, x, geodeY, z);
 				}
 			}
 

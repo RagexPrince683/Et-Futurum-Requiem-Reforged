@@ -20,7 +20,8 @@ public final class ReleasedBlockModel {
 	private final List<Face> faces = new ArrayList<>();
 	public final IIcon particle;
 
-	public ReleasedBlockModel(IIconRegister atlas, String name) {
+	public ReleasedBlockModel(IIconRegister atlas, String name) { this(atlas, name, 0); }
+	public ReleasedBlockModel(IIconRegister atlas, String name, int rotation) {
 		try (Reader reader = new InputStreamReader(Minecraft.getMinecraft().getResourceManager().getResource(
 				new ResourceLocation("etfuturum", "models/block/" + name + ".json")).getInputStream(), StandardCharsets.UTF_8)) {
 			JsonObject model = new JsonParser().parse(reader).getAsJsonObject();
@@ -36,15 +37,17 @@ public final class ReleasedBlockModel {
 					if (uv == null) throw new IllegalArgumentException("Explicit UV required: " + name);
 					double[][] vertices = vertices(side, from, to);
 					if (element.has("rotation")) rotate(vertices, element.getAsJsonObject("rotation"));
+					for (double[] vertex : vertices) for (int turn = 0; turn < rotation; turn++) { double oldX = vertex[0]; vertex[0] = 1 - vertex[2]; vertex[2] = oldX; }
 					int cull = -1;
 					if (definition.has("cullface")) cull = Arrays.asList(SIDES).indexOf(definition.get("cullface").getAsString());
 					float shade = element.has("shade") && !element.get("shade").getAsBoolean() ? 1 : side == 0 ? .5F : side == 1 ? 1 : side < 4 ? .8F : .6F;
 					faces.add(new Face(vertices, uv, definition.has("rotation") ? definition.get("rotation").getAsInt() / 90 : 0,
-							atlas.registerIcon(texture(textures, definition.get("texture").getAsString())), side, cull, shade));
+							atlas.registerIcon(texture(textures, definition.get("texture").getAsString())), rotateSide(side, rotation), cull < 0 ? -1 : rotateSide(cull, rotation), shade));
 				}
 			}
 		} catch (IOException exception) { throw new IllegalStateException("Cannot load released block model " + name, exception); }
 	}
+	private static int rotateSide(int side, int rotation) { int[] next = {0, 1, 5, 4, 2, 3}; for (int i = 0; i < rotation; i++) side = next[side]; return side; }
 	private static String texture(JsonObject textures, String key) {
 		for (int depth = 0; key.startsWith("#") && depth < 16; depth++) key = textures.get(key.substring(1)).getAsString();
 		if (key.startsWith("#")) throw new IllegalArgumentException("Cyclic block texture " + key);

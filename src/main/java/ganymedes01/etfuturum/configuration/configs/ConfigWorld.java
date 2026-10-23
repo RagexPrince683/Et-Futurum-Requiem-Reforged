@@ -63,6 +63,7 @@ public class ConfigWorld extends ConfigBase {
 	public static boolean bambooWorldgen;
 	public static boolean enableBastions;
 	public static int bastionSpacing;
+	public static boolean enableAncientCities, enableTrialChambers;
 	public static boolean enableSurfaceBiomes;
 	public static int cherryGroveID, mangroveSwampID, paleGardenID, meadowID, groveID, snowySlopesID, jaggedPeaksID, frozenPeaksID, stonyPeaksID, bambooJungleID;
 	public static int warmOceanID, lukewarmOceanID, coldOceanID, deepLukewarmOceanID, deepColdOceanID, deepFrozenOceanID;
@@ -191,6 +192,8 @@ public class ConfigWorld extends ConfigBase {
 		amethystMaxY = getInt("amethystMaxY", catGeneration, 46, 6, 245, "Max Y level amethyst geodes should attempt to generate at");
 		cherryTreeRarity = getInt("cherryTreeRarity", catGeneration, 72, 0, Byte.MAX_VALUE, "Legacy mountain-biome cherry tree chance, 1/x per chunk; zero disables it. This fallback runs only when native Cherry Grove generation is disabled. Cherry Grove has its own biome decorator.");
 		bambooWorldgen = getBoolean("bambooWorldgen", catGeneration, true, "Whether bamboo should naturally spawn in the overworld. Turning this off allows you to use bamboo based blocks without bamboo world gen for mod compatability.");
+		enableAncientCities = getBoolean("enableAncientCities", catGeneration, true, "Generate released modular Ancient Cities with local Deep Dark caverns in new Overworld chunks. Requires experimental Sculk and deepslate. Adapted to Y 8..48; no retrogen or surface biome replacement.");
+		enableTrialChambers = getBoolean("enableTrialChambers", catGeneration, true, "Generate released modular Trial Chambers in new Overworld chunks, at Y 8..48. Requires copper and tuff; no retrogen.");
 		enableBastions = getBoolean("enableBastions", catGeneration, true, "Generate bastion remnants in new chunks of the experimental EFR Nether. Requires blackstone; respects the world's Generate Structures switch. No retrogen.");
 		bastionSpacing = getInt("bastionSpacing", catGeneration, 27, 8, 128, "Bastion candidate grid spacing in chunks. Existing saved structure starts keep their positions.");
 		enableSurfaceBiomes = getBoolean("enableSurfaceBiomes", catGeneration, true, "Add enabled modern surface biomes to native Forge climate generation in new chunks. Disabling generation retains registered biome IDs for existing saves. No retrogen or terrain-engine replacement.");

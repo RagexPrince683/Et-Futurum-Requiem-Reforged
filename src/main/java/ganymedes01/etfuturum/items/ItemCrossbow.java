@@ -11,7 +11,8 @@ import net.minecraft.world.World;
 public class ItemCrossbow extends Item {
 	public ItemCrossbow() { setUnlocalizedName("etfuturum.crossbow"); setTextureName("crossbow_standby"); setMaxStackSize(1); setMaxDamage(465); setCreativeTab(EtFuturum.creativeTabItems); }
 	public static boolean charged(ItemStack stack) { return stack.hasTagCompound() && stack.getTagCompound().getBoolean("Charged"); }
-	private static int chargeTime(ItemStack stack) { return 25 - 5 * Math.min(3, ganymedes01.etfuturum.ModEnchantments.level(ganymedes01.etfuturum.ModEnchantments.quickCharge, stack)); }
+	public static int chargeTime(ItemStack stack) { return 25 - 5 * Math.min(3, ganymedes01.etfuturum.ModEnchantments.level(ganymedes01.etfuturum.ModEnchantments.quickCharge, stack)); }
+	@cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT) public net.minecraft.util.IIcon getChargingIcon(ItemStack stack, float ticks) { return pulling[Math.min(2, Math.max(0, (int) (ticks * 3 / chargeTime(stack))))]; }
 	@cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT) private net.minecraft.util.IIcon loaded;
 	@cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT) private net.minecraft.util.IIcon[] pulling;
 	@Override @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT) public void registerIcons(net.minecraft.client.renderer.texture.IIconRegister icons) { super.registerIcons(icons); loaded = icons.registerIcon("crossbow_arrow"); pulling = new net.minecraft.util.IIcon[]{icons.registerIcon("crossbow_pulling_0"), icons.registerIcon("crossbow_pulling_1"), icons.registerIcon("crossbow_pulling_2")}; }

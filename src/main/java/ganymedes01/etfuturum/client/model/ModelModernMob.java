@@ -47,8 +47,14 @@ public class ModelModernMob extends ModelBase {
 			boolean crossbow = illager.getHeldItem() != null && illager.getHeldItem().getItem() instanceof ganymedes01.etfuturum.items.ItemCrossbow;
 			boolean armed = illager.isAttacking() || crossbow;
 			show("arms", !armed); show("right_arm", armed); show("left_arm", armed);
-			rotate("right_arm", crossbow ? -1.3F + pitch * .0174533F : armed ? -1.3F : -walk, crossbow ? -.3F + yaw * .0174533F : 0, 0);
-			rotate("left_arm", crossbow ? -1.3F + pitch * .0174533F : entity instanceof EntityIllusioner ? -1.3F : walk, crossbow ? .6F + yaw * .0174533F : 0, 0);
+			if (crossbow && entity instanceof EntityPillager pillager) {
+				if (pillager.getCrossbowChargeTicks() >= 0) CrossbowPose.charge(find("right_arm"), find("left_arm"), pillager.getCrossbowChargeTicks() + MathHelper.clamp_float(age - entity.ticksExisted, 0, 1), ganymedes01.etfuturum.items.ItemCrossbow.chargeTime(illager.getHeldItem()));
+				else if (illager.isAttacking() && ganymedes01.etfuturum.items.ItemCrossbow.charged(illager.getHeldItem())) CrossbowPose.hold(find("right_arm"), find("left_arm"), find("head"));
+				else { rotate("right_arm", -walk * .5F - .314159F, 0, 0); rotate("left_arm", walk, 0, 0); }
+			} else {
+				rotate("right_arm", armed ? -1.3F : -walk, 0, 0);
+				rotate("left_arm", entity instanceof EntityIllusioner ? -1.3F : walk, 0, 0);
+			}
 		}
 		if (entity instanceof EntityVex || entity instanceof EntityAllay) { rotate("right_wing", 0, .6F + MathHelper.cos(age * .8F) * .5F, 0); rotate("left_wing", 0, -.6F - MathHelper.cos(age * .8F) * .5F, 0); rotate("right_arm", -.6F, 0, -.2F); rotate("left_arm", -.6F, 0, .2F); }
 		if (entity instanceof EntityAllay allay && allay.isDancing()) rotate("body", 0, age * .15F, MathHelper.sin(age * .3F) * .3F);

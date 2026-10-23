@@ -581,7 +581,13 @@ public enum ModBlocks {
 	FROGSPAWN(ConfigEntities.enableFrogs, new BlockFrogspawn()),
 	OCHRE_FROGLIGHT(ConfigEntities.enableFrogs, new BlockFroglight("ochre_froglight")),
 	VERDANT_FROGLIGHT(ConfigEntities.enableFrogs, new BlockFroglight("verdant_froglight")),
-	PEARLESCENT_FROGLIGHT(ConfigEntities.enableFrogs, new BlockFroglight("pearlescent_froglight"))
+	PEARLESCENT_FROGLIGHT(ConfigEntities.enableFrogs, new BlockFroglight("pearlescent_froglight")),
+	REINFORCED_DEEPSLATE(ConfigExperiments.enableSculk, new BlockReinforcedDeepslate()),
+	SCULK_SENSOR(ConfigExperiments.enableSculk, new BlockSculkSensor()),
+	VAULT(true, new BlockVault()),
+	CANDLE(true, new BlockStructureDecoration("candle", "candle_one_candle").setLightLevel(.2F)),
+	DECORATED_POT(true, new BlockDecoratedPot()),
+	HEAVY_CORE(true, new BlockStructureDecoration("heavy_core", "heavy_core").setHardness(10).setResistance(30))
 	;
 
 	public static final ModBlocks[] DOORS = new ModBlocks[]{DOOR_SPRUCE, DOOR_BIRCH, DOOR_JUNGLE, DOOR_ACACIA, DOOR_DARK_OAK, CRIMSON_DOOR, WARPED_DOOR, MANGROVE_DOOR, CHERRY_DOOR, BAMBOO_DOOR};

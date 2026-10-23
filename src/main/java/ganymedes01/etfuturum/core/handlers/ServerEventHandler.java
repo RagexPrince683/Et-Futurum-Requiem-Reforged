@@ -128,6 +128,8 @@ public class ServerEventHandler {
 
 	public void onServerStopped() {
 		ganymedes01.etfuturum.world.structure.MapGenOceanMonument.clear();
+		ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.clear();
+		ganymedes01.etfuturum.tileentities.TileEntitySculkShrieker.clear();
 		ganymedes01.etfuturum.tileentities.TileEntityLightningRod.clearAll();
 		playersClosedContainers.clear();
 		armorTracker.clear();
@@ -141,6 +143,8 @@ public class ServerEventHandler {
 	public void onWorldUnload(WorldEvent.Unload event) {
 		if (!event.world.isRemote) {
 			ganymedes01.etfuturum.world.structure.MapGenOceanMonument.unload(event.world);
+			ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.unload(event.world);
+			ganymedes01.etfuturum.tileentities.TileEntitySculkShrieker.unload(event.world);
 			ganymedes01.etfuturum.tileentities.TileEntityLightningRod.clear(event.world);
 			removeLoadedChunks(event.world.provider.dimensionId);
 			playersClosedContainers.removeIf(player -> player.worldObj == event.world);

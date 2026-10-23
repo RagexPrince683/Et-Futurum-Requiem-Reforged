@@ -421,6 +421,8 @@ public class EtFuturum {
 
 		EtFuturumLootTables.init();
 		ganymedes01.etfuturum.world.nether.structure.BastionLoot.init();
+		MapGenStructureIO.registerStructure(ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.Start.class, "EFRUnderground");
+		MapGenStructureIO.func_143031_a(ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.Piece.class, "EFRUndergroundPiece");
 		MapGenStructureIO.registerStructure(ganymedes01.etfuturum.world.nether.structure.MapGenBastion.Start.class, "EFRBastion");
 		MapGenStructureIO.registerStructure(ganymedes01.etfuturum.world.structure.MapGenOceanMonument.Start.class, "EFROceanMonument");
 		MapGenStructureIO.func_143031_a(ganymedes01.etfuturum.world.structure.MapGenOceanMonument.Piece.class, "EFRMonumentPiece");
@@ -534,6 +536,7 @@ public class EtFuturum {
 	public void serverStarting(FMLServerStartingEvent event) {
 		ServerPacketExecutor.start();
 		event.registerServerCommand(new ganymedes01.etfuturum.command.CommandGameplayAudit());
+		event.registerServerCommand(new ganymedes01.etfuturum.command.CommandLocateUnderground());
 		if (ConfigFunctions.enableFillCommand) {
 			event.registerServerCommand(new CommandFill());
 		}
@@ -839,6 +842,7 @@ public class EtFuturum {
 		config.addSoundEvent(ver, "entity.player.attack.weak", "player");
 		config.addSoundEvent(ver, "entity.player.splash.high_speed", "player");
 		config.addSoundEvent(ver, "weather.end_flash", "weather");
+		for (String sound : new String[]{"block.dried_ghast.spawn", "block.sculk_sensor.clicking", "block.sculk_sensor.clicking_stop", "block.vault.insert_item", "block.vault.eject_item", "block.trial_spawner.ominous_activate"}) config.addSoundEvent(ver, sound, "block");
 
 		config.addSoundEvent(ver, "item.axe.scrape", "player");
 		config.addSoundEvent(ver, "item.axe.wax_off", "player");

@@ -1,6 +1,6 @@
 # Configuration trace â€” 2026-10-20
 
-This is a source trace, not proof that every configuration combination has run. All 371 public configuration fields are listed, including derived values and obsolete unloaded fields. Each load link contains the exact documented meaning. All qualified consumers are linked, including write sites; a reference alone does not prove effective behavior.
+This is a source trace, not proof that every configuration combination has run. The original 371-field audit is retained below, including derived values and obsolete unloaded fields; subsequent configuration additions are documented in the later sections. Each load link contains the exact documented meaning. All qualified consumers are linked, including write sites; a reference alone does not prove effective behavior.
 
 Loading: `EtFuturumEarlyMixins.initConfigs()` calls `ConfigBase.initializeConfigs()` and each `syncConfigOptions()` before content/Mixin selection. `onConstructingValues()` handles early compatibility. `ConfigBase.init()` resolves item/block names after pre-init; shulker bans now resolve here too.
 
@@ -520,3 +520,7 @@ Keep this file with the modpack and world backups, and distribute the same file 
 Automatic allocation respects the live table capacity and stays within IDs 1..127, the range that stock 1.7.10's signed-byte effect packets and NBT can represent. A full table fails with an explicit capacity error. Wider explicit overrides remain available for installations with appropriate registry, network and save-format extensions. Unmodified third-party mods still own their own registrations: an incompatible hardcoded or saved allocation is reported and is never silently moved. Changing existing saved IDs requires a deliberate save migration.
 
 For an installation blocked on its first combined startup by the old `nautilusBreathID=30` / `dolphinGraceID=31` defaults, explicitly set those two unused EFR-R allocations to `-1` before the first allocator-enabled launch, retaining Farmer's Delight's existing 30/31 and other established IDs. Do not reset IDs already used by saved effects or delete the allocation file to resolve a conflict.
+
+### Underground generation and local waterlogging
+
+`world.cfg` adds `enableAncientCities=true` and `enableTrialChambers=true` for new native Overworld terrain with Generate Structures enabled. Cities also require the existing experimental `enableSculk` registration gate and deepslate. Chambers require copper/tuff/deepslate content. Superflat and replacement terrain providers are excluded. Disabling generation retains saved identities; no automatic retrogen is performed. `/efr_locate ancient_city` and `/efr_locate trial_chambers` provide bounded operator discovery. See WORLD_GENERATION.md for terrain cover, height adaptation, reservation and gameplay limitations. Existing `enableMobDungeonContent`, Nether/Bastion gates and `enableHoney` retain their separate meanings.

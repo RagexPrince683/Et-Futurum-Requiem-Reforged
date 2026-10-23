@@ -15,6 +15,7 @@ public class ModernMobRenderer extends RenderLiving {
 	private final String kind, texture;
 	private final ModelModernMob model;
 	private ModelModernMob layer;
+	private static final ganymedes01.etfuturum.client.renderer.item.ItemCrossbowRenderer CROSSBOW = new ganymedes01.etfuturum.client.renderer.item.ItemCrossbowRenderer();
 	private final ModelModernMob baby;
 	private final ModelModernMob coral;
 	private static final String[] COLORS = {"white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
@@ -59,7 +60,10 @@ public class ModernMobRenderer extends RenderLiving {
 	private static class Layers { private static final java.util.Map<String, ModelModernMob> MODELS = new java.util.HashMap<>(); static ModelModernMob get(String kind) { ModelModernMob model = MODELS.get(kind); if (model == null) { model = new ModelModernMob(kind); MODELS.put(kind, model); } return model; } }
 	@Override protected void renderEquippedItems(EntityLivingBase entity, float partial) {
 		ItemStack stack = entity.getHeldItem(); if (stack == null || !(entity instanceof EntityIllager || entity instanceof EntityVex || entity instanceof EntityAllay || entity instanceof EntityCopperGolem)) return;
-		GL11.glPushMatrix(); model.poseArm(.0625F); GL11.glTranslatef(-.07F, .5F, -.1F); GL11.glRotatef(-90, 1, 0, 0); GL11.glScalef(.6F, .6F, .6F); renderManager.itemRenderer.renderItem(entity, stack, 0); GL11.glPopMatrix();
+		GL11.glPushMatrix(); model.poseArm(.0625F);
+		if (stack.getItem() instanceof ganymedes01.etfuturum.items.ItemCrossbow) CROSSBOW.renderModernHand(stack, entity);
+		else { GL11.glTranslatef(-.07F, .5F, -.1F); GL11.glRotatef(-90, 1, 0, 0); GL11.glScalef(.6F, .6F, .6F); renderManager.itemRenderer.renderItem(entity, stack, 0); }
+		GL11.glPopMatrix();
 	}
 	public static void register() {
 		register(EntityPillager.class, "illager", "illager/pillager", .5F); register(EntityVindicator.class, "illager", "illager/vindicator", .5F); register(EntityEvoker.class, "illager", "illager/evoker", .5F); register(EntityIllusioner.class, "illager", "illager/illusioner", .5F); register(EntityVex.class, "vex", "illager/vex", .3F); register(EntityRavager.class, "ravager", "illager/ravager", 1.1F);

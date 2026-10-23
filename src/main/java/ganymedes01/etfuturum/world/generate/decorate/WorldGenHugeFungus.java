@@ -57,6 +57,7 @@ public class WorldGenHugeFungus extends WorldGenAbstractTree {
 //			}
 
 			boolean flag = !planted && random.nextFloat() < 0.06F;
+			if (!ganymedes01.etfuturum.world.structure.PlacementChecks.clear(world, x - 4, y, z - 4, 9, i + 1, 9)) return false;
 			world.setBlock(x, y, z, Blocks.air);
 			if (!planted) {
 				world.setBlock(x, y - 1, z, Blocks.netherrack);

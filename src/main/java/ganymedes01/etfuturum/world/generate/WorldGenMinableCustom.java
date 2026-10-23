@@ -42,6 +42,7 @@ public class WorldGenMinableCustom extends WorldGenMinable {
 
 	@Override
 	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_) {
+		if (ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.oreReserved(p_76484_1_, p_76484_3_, p_76484_4_, p_76484_5_, numberOfBlocks)) return false;
 		if (ConfigWorld.deepslateReplacesStones && field_150519_a == ModBlocks.STONE.get() && p_76484_1_.getBlock(p_76484_3_, p_76484_4_, p_76484_5_) == ModBlocks.DEEPSLATE.get()) {
 			return false; //Don't even try to generate this vein if it starts in deepslate and this is a bountiful stone
 		}

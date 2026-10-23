@@ -4,6 +4,7 @@ import ganymedes01.etfuturum.items.ItemCrossbow;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -14,10 +15,10 @@ public class MixinCrossbowModel {
 	private void etfu$holdCrossbow(float limb, float amount, float age, float yaw, float pitch, float scale, Entity entity, CallbackInfo ci) {
 		if (!(entity instanceof EntityLivingBase living)) return;
 		ItemStack held = living.getHeldItem();
-		if (held == null || !(held.getItem() instanceof ItemCrossbow) || !ItemCrossbow.charged(held)) return;
+		if (held == null || !(held.getItem() instanceof ItemCrossbow) || !ItemCrossbow.charged(held) && (!(living instanceof net.minecraft.entity.player.EntityPlayer player) || player.getItemInUse() != held)) return;
 		ModelBiped model = (ModelBiped) (Object) this;
-		model.bipedRightArm.rotateAngleX = model.bipedLeftArm.rotateAngleX = -(float) Math.PI / 2 + model.bipedHead.rotateAngleX;
-		model.bipedRightArm.rotateAngleY = -.3F + model.bipedHead.rotateAngleY; model.bipedLeftArm.rotateAngleY = .6F + model.bipedHead.rotateAngleY;
-		model.bipedRightArm.rotateAngleZ = model.bipedLeftArm.rotateAngleZ = 0;
+		if (living instanceof net.minecraft.entity.player.EntityPlayer player && player.getItemInUse() == held)
+			ganymedes01.etfuturum.client.model.CrossbowPose.charge(model.bipedRightArm, model.bipedLeftArm, player.getItemInUseDuration() + MathHelper.clamp_float(age - living.ticksExisted, 0, 1), ItemCrossbow.chargeTime(held));
+		else ganymedes01.etfuturum.client.model.CrossbowPose.hold(model.bipedRightArm, model.bipedLeftArm, model.bipedHead);
 	}
 }

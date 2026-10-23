@@ -26,35 +26,25 @@ public class WorldGenNetherFossil extends WorldGenFossil {
 		NBTStructure fossil = fossils.get(rand.nextInt(fossils.size()));
 		ForgeDirection dir = ForgeDirection.getOrientation(rand.nextInt(4) + 2);
 		BlockPos size = fossil.getSize(dir);
-		if (!world.checkChunksExist(x, y, z, x + size.getX(), y + size.getY(), z + size.getZ())) return false;
-		if (!canFossilGenerateHere(world, x, y, z, fossil.getSize(dir))) return false;
-		fossil.placeStructure(world, rand, x, y, z, dir);
-		return true;
+		if (!world.checkChunksExist(x, 1, z, x + size.getX() - 1, world.getActualHeight() - 1, z + size.getZ() - 1)) return false;
+		for (int floor = Math.min(y, world.getActualHeight() - size.getY() - 1); floor >= 32; floor--) {
+			if (!validCorner(world, x, floor, z) || !canFossilGenerateHere(world, x, floor, z, size)) continue;
+			fossil.placeStructure(world, rand, x, floor, z, dir);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	protected boolean canFossilGenerateHere(World world, int x, int y, int z, BlockPos corners) {
-		int air = 0;
-		if (!validCorner(world, x, y, z)) {
-			air++;
-		}
-		if (!validCorner(world, x + corners.getX(), y, z)) {
-			air++;
-		}
-		if (!validCorner(world, x, y, z + corners.getZ())) {
-			air++;
-		}
-		if (!validCorner(world, x + corners.getX(), y, z + corners.getZ())) {
-			if (air++ >= 3) return false;
-		}
-		if (!validCorner(world, x + (corners.getX() >> 1), y, z + (corners.getZ() >> 1))) {
-			if (air++ >= 3) return false;
-		}
-		return air <= 3;
+		int support = 0;
+		for (int dx = 0; dx < corners.getX(); dx++) for (int dz = 0; dz < corners.getZ(); dz++) if (validCorner(world, x + dx, y, z + dz)) support++;
+		return support * 2 >= corners.getX() * corners.getZ() && ganymedes01.etfuturum.world.structure.PlacementChecks.clear(world, x, y, z, corners.getX(), corners.getY(), corners.getZ());
 	}
 
 	@Override
 	protected boolean validCorner(World world, int x, int y, int z) {
-		return world.getBlock(x, y - 1, z).isOpaqueCube() && world.isAirBlock(x, y, z);
+		net.minecraft.block.Block floor = world.getBlock(x, y - 1, z);
+		return (floor == net.minecraft.init.Blocks.soul_sand || floor == ganymedes01.etfuturum.ModBlocks.SOUL_SOIL.get()) && world.isAirBlock(x, y, z);
 	}
 }
