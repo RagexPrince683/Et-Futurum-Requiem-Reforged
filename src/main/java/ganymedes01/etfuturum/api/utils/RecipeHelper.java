@@ -19,6 +19,30 @@ public final class RecipeHelper {
 
     private RecipeHelper() {}
 
+    public static void addRecipe(ItemStack output, Object... input) {
+        addShapedRecipe(output, input);
+    }
+
+    public static void addRecipe(IRecipe recipe) {
+        if (!validateItems(recipe.getRecipeOutput())) return;
+        Object ingredients = null;
+        if (recipe instanceof ShapedOreRecipe) ingredients = ((ShapedOreRecipe) recipe).getInput();
+        else if (recipe instanceof ShapelessOreRecipe) ingredients = ((ShapelessOreRecipe) recipe).getInput();
+        else if (recipe instanceof net.minecraft.item.crafting.ShapedRecipes) ingredients = ((net.minecraft.item.crafting.ShapedRecipes) recipe).recipeItems;
+        else if (recipe instanceof net.minecraft.item.crafting.ShapelessRecipes) ingredients = ((net.minecraft.item.crafting.ShapelessRecipes) recipe).recipeItems;
+        if (ingredients instanceof Object[]) for (Object input : (Object[]) ingredients) if (input != null && !validateIngredient(input)) return;
+        if (ingredients instanceof Iterable) for (Object input : (Iterable<?>) ingredients) if (input != null && !validateIngredient(input)) return;
+        GameRegistry.addRecipe(recipe);
+    }
+
+    private static boolean validateIngredient(Object input) {
+        if (input instanceof Iterable) {
+            for (Object alternative : (Iterable<?>) input) if (validateIngredient(alternative)) return true;
+            return false;
+        }
+        return validateItems(input);
+    }
+
     public static void init() {
         RecipeSorter.register(Tags.MOD_ID + ":shaped_high_priority",
             HighPriorityShapedRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
@@ -217,7 +241,7 @@ public final class RecipeHelper {
     /// This is because we can't expect items and blocks to be finished registering before that.
     public static boolean validateItems(Object... objects) {
         for (Object object : objects) {
-            if (object == null || object == Blocks.air) return false;
+            if (object == null || object == Blocks.air || !ganymedes01.etfuturum.configuration.ContentAvailability.available(object)) return false;
             if (object instanceof String) continue;
             if (object instanceof ItemStack stack) {
                 if (stack.getItem() == null || stack.getItem().delegate.name() == null) return false;

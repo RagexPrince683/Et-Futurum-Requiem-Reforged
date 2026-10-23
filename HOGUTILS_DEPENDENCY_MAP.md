@@ -1,10 +1,10 @@
 # Former HogUtils dependency map
 
 This document records the audit against HogUtils revision
-`5782dbbe51c301512a08d820f122326984b19b7b`. Only facilities used by Et Futurum
+`5782dbbe51c301512a08d820f122326984b19b7b`. Only facilities used by UAB
 were internalized.
 
-| Former facility | Et Futurum owner | Runtime support / callers |
+| Former facility | UAB owner | Runtime support / callers |
 | --- | --- | --- |
 | Block, item, and biome tags | `ganymedes01.etfuturum.api.tags` | Early `Block`, `Item`, and `BiomeGenBase` Mixins attach metadata-aware containers. `ModTagging`, bees, brewing/enchanting fuel, pistons, bubble columns, goats, campfires, spectators, tools, and world generation use them. |
 | `BlockMetaPair`, `ItemMetaPair`, metadata maps | `ganymedes01.etfuturum.api.blocksanditems.utils` | Identity-keyed, wildcard-aware pairs and Java-collection-backed maps serve deepslate/raw ore, stripping, geodes, configuration, and entity/world mappings. |
@@ -14,11 +14,11 @@ were internalized.
 | `DummyWorld` | `ganymedes01.etfuturum.api.world.DummyWorld` | Global and per-instance fake block-state queries used by deepslate and raw-ore property delegation. |
 | Generation check | `ganymedes01.etfuturum.api.world.IGeneratingCheck` | The early `MixinChunkProviderServer` keeps a nested per-thread counter; the deepslate chunk Mixin queries it. |
 | Multi-block sounds | `ganymedes01.etfuturum.api.blocksanditems.block.IMultiBlockSound` | The existing client sound handler now applies BREAK, PLACE, HIT, and WALK sound types, including metadata-specific blocks and optional late Mixins. |
-| Registry iteration event | `ganymedes01.etfuturum.api.event.BlockItemIterateEvent` | Et Futurum posts init events after registry population for dynamic external-mod tags and armor/block sound discovery. |
+| Registry iteration event | `ganymedes01.etfuturum.api.event.BlockItemIterateEvent` | UAB posts init events after registry population for dynamic external-mod tags and armor/block sound discovery. |
 | Weighted random list | `ganymedes01.etfuturum.api.utils.WeighedRandomList` | Fox item-selection behavior. |
 
 HogUtils event, ambience, rendering, base-block, OreDictionary Mixin, command,
-configuration, and unrelated compatibility systems were not copied because Et Futurum
+configuration, and unrelated compatibility systems were not copied because UAB
 does not call or depend on them.
 
 ## Collection and dependency audit

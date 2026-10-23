@@ -1,4 +1,4 @@
-# Vanilla mob coverage â€” Java 1.8 through 1.21.11
+# UAB mob support
 
 The content ceiling is the **released Java Edition 1.21.11**, not snapshots or later releases. This catalog describes the maintained Forge **1.7.10** implementation. All 53 eligible mob entries now have maintained implementations, including elder/juvenile variants and the command-only Illusioner. **Partial** rows below identify remaining concrete differences; this is not a claim of complete modern parity.
 

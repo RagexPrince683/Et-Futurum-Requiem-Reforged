@@ -62,7 +62,7 @@ public class ModRecipes {
 
 	public static void init() {
 		MobRecipes.init();
-		GameRegistry.addRecipe(ModItems.TURTLE_HELMET.newItemStack(), "sss", "s s", 's', ModItems.TURTLE_SCUTE.get());
+		ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(ModItems.TURTLE_HELMET.newItemStack(), "sss", "s s", 's', ModItems.TURTLE_SCUTE.get());
 		if (ConfigBlocksItems.enableBanners) {
 			RecipeSorter.register(Tags.MOD_ID + ".RecipeDuplicatePattern", RecipeDuplicatePattern.class, Category.SHAPELESS, "after:minecraft:shapeless");
 			RecipeSorter.register(Tags.MOD_ID + ".RecipeAddPattern", RecipeAddPattern.class, Category.SHAPED, "after:minecraft:shaped");
@@ -119,9 +119,9 @@ public class ModRecipes {
 
 		if (ConfigFunctions.enableDoorRecipeBuffs && !ModsList.GTNH.isLoaded()) {
 			RecipeHelper.removeFirstRecipeWithOutput(Items.wooden_door, 0, false);
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.wooden_door, 3), "xx", "xx", "xx", 'x', "plankWood"));
+			ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(Items.wooden_door, 3), "xx", "xx", "xx", 'x', "plankWood"));
 			RecipeHelper.removeFirstRecipeWithOutput(Items.iron_door, 0, false);
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.iron_door, 3), "xx", "xx", "xx", 'x', "ingotIron"));
+			ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(Items.iron_door, 3), "xx", "xx", "xx", 'x', "ingotIron"));
 		}
 
 		if (ConfigBlocksItems.enableVanillaFences && !ModsList.GTNH.isLoaded()) {
@@ -803,8 +803,8 @@ public class ModRecipes {
 		RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output146, objects100);
 
 		if (ConfigBlocksItems.enableVanillaFences && !ModsList.GTNH.isLoaded()) {
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.fence, 3), "xyx", "xyx", 'x', "plankWood", 'y', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.nether_brick_fence, 6), "xyx", "xyx", 'x', Blocks.nether_brick, 'y', "ingotBrickNether"));
+			ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.fence, 3), "xyx", "xyx", 'x', "plankWood", 'y', "stickWood"));
+			ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.nether_brick_fence, 6), "xyx", "xyx", 'x', Blocks.nether_brick, 'y', "ingotBrickNether"));
 		}
 
 		for (EnumColor colour : EnumColor.VALUES) {
@@ -812,8 +812,8 @@ public class ModRecipes {
 			Object[] objects = new Object[]{"xxx", "xxx", " y ", 'x', new ItemStack(Blocks.wool, 1, colour.getDamage()), 'y', "stickWood"};
 			RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output1, objects);
 		}
-		GameRegistry.addRecipe(new RecipeDuplicatePattern());
-		GameRegistry.addRecipe(new RecipeAddPattern());
+		ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(new RecipeDuplicatePattern());
+		ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(new RecipeAddPattern());
 
 		ItemStack output145 = ModItems.WOODEN_ARMORSTAND.newItemStack();
 		Object[] objects99 = new Object[]{"xxx", " x ", "xyx", 'x', "stickWood", 'y', new ItemStack(Blocks.stone_slab)};
@@ -835,7 +835,7 @@ public class ModRecipes {
 
 		ItemStack output142 = ModItems.BEETROOT_SOUP.newItemStack();
 		RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, output142, "xxx", "xxx", " y ", 'x', "cropBeetroot", 'y', "bowlWood");
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.dye, 1, 1), "cropBeetroot"));
+		ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.dye, 1, 1), "cropBeetroot"));
 
 		if (!ModsList.GTNH.isLoaded()) {
 			ItemStack output3 = ModBlocks.END_BRICK_SLAB.newItemStack(6);
@@ -882,7 +882,7 @@ public class ModRecipes {
 
 		if (ModItems.TIPPED_ARROW.isEnabled() && ModItems.LINGERING_POTION.isEnabled()) {
 			RecipeSorter.register(Tags.MOD_ID + ".RecipeTippedArrow", RecipeTippedArrow.class, Category.SHAPED, "after:minecraft:shaped");
-			GameRegistry.addRecipe(new RecipeTippedArrow(ModItems.TIPPED_ARROW.newItemStack(), "xxx", "xyx", "xxx", 'x', Items.arrow, 'y', ModItems.LINGERING_POTION.newItemStack(1, OreDictionary.WILDCARD_VALUE)));
+			ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(new RecipeTippedArrow(ModItems.TIPPED_ARROW.newItemStack(), "xxx", "xyx", "xxx", 'x', Items.arrow, 'y', ModItems.LINGERING_POTION.newItemStack(1, OreDictionary.WILDCARD_VALUE)));
 		}
 
 		if (ModItems.SPECTRAL_ARROW.isEnabled()) {
@@ -1584,7 +1584,7 @@ public class ModRecipes {
 					RecipeHelper.addShapelessRecipe(RecipeHelper.Priority.HIGH, boat, "chestWood", inputBoat);
 				} else {
 					if (isOak) { //We're using the plankWood tag for this, so it needs to be in the vanilla sorter
-						GameRegistry.addRecipe(new ShapedOreRecipe(boat, (ConfigBlocksItems.replaceOldBoats ? "x x" : "xyx"), "xxx", 'x', "plankWood", 'y', new ItemStack(Items.wooden_shovel, 1)));
+						ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(new ShapedOreRecipe(boat, (ConfigBlocksItems.replaceOldBoats ? "x x" : "xyx"), "xxx", 'x', "plankWood", 'y', new ItemStack(Items.wooden_shovel, 1)));
 					} else { //Not a tagged recipe, we sort this before vanilla recipes, so it takes precedent over them
 						Object[] objects = new Object[]{(ConfigBlocksItems.replaceOldBoats ? "x x" : "xyx"), "xxx", 'x', entry.getValue().getPlank(), 'y', new ItemStack(Items.wooden_shovel, 1)};
 						RecipeHelper.addShapedRecipe(RecipeHelper.Priority.HIGH, boat, objects);
@@ -1606,7 +1606,7 @@ public class ModRecipes {
 				ItemStack shulker = ModBlocks.SHULKER_BOX.newItemStack();
 				shulker.setTagCompound(new NBTTagCompound());
 				shulker.getTagCompound().setByte("Color", (byte) (16 - i));
-				GameRegistry.addRecipe(new RecipeDyedShulkerBox(shulker, new Object[]{ModBlocks.SHULKER_BOX.get(), ore_dyes[i]}));
+				ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(new RecipeDyedShulkerBox(shulker, new Object[]{ModBlocks.SHULKER_BOX.get(), ore_dyes[i]}));
 			}
 		}
 

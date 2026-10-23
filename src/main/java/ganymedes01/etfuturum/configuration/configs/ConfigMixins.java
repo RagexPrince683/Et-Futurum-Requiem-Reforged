@@ -59,17 +59,8 @@ public class ConfigMixins extends ConfigBase {
 	static final String catFixes = "fixes";
 	static final String catMisc = "misc";
 
-	public ConfigMixins(File file) {
-		super(file);
-		setCategoryComment(catBackport, "Backports that can typically only have a clean implementation with mixins.");
-		setCategoryComment(catOptimization, "Better implementations of existing features.\nThis is generally used when doing something through the Forge API would be slower or less practical than using a Mixin.");
-		setCategoryComment(catFixes, "Fixes to vanilla issues which are necessary for backports.");
-		setCategoryComment(catMisc, "Mixins that don't fit in any other category.");
-
-		configCats.add(getCategory(catBackport));
-		configCats.add(getCategory(catOptimization));
-		configCats.add(getCategory(catFixes));
-		configCats.add(getCategory(catMisc));
+	public ConfigMixins() {
+		super("mixins");
 	}
 
 	@Override
@@ -87,7 +78,7 @@ public class ConfigMixins extends ConfigBase {
 		endPortalFix = getBoolean("endPortalFix", catBackport, true, "Makes the End Portal block (the actual portal, not the frame) have an item icon, proper hitbox and will not instantly destroy itself in other dimensions.\nModified classes: net.minecraft.block.BlockEndPortal");
 		fenceWallConnectFix = getBoolean("fenceWallConnectFix", catBackport, true, "Makes vanilla fences connect to modded ones of the same material. Might have connection issue with mods that don't reference BlockFence super code.\nModified classes: net.minecraft.block.BlockFence net.minecraft.block.BlockWall");
 		avoidDroppingItemsWhenClosing = getBoolean("avoidDroppingItemsWhenClosing", catBackport, false, "Experimental: avoid dropping items when closing an inventory, like in modern versions.\nModified Classes: net.minecraft.entity.player.EntityPlayerMP");
-		enableSpectatorMode = getBoolean("enableSpectatorMode", catBackport, true, "VERY EXPERIMENTAL!\nModified Classes: net.minecraft.world.WorldSettings.GameType net.minecraft.entity.Entity net.minecraft.world.World net.minecraft.entity.player.EntityPlayer net.minecraft.network.NetHandlerPlayServer net.minecraft.entity.player.InventoryPlayer net.minecraft.inventory.ContainerChest\nModified Client Classes: net.minecraft.client.renderer.EntityRenderer net.minecraft.entity.player.EntityPlayer net.minecraft.client.renderer.WorldRenderer");
+		enableSpectatorMode = getBoolean("enableSpectatorMode", catBackport, false, "VERY EXPERIMENTAL!\nModified Classes: net.minecraft.world.WorldSettings.GameType net.minecraft.entity.Entity net.minecraft.world.World net.minecraft.entity.player.EntityPlayer net.minecraft.network.NetHandlerPlayServer net.minecraft.entity.player.InventoryPlayer net.minecraft.inventory.ContainerChest\nModified Client Classes: net.minecraft.client.renderer.EntityRenderer net.minecraft.entity.player.EntityPlayer net.minecraft.client.renderer.WorldRenderer");
 		enableObservers = getBoolean("enableObservers", catBackport, true, "Modified Classes: net.minecraft.world.World net.minecraft.world.WorldServer");
 		blockHopperInteraction = getBoolean("blockHopperInteraction", catBackport, true, "Allows some blocks without tile entities (e.g. composters) to interact with hoppers. May still not interact with modded pipes.\nModified Classes: net.minecraft.tileentity.TileEntityHopper");
 

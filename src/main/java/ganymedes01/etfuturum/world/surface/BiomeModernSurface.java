@@ -32,8 +32,8 @@ public class BiomeModernSurface extends BiomeGenBase {
 				tree = new WorldGenCherryTrees(false);
 				setTemperatureRainfall(0.5F, 0.8F);
 				spawnableCreatureList.clear();
-				spawnableCreatureList.add(new SpawnListEntry(EntityPig.class, 1, 1, 2));
-				spawnableCreatureList.add(new SpawnListEntry(EntitySheep.class, 1, 1, 2));
+				ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, EntityPig.class, 1, 1, 2);
+				ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, EntitySheep.class, 1, 1, 2);
 				BiomeDictionary.registerBiomeType(this, Type.FOREST, Type.MOUNTAIN);
 				break;
 			case MANGROVE:
@@ -59,8 +59,8 @@ public class BiomeModernSurface extends BiomeGenBase {
 				theBiomeDecorator.flowersPerChunk = 12;
 				BiomeDictionary.registerBiomeType(this, Type.PLAINS, Type.MOUNTAIN);
 				spawnableCreatureList.clear();
-				spawnableCreatureList.add(new SpawnListEntry(EntitySheep.class, 2, 2, 6));
-				spawnableCreatureList.add(new SpawnListEntry(EntityHorse.class, 1, 1, 2));
+				ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, EntitySheep.class, 2, 2, 6);
+				ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, EntityHorse.class, 1, 1, 2);
 				break;
 			case BAMBOO:
 				tree = new WorldGenMegaJungle(false, 10, 20, 3, 3);
@@ -85,22 +85,22 @@ public class BiomeModernSurface extends BiomeGenBase {
 		spawnableWaterCreatureList.clear();
 		switch (kind) {
 			case CHERRY:
-				spawnableCreatureList.add(new SpawnListEntry(EntityPig.class, 1, 1, 2)); spawnableCreatureList.add(new SpawnListEntry(EntitySheep.class, 1, 1, 2)); rabbit(); break;
+				ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, EntityPig.class, 1, 1, 2); ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, EntitySheep.class, 1, 1, 2); rabbit(); break;
 			case MANGROVE:
-				if (ganymedes01.etfuturum.configuration.configs.ConfigEntities.enableFrogs) spawnableCreatureList.add(new SpawnListEntry(ganymedes01.etfuturum.entities.EntityFrog.class, 1, 2, 5)); break;
+				if (ganymedes01.etfuturum.configuration.configs.ConfigEntities.enableFrogs) ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, ganymedes01.etfuturum.entities.EntityFrog.class, 1, 2, 5); break;
 			case MEADOW:
-				spawnableCreatureList.add(new SpawnListEntry(EntitySheep.class, 2, 2, 6)); spawnableCreatureList.add(new SpawnListEntry(EntityHorse.class, 1, 1, 2)); rabbit(); break;
+				ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, EntitySheep.class, 2, 2, 6); ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, EntityHorse.class, 1, 1, 2); rabbit(); break;
 			case GROVE:
-				spawnableCreatureList.add(new SpawnListEntry(EntityWolf.class, 8, 4, 4)); rabbit();
-				if (ganymedes01.etfuturum.configuration.configs.ConfigEntities.enableFoxes) spawnableCreatureList.add(new SpawnListEntry(ganymedes01.etfuturum.entities.EntityFox.class, 8, 2, 4)); break;
+				ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, EntityWolf.class, 8, 4, 4); rabbit();
+				if (ganymedes01.etfuturum.configuration.configs.ConfigEntities.enableFoxes) ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, ganymedes01.etfuturum.entities.EntityFox.class, 8, 2, 4); break;
 			case SLOPES: rabbit(); goat(); break;
 			case JAGGED: case FROZEN: goat(); break;
-			case BAMBOO: spawnableCreatureList.add(new SpawnListEntry(EntityChicken.class, 10, 4, 4)); spawnableCreatureList.add(new SpawnListEntry(EntityOcelot.class, 2, 1, 1)); break;
+			case BAMBOO: ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, EntityChicken.class, 10, 4, 4); ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, EntityOcelot.class, 2, 1, 1); break;
 			default: break;
 		}
 	}
-	private void rabbit() { if (ganymedes01.etfuturum.configuration.configs.ConfigEntities.enableRabbit) spawnableCreatureList.add(new SpawnListEntry(ganymedes01.etfuturum.entities.EntityRabbit.class, 2, 2, 3)); }
-	private void goat() { if (ganymedes01.etfuturum.configuration.configs.ConfigEntities.enableGoats) spawnableCreatureList.add(new SpawnListEntry(ganymedes01.etfuturum.entities.EntityGoat.class, 5, 1, 3)); }
+	private void rabbit() { if (ganymedes01.etfuturum.configuration.configs.ConfigEntities.enableRabbit) ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, ganymedes01.etfuturum.entities.EntityRabbit.class, 2, 2, 3); }
+	private void goat() { if (ganymedes01.etfuturum.configuration.configs.ConfigEntities.enableGoats) ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableCreatureList, ganymedes01.etfuturum.entities.EntityGoat.class, 5, 1, 3); }
 	@Override public int getBiomeGrassColor(int x, int y, int z) { return kind == Kind.PALE ? 0x778272 : kind == Kind.CHERRY ? 0xB6DB61 : kind == Kind.MANGROVE ? 0x6A7039 : super.getBiomeGrassColor(x, y, z); }
 	@Override public int getBiomeFoliageColor(int x, int y, int z) { return kind == Kind.PALE ? 0x878D76 : kind == Kind.MANGROVE ? 0x8DB127 : super.getBiomeFoliageColor(x, y, z); }
 	@Override public void decorate(World world, Random random, int chunkX, int chunkZ) {

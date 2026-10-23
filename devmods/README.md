@@ -1,6 +1,5 @@
-# Development mods
+# UAB development mods
 
-- Put normal production/obfuscated Minecraft 1.7.10 mod jars directly in `devmods/`.
-- Put already-deobfuscated development jars in `devmods/deobf/`.
-- `runClient` and `runServer` automatically prepare production jars by remapping them through RetroFuturaGradle; the results are written to `build/devmods/remapped/`.
-- All jars in this directory are development-only dependencies and are not published or shipped inside Et Futurum.
+Place production Minecraft 1.7.10 mod JARs in `devmods/`, and already deobfuscated development JARs in `devmods/deobf/`.
+
+The client and server development tasks remap production JARs through the pinned RetroFuturaGradle tooling into `build/devmods/remapped/`. These local dependencies are neither published nor bundled into UAB. Keep personal installations and saves separate from disposable test instances.

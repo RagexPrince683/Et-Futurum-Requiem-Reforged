@@ -10,7 +10,7 @@ public class SwiftSneak extends Enchantment {
 
 	public SwiftSneak() {
 		super(ConfigEnchantsPotions.swiftSneakID, 1, EnumEnchantmentType.armor_legs);
-		Enchantment.addToBookList(this);
+		if (ConfigEnchantsPotions.enableSwiftSneak) Enchantment.addToBookList(this);
 		setName("swift_sneak");
 	}
 
@@ -31,6 +31,6 @@ public class SwiftSneak extends Enchantment {
 
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack) {
-		return stack != null && stack.getItem() == Items.book;
+		return ConfigEnchantsPotions.enableSwiftSneak && stack != null && stack.getItem() == Items.book;
 	}
 }

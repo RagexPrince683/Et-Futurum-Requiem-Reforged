@@ -1,6 +1,6 @@
 # Kreativ-Tab
-itemGroup.etfuturum.items=Et-Futurum-Items
-itemGroup.etfuturum.blocks=Et-Futurum-Blöcke
+itemGroup.etfuturum.items=UAB Items
+itemGroup.etfuturum.blocks=UAB Blocks
 
 # Verzauberungen
 enchantment.frost_walker=Eisläufer
@@ -55,8 +55,8 @@ gui.smithing.upgrade=Ausrüstung aufwerten
 gui.warn.continue=Fortsetzen...
 gui.warn.dismiss=Nicht erneut anzeigen.
 gui.warn.notice=HINWEIS:
-gui.warn.configSplit1=Da die gesamte Et-Futurum-Konfigurationsdatei sehr lang und schwierig zu navigieren ist, sind die Einstellungen jetzt auf mehrere Dateien verteilt. Dir wird diese Warnung angezeigt, weil du eine Datei aus einer früheren Version in "configs/etfuturum.cfg" hast. Es gibt kein System, um die Einstellungen automatisch zu übertragen, also wirf einen Blick in die neuen Dateien!
-gui.warn.configSplit2=Wenn du fertig bist, kannst du die alte Konfigurationsdatei löschen oder umbenennen, oder das Kästchen ankreuzen, um diese Warnung nicht länger anzuzeigen.
+gui.warn.configSplit1=UAB imports recognized legacy settings into config/uab.cfg and retains the original files.
+gui.warn.configSplit2=UAB imports recognized legacy settings into config/uab.cfg and retains the original files.
 gui.chat.update=%1$s Version %2$s ist verfügbar!
 gui.chat.update.download=Klicke hier um das Update von %s herunterzuladen!
 
@@ -1592,9 +1592,9 @@ efr.nei.weight=Gewicht
 				   
 efr.decoration.only=Nur Dekoration
 
-efr.warn.prerelease.version=§c§l[Debug]: §rDu benutzt eine Pre-Release-Version von §bEt §bFuturum §bRequiem§r. Diese Version könnte instabil sein, klicke hier, um auf GitHub Fehler zu melden.
-efr.log.prerelease.version=WARNUNG: Eine Pre-Release-Version von Et Futurum Requiem wird benutzt! Diese Instanz könnte instabil sein, erwarte mehr Fehler als üblich.
-efr.warn.prerelease.version.bugs=Bitte melde Fehler auf https://github.com/Roadhog360/Et-Futurum-Requiem/issues [Fehlermeldungen nur auf Englisch!]
+efr.warn.prerelease.version=§c§l[Debug]: §rDu benutzt eine Pre-Release-Version von §bUAB§r. Diese Version könnte instabil sein, klicke hier, um auf GitHub Fehler zu melden.
+efr.log.prerelease.version=WARNUNG: Eine Pre-Release-Version von UAB wird benutzt! Diese Instanz könnte instabil sein, erwarte mehr Fehler als üblich.
+efr.warn.prerelease.version.bugs=Bitte melde Fehler auf https://github.com/RagexPrince683/Et-Futurum-Requiem-Reforged/issues [Fehlermeldungen nur auf Englisch!]
 efr.critical.badbetterfpsalgorithm1=§4§l[KRITISCH]: §bBetterFPS §r ist mit einem schlechten Mathematik-Algorithmus ausgestattet.
 efr.critical.badbetterfpsalgorithm2= "rivens-half" oder "taylors" sollten nicht benutzt werden, um Schäden an deiner Welt zu vermeiden. Es wird empfohlen, in den Konfigurationseinstellungen "algorithm" durch eine andere Option zu ersetzen, am besten "vanilla".
 efr.critical.badbetterfpsalgorithm3= Diese Meldung wird dir gezeigt, weil die erwähnten Mathematik-Algorithmen Fehler enthalten und inkorrekte Werte generieren, welche den Speicherstand zerstören können.

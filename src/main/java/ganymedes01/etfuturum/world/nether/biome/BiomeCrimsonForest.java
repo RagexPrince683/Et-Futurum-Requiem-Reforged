@@ -15,10 +15,10 @@ public class BiomeCrimsonForest extends NetherBiomeBase {
 		this.fillerBlock = Blocks.netherrack;
 
 		spawnableMonsterList.clear();
-		this.spawnableMonsterList.add(new SpawnListEntry(EntityPigZombie.class, 1, 2, 4));
+		ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableMonsterList, EntityPigZombie.class, 1, 2, 4);
 		if (ganymedes01.etfuturum.configuration.configs.ConfigEntities.enableNetherMobs) {
-			spawnableMonsterList.add(new SpawnListEntry(ganymedes01.etfuturum.entities.EntityPiglin.class, 5, 3, 4));
-			spawnableMonsterList.add(new SpawnListEntry(ganymedes01.etfuturum.entities.EntityHoglin.class, 9, 3, 4));
+			ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableMonsterList, ganymedes01.etfuturum.entities.EntityPiglin.class, 5, 3, 4);
+			ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableMonsterList, ganymedes01.etfuturum.entities.EntityHoglin.class, 9, 3, 4);
 		}
 	}
 }

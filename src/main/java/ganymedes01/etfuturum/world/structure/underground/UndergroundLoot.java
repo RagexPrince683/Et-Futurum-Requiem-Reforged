@@ -94,9 +94,10 @@ public final class UndergroundLoot {
 		if (name.equals("splash_potion")) return new ItemStack(Items.potionitem, 1, 16384);
 		Item item = GameRegistry.findItem("etfuturum", name); if (item == null) item = GameRegistry.findItem("minecraft", name);
 		if (item == null) { deferred(id); return null; }
+		if (!ganymedes01.etfuturum.configuration.ContentAvailability.available(item)) return null;
 		return new ItemStack(item);
 	}
-	private static void deferred(String id) { if (DEFERRED.add(id)) org.apache.logging.log4j.LogManager.getLogger("EFR underground loot").warn("Deferred unavailable released loot: {}", id); }
+	private static void deferred(String id) { if (DEFERRED.add(id)) org.apache.logging.log4j.LogManager.getLogger("UAB underground loot").warn("Deferred unavailable released loot: {}", id); }
 	public static void fill(IInventory inventory, String table, Random random) {
 		for (ItemStack stack : roll(table, random)) {
 			List<Integer> empty = new ArrayList<>(); for (int i = 0; i < inventory.getSizeInventory(); i++) if (inventory.getStackInSlot(i) == null) empty.add(i);

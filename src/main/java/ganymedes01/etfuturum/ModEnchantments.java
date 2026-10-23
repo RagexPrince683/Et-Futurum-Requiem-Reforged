@@ -46,19 +46,19 @@ public class ModEnchantments {
 		RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.impalingID, "impaling"); impaling = new ganymedes01.etfuturum.enchantment.MobEquipmentEnchantment(ConfigEnchantsPotions.impalingID, "impaling", 5, 1);
 		RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.riptideID, "riptide"); riptide = new ganymedes01.etfuturum.enchantment.MobEquipmentEnchantment(ConfigEnchantsPotions.riptideID, "riptide", 3, 1);
 		RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.channelingID, "channeling"); channeling = new ganymedes01.etfuturum.enchantment.MobEquipmentEnchantment(ConfigEnchantsPotions.channelingID, "channeling", 1, 1);
-		if (ConfigEnchantsPotions.enableSoulSpeed) {
+		 {
 			RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.soulSpeedID, "Soul Speed");
 			soulSpeed = new ganymedes01.etfuturum.enchantment.SoulSpeed();
 		}
-		if (ConfigEnchantsPotions.enableFrostWalker) {
+		 {
 			RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.frostWalkerID, "Frost Walker");
 			frostWalker = new FrostWalker();
 		}
-		if (ConfigEnchantsPotions.enableMending) {
+		 {
 			RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.mendingID, "Mending");
 			mending = new Mending();
 		}
-		if (ConfigEnchantsPotions.enableSwiftSneak) {
+		 {
 			RegistrySafety.requireVacant(Enchantment.enchantmentsList, ConfigEnchantsPotions.swiftSneakID, "Swift Sneak");
 			swiftSneak = new SwiftSneak();
 		}

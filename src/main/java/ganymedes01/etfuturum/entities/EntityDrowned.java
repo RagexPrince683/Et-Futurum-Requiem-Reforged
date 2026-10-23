@@ -70,8 +70,8 @@ public class EntityDrowned extends EntityZombie implements IRangedAttackMob {
 		else if (isCollidedHorizontally) motionY += .04;
 		moveEntity(motionX, motionY, motionZ); motionX *= .9; motionY *= .9; motionZ *= .9;
 	}
-	@Override protected void dropFewItems(boolean player, int looting) { super.dropFewItems(player, looting); if (carriesShell) entityDropItem(ModItems.NAUTILUS_SHELL.newItemStack(), 0); }
+	@Override protected void dropFewItems(boolean player, int looting) { super.dropFewItems(player, looting); if (carriesShell) ganymedes01.etfuturum.configuration.ContentAvailability.drop(this, ModItems.NAUTILUS_SHELL.newItemStack(), 0); }
 	@Override public void writeEntityToNBT(NBTTagCompound tag) { super.writeEntityToNBT(tag); tag.setBoolean("HasNautilusShell", carriesShell); }
 	@Override public void readEntityFromNBT(NBTTagCompound tag) { super.readEntityFromNBT(tag); carriesShell = tag.getBoolean("HasNautilusShell"); }
-	@Override protected void dropRareDrop(int bonus) { if (ModItems.COPPER_INGOT.isEnabled()) entityDropItem(ModItems.COPPER_INGOT.newItemStack(), 0); }
+	@Override protected void dropRareDrop(int bonus) { if (ModItems.COPPER_INGOT.isEnabled()) ganymedes01.etfuturum.configuration.ContentAvailability.drop(this, ModItems.COPPER_INGOT.newItemStack(), 0); }
 }

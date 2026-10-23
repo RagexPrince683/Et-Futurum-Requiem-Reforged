@@ -28,7 +28,7 @@ public class EntityGlowSquid extends EntitySquid {
 		return worldObj.provider.dimensionId == 0 && y < 30 && isInWater() && !worldObj.canBlockSeeTheSky(x, y, z)
 				&& worldObj.getBlockLightValue(x, y, z) == 0 && worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty();
 	}
-	@Override protected void dropFewItems(boolean player, int looting) { entityDropItem(ModItems.GLOW_INK_SAC.newItemStack(1 + rand.nextInt(3) + rand.nextInt(looting + 1)), 0); }
+	@Override protected void dropFewItems(boolean player, int looting) { ganymedes01.etfuturum.configuration.ContentAvailability.drop(this, ModItems.GLOW_INK_SAC.newItemStack(1 + rand.nextInt(3) + rand.nextInt(looting + 1)), 0); }
 	@Override public void writeEntityToNBT(NBTTagCompound tag) { super.writeEntityToNBT(tag); tag.setInteger("DarkTicksRemaining", dataWatcher.getWatchableObjectInt(16)); }
 	@Override public void readEntityFromNBT(NBTTagCompound tag) { super.readEntityFromNBT(tag); dataWatcher.updateObject(16, Math.max(0, Math.min(100, tag.getInteger("DarkTicksRemaining")))); }
 }

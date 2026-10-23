@@ -26,14 +26,14 @@ public final class MobSpawning {
 		GLOW_SQUID = EnumHelper.addCreatureType("EFR_GLOW_SQUID", EntityGlowSquid.class, ConfigEntities.glowSquidPopulation, Material.water, true, false);
 		DROWNED = EnumHelper.addCreatureType("EFR_DROWNED", EntityDrowned.class, ConfigEntities.drownedPopulation, Material.water, false, false);
 		NAUTILUS = EnumHelper.addCreatureType("EFR_NAUTILUS", EntityNautilus.class, ConfigEntities.nautilusPopulation, Material.water, true, false);
-		nautilus = Arrays.asList(new BiomeGenBase.SpawnListEntry(EntityNautilus.class, 5, 1, 2), new BiomeGenBase.SpawnListEntry(EntityZombieNautilus.class, 1, 1, 1));
-		cod = Collections.singletonList(new BiomeGenBase.SpawnListEntry(EntityCod.class, 15, 3, 6));
-		salmon = Collections.singletonList(new BiomeGenBase.SpawnListEntry(EntitySalmon.class, 15, 1, 5));
-		tropical = Arrays.asList(new BiomeGenBase.SpawnListEntry(EntityTropicalFish.class, 25, 4, 8), new BiomeGenBase.SpawnListEntry(EntityPufferfish.class, 5, 1, 3));
-		dolphins = Collections.singletonList(new BiomeGenBase.SpawnListEntry(EntityDolphin.class, 2, 1, 5));
-		axolotls = Collections.singletonList(new BiomeGenBase.SpawnListEntry(EntityAxolotl.class, 1, 1, 3));
-		squid = Collections.singletonList(new BiomeGenBase.SpawnListEntry(EntityGlowSquid.class, 1, 2, 4));
-		drowned = Collections.singletonList(new BiomeGenBase.SpawnListEntry(EntityDrowned.class, 1, 1, 2));
+		nautilus = ganymedes01.etfuturum.configuration.SpawnSettings.list(new BiomeGenBase.SpawnListEntry(EntityNautilus.class, 5, 1, 2), new BiomeGenBase.SpawnListEntry(EntityZombieNautilus.class, 1, 1, 1));
+		cod = ganymedes01.etfuturum.configuration.SpawnSettings.list(new BiomeGenBase.SpawnListEntry(EntityCod.class, 15, 3, 6));
+		salmon = ganymedes01.etfuturum.configuration.SpawnSettings.list(new BiomeGenBase.SpawnListEntry(EntitySalmon.class, 15, 1, 5));
+		tropical = ganymedes01.etfuturum.configuration.SpawnSettings.list(new BiomeGenBase.SpawnListEntry(EntityTropicalFish.class, 25, 4, 8), new BiomeGenBase.SpawnListEntry(EntityPufferfish.class, 5, 1, 3));
+		dolphins = ganymedes01.etfuturum.configuration.SpawnSettings.list(new BiomeGenBase.SpawnListEntry(EntityDolphin.class, 2, 1, 5));
+		axolotls = ganymedes01.etfuturum.configuration.SpawnSettings.list(new BiomeGenBase.SpawnListEntry(EntityAxolotl.class, 1, 1, 3));
+		squid = ganymedes01.etfuturum.configuration.SpawnSettings.list(new BiomeGenBase.SpawnListEntry(EntityGlowSquid.class, 1, 2, 4));
+		drowned = ganymedes01.etfuturum.configuration.SpawnSettings.list(new BiomeGenBase.SpawnListEntry(EntityDrowned.class, 1, 1, 2));
 		register(EntityCod.class, "cod", 35, 0xBEA085, 0xC5BCA2);
 		register(EntitySalmon.class, "salmon", 36, 0xA00F10, 0x0E8474);
 		register(EntityTropicalFish.class, "tropical_fish", 37, 0xEF6915, 0xFFF9F2);
@@ -45,8 +45,8 @@ public final class MobSpawning {
 		register(EntityAxolotl.class, "axolotl", 43, 0xFBC1E3, 0xA62D74);
 		register(EntityGlowSquid.class, "glow_squid", 44, 0x095656, 0x85F1BC);
 		ModEntityList.registerEntity(EntityTrident.class, "trident", 45, EtFuturum.instance, 64, 1, true);
-		if (ConfigEntities.enableAquaticSpawning && ConfigEntities.turtleSpawnWeight > 0) {
-			for (BiomeGenBase biome : BiomeDictionary.getBiomesForType(Type.BEACH)) if (!BiomeDictionary.isBiomeOfType(biome, Type.COLD) && !BiomeDictionary.isBiomeOfType(biome, Type.NETHER) && !BiomeDictionary.isBiomeOfType(biome, Type.END)) EntityRegistry.addSpawn(EntityTurtle.class, ConfigEntities.turtleSpawnWeight, 2, 5, EnumCreatureType.creature, biome);
+		if (ConfigEntities.enableAquaticSpawning) {
+			for (BiomeGenBase biome : BiomeDictionary.getBiomesForType(Type.BEACH)) if (!BiomeDictionary.isBiomeOfType(biome, Type.COLD) && !BiomeDictionary.isBiomeOfType(biome, Type.NETHER) && !BiomeDictionary.isBiomeOfType(biome, Type.END)) ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityTurtle.class, ConfigEntities.turtleSpawnWeight, 2, 5, EnumCreatureType.creature, biome);
 		}
 	}
 	private static void register(Class<? extends net.minecraft.entity.Entity> type, String name, int id, int primary, int secondary) { ModEntityList.registerEntity(type, name, id, EtFuturum.instance, 80, 3, true, primary, secondary); }
@@ -67,7 +67,7 @@ public final class MobSpawning {
 		return biome.temperature < .3F ? salmon : cod;
 	}
 	public static void seagrass(World world, Random random, int chunkX, int chunkZ) {
-		if (!ConfigEntities.enableAquaticSpawning || world.provider.dimensionId != 0) return;
+		if (!ganymedes01.etfuturum.ModBlocks.SEAGRASS.isEnabled() || world.provider.dimensionId != 0) return;
 		for (int attempt = 0; attempt < 12; attempt++) {
 			int x = chunkX * 16 + random.nextInt(16), z = chunkZ * 16 + random.nextInt(16);
 			if (!world.blockExists(x, 63, z)) continue;

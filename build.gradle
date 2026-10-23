@@ -2,52 +2,77 @@ plugins {
     id("com.gtnewhorizons.gtnhconvention")
 }
 
-// Write the next planned version here. This will be used instead of the previous tag version for CI builds and other "dirty" builds.
-// If left blank, the previous tag name will be used. At the moment, this will not apply at all if there is no tag in the repository.
-String stagingVersion = "4.0.0"
-stagingVersion = stagingVersion.trim()
-def details = versionDetails()
-// Commit distance isn't 0, last tag isn't empty and there are no unpushed commits.
-// If true, this build was built from a tagged commit, usually coming from the tagged release workflow.
-boolean isTaggedRelease = details.getCommitDistance() == 0 && !details.lastTag.isEmpty() && details.getIsCleanTag()
-version = version.replace("+", "-") // For some reason some instances have weird intermittent issues with + in a file path.
-
-if(!stagingVersion.isEmpty() && !isTaggedRelease) {
-    String lastTag = details.lastTag
-    if(!lastTag.isEmpty()) {
-        // There is a previous tag, replace it with our staging version
-        version = version.replace(lastTag, stagingVersion)
-    } else {
-        // TODO: Add logic for when there is no tag
-    }
+// A release has one version across metadata, artifacts and both upload services.
+Properties releaseProperties = new Properties()
+File releaseFile = rootProject.file("version.properties")
+if (!releaseFile.isFile()) throw new GradleException("Missing root version.properties")
+releaseFile.withInputStream { releaseProperties.load(it) }
+String releaseVersion = releaseProperties.getProperty("modVersion", "").trim()
+if (!(releaseVersion ==~ /[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?/)) {
+    throw new GradleException("version.properties must contain a valid modVersion (for example 4.0.0)")
 }
-
-boolean isStable() {
-    ver = versionDetails().lastTag;
-    if(ver.isEmpty() || ver.contains("-rc-") || ver.contains("alpha") || ver.contains("beta") || ver.contains("candidate") || ver.contains("snapshot")) {
-        return false
-    }
-    return true
+version = releaseVersion
+if (project.findProperty("modVersion") != null && project.findProperty("modVersion").toString() != releaseVersion) {
+    throw new GradleException("modVersion override disagrees with version.properties")
 }
-
-String prefixTaglessVersion(String prefix, String string) {
-    if(!string.startsWith("-")) {
-        return prefix += "-"
-    }
-    return prefix + string
+ext.modVersion = releaseVersion
+for (String overrideName : ["VERSION", "RELEASE_VERSION"]) {
+    String overrideValue = System.getenv(overrideName)
+    if (overrideValue != null && overrideValue != releaseVersion) throw new GradleException(overrideName + " disagrees with version.properties")
+}
+String tagRef = System.getenv("GITHUB_REF") ?: ""
+boolean isTaggedRelease = tagRef.startsWith("refs/tags/")
+if (isTaggedRelease && tagRef.substring("refs/tags/".length()).replaceFirst(/^v/, "") != releaseVersion) {
+    throw new GradleException("Release tag must match version.properties: " + releaseVersion)
+}
+boolean stableRelease = isTaggedRelease && !releaseVersion.contains("-")
+base { archivesName = "uab" }
+tasks.withType(AbstractArchiveTask).configureEach {
+    archiveBaseName = "uab"
+    archiveVersion = releaseVersion + "+mc" + project.minecraftVersion
 }
 
 minecraft {
     injectedTags.put("MOD_ID", project.modId)
     injectedTags.put("MOD_NAME", project.modName)
     injectedTags.put("MOD_GROUP", project.modGroup)
+    injectedTags.put("VERSION", releaseVersion)
 
     //Returns true if this build isn't a tagged release build, meaning it came from the CI (or was arbitrarily built)
     injectedTags.put("SNAPSHOT_BUILD", !isTaggedRelease)
     //Returns true if this build is a tagged build, and contains no version keywords that may indicate it possibly being a pre-release tagged build.
-    injectedTags.put("STABLE_BUILD", isTaggedRelease && isStable())
+    injectedTags.put("STABLE_BUILD", stableRelease)
     // SNAPSHOT_BUILD == false but STABLE_BUILD == false means this release is a tagged beta, alpha, release candidate, etc.
     // Neither of these values can be true at the same time.
 
     injectedTags.put("MC_ASSET_VER", "minecraft_1.21.11")
 }
+
+tasks.register("configurationTest", JavaExec) {
+    group = "verification"
+    description = "Exercises native Forge configuration, legacy migration and spawn parameter validation."
+    dependsOn(tasks.named("testClasses"))
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = "ganymedes01.etfuturum.configuration.ConfigurationTest"
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(8) }
+}
+tasks.named("check") { dependsOn(tasks.named("configurationTest")) }
+tasks.named("test") {
+    dependsOn(tasks.named("configurationTest"))
+    // The regression suite is a plain Java entry point using Forge's own parser, not a JUnit suite.
+    failOnNoDiscoveredTests = false
+}
+
+tasks.register("generateReleaseMetadata") {
+    inputs.file(rootProject.file("version.properties"))
+    outputs.file(layout.buildDirectory.file("release/uab-update.json"))
+    doLast {
+        File output = layout.buildDirectory.file("release/uab-update.json").get().asFile
+        output.parentFile.mkdirs()
+        output.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([
+            homepages: [GitHub: "https://github.com/RagexPrince683/Et-Futurum-Requiem-Reforged/releases/tag/v" + releaseVersion],
+            promos: [(project.minecraftVersion + "-latest"): releaseVersion]
+        ])) + "\n"
+    }
+}
+tasks.named("build") { dependsOn(tasks.named("generateReleaseMetadata")) }

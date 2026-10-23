@@ -86,7 +86,7 @@ public class BlockObserver extends Block implements IBlockObserver {
 
 	@Override
 	public void observedNeighborChange(World world, int observerX, int observerY, int observerZ, Block changedBlock, int changedX, int changedY, int changedZ) {
-		if (world.isRemote)
+		if (world.isRemote || !(world instanceof IObserverWorldExtension))
 			return;
 		int myMeta = world.getBlockMetadata(observerX, observerY, observerZ);
 		int facing = BlockPistonBase.getPistonOrientation(myMeta);

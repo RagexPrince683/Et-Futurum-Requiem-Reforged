@@ -167,9 +167,9 @@ public class EntityPiglin extends EntityMob implements IRangedAttackMob {
 		int[] weights = {10, 20, 20, 40, 40, 40, 40, 40, 40, 8, 8, 10};
 		int total = 0;
 		for (int weight : weights) total += weight;
-		int roll = rand.nextInt(total + (ModBlocks.CRYING_OBSIDIAN.isEnabled() ? 40 : 0) + (ModBlocks.BLACKSTONE.isEnabled() ? 40 : 0) + (ModItems.NUGGET_IRON.isEnabled() ? 10 : 0) + (ganymedes01.etfuturum.ModEnchantments.soulSpeed != null ? 13 : 0));
+		int roll = rand.nextInt(total + (ModBlocks.CRYING_OBSIDIAN.isEnabled() ? 40 : 0) + (ModBlocks.BLACKSTONE.isEnabled() ? 40 : 0) + (ModItems.NUGGET_IRON.isEnabled() ? 10 : 0) + (ganymedes01.etfuturum.configuration.configs.ConfigEnchantsPotions.enableSoulSpeed ? 13 : 0));
 		for (int i = 0; i < entries.length; i++) if ((roll -= weights[i]) < 0) return entries[i];
-		if (ganymedes01.etfuturum.ModEnchantments.soulSpeed != null && (roll -= 13) < 0) {
+		if (ganymedes01.etfuturum.configuration.configs.ConfigEnchantsPotions.enableSoulSpeed && (roll -= 13) < 0) {
 			int level = 1 + rand.nextInt(3);
 			if (roll < -8) return Items.enchanted_book.getEnchantedItemStack(new net.minecraft.enchantment.EnchantmentData(ganymedes01.etfuturum.ModEnchantments.soulSpeed, level));
 			ItemStack boots = new ItemStack(Items.iron_boots); boots.addEnchantment(ganymedes01.etfuturum.ModEnchantments.soulSpeed, level); return boots;

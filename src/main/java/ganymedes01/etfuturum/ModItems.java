@@ -16,34 +16,34 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public enum ModItems {
-	WOODEN_SPEAR(true, new ItemSpear(Item.ToolMaterial.WOOD, "wooden_spear")),
-	STONE_SPEAR(true, new ItemSpear(Item.ToolMaterial.STONE, "stone_spear")),
-	COPPER_SPEAR(true, new ItemSpear(net.minecraftforge.common.util.EnumHelper.addToolMaterial("EFR_COPPER_SPEAR", 1, 190, 4, 1, 13), "copper_spear")),
-	IRON_SPEAR(true, new ItemSpear(Item.ToolMaterial.IRON, "iron_spear")),
-	GOLDEN_SPEAR(true, new ItemSpear(Item.ToolMaterial.GOLD, "golden_spear")),
-	DIAMOND_SPEAR(true, new ItemSpear(Item.ToolMaterial.EMERALD, "diamond_spear")),
-	CROSSBOW(true, new ItemCrossbow()),
-	OMINOUS_BOTTLE(true, new ItemOminousBottle()),
-	BRUSH(true, new BaseItem("brush").setMaxStackSize(1).setMaxDamage(64)),
-	ARMADILLO_SCUTE(true, new BaseItem("armadillo_scute")),
-	WOLF_ARMOR(true, new BaseItem("wolf_armor").setMaxStackSize(1).setMaxDamage(64)),
-	WIND_CHARGE(true, new ItemWindCharge()),
-	BREEZE_ROD(true, new BaseItem("breeze_rod")),
-	TORCHFLOWER_SEEDS(true, new net.minecraft.item.ItemSeeds(ModBlocks.TORCHFLOWER_CROP.get(), Blocks.farmland).setUnlocalizedName("etfuturum.torchflower_seeds").setTextureName("torchflower_seeds")),
-	PITCHER_POD(true, new net.minecraft.item.ItemSeeds(ModBlocks.PITCHER_CROP.get(), Blocks.farmland).setUnlocalizedName("etfuturum.pitcher_pod").setTextureName("pitcher_pod")),
-	HARNESS(true, new BaseSubtypesItem("white_harness", "orange_harness", "magenta_harness", "light_blue_harness", "yellow_harness", "lime_harness", "pink_harness", "gray_harness", "light_gray_harness", "cyan_harness", "purple_harness", "blue_harness", "brown_harness", "green_harness", "red_harness", "black_harness").setNames("harness").setMaxStackSize(1)),
-	NAUTILUS_ARMOR(true, new BaseSubtypesItem("copper_nautilus_armor", "golden_nautilus_armor", "iron_nautilus_armor", "diamond_nautilus_armor", "netherite_nautilus_armor").setNames("nautilus_armor").setMaxStackSize(1)),
-	COD_BUCKET(true, new ItemFishBucket(0, "cod_bucket")),
-	SALMON_BUCKET(true, new ItemFishBucket(1, "salmon_bucket")),
-	TROPICAL_FISH_BUCKET(true, new ItemFishBucket(2, "tropical_fish_bucket")),
-	PUFFERFISH_BUCKET(true, new ItemFishBucket(3, "pufferfish_bucket")),
-	AXOLOTL_BUCKET(true, new ItemFishBucket(4, "axolotl_bucket")),
-	GLOW_INK_SAC(true, new BaseItem("glow_ink_sac")),
-	TURTLE_SCUTE(true, new BaseItem("turtle_scute")),
-	TURTLE_HELMET(true, new ItemTurtleHelmet()),
-	PHANTOM_MEMBRANE(true, new BaseItem("phantom_membrane")),
-	TRIDENT(true, new ItemTrident()),
-	NAUTILUS_SHELL(true, new BaseItem("nautilus_shell")),
+	WOODEN_SPEAR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("spears"), new ItemSpear(Item.ToolMaterial.WOOD, "wooden_spear")),
+	STONE_SPEAR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("spears"), new ItemSpear(Item.ToolMaterial.STONE, "stone_spear")),
+	COPPER_SPEAR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("spears"), new ItemSpear(net.minecraftforge.common.util.EnumHelper.addToolMaterial("EFR_COPPER_SPEAR", 1, 190, 4, 1, 13), "copper_spear")),
+	IRON_SPEAR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("spears"), new ItemSpear(Item.ToolMaterial.IRON, "iron_spear")),
+	GOLDEN_SPEAR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("spears"), new ItemSpear(Item.ToolMaterial.GOLD, "golden_spear")),
+	DIAMOND_SPEAR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("spears"), new ItemSpear(Item.ToolMaterial.EMERALD, "diamond_spear")),
+	CROSSBOW(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("crossbows"), new ItemCrossbow()),
+	OMINOUS_BOTTLE(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("ominous_bottles"), new ItemOminousBottle()),
+	BRUSH(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("brushes"), new BaseItem("brush").setMaxStackSize(1).setMaxDamage(64)),
+	ARMADILLO_SCUTE(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("wolf_armor"), new BaseItem("armadillo_scute")),
+	WOLF_ARMOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("wolf_armor"), new BaseItem("wolf_armor").setMaxStackSize(1).setMaxDamage(64)),
+	WIND_CHARGE(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("wind_charges"), new ItemWindCharge()),
+	BREEZE_ROD(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("wind_charges"), new BaseItem("breeze_rod")),
+	TORCHFLOWER_SEEDS(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("ancient_plants"), new net.minecraft.item.ItemSeeds(ModBlocks.TORCHFLOWER_CROP.get(), Blocks.farmland).setUnlocalizedName("etfuturum.torchflower_seeds").setTextureName("torchflower_seeds")),
+	PITCHER_POD(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("ancient_plants"), new net.minecraft.item.ItemSeeds(ModBlocks.PITCHER_CROP.get(), Blocks.farmland).setUnlocalizedName("etfuturum.pitcher_pod").setTextureName("pitcher_pod")),
+	HARNESS(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("harnesses"), new BaseSubtypesItem("white_harness", "orange_harness", "magenta_harness", "light_blue_harness", "yellow_harness", "lime_harness", "pink_harness", "gray_harness", "light_gray_harness", "cyan_harness", "purple_harness", "blue_harness", "brown_harness", "green_harness", "red_harness", "black_harness").setNames("harness").setMaxStackSize(1)),
+	NAUTILUS_ARMOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("nautilus_armor"), new BaseSubtypesItem("copper_nautilus_armor", "golden_nautilus_armor", "iron_nautilus_armor", "diamond_nautilus_armor", "netherite_nautilus_armor").setNames("nautilus_armor").setMaxStackSize(1)),
+	COD_BUCKET(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("fish_buckets"), new ItemFishBucket(0, "cod_bucket")),
+	SALMON_BUCKET(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("fish_buckets"), new ItemFishBucket(1, "salmon_bucket")),
+	TROPICAL_FISH_BUCKET(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("fish_buckets"), new ItemFishBucket(2, "tropical_fish_bucket")),
+	PUFFERFISH_BUCKET(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("fish_buckets"), new ItemFishBucket(3, "pufferfish_bucket")),
+	AXOLOTL_BUCKET(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("axolotl_buckets"), new ItemFishBucket(4, "axolotl_bucket")),
+	GLOW_INK_SAC(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("glow_ink"), new BaseItem("glow_ink_sac")),
+	TURTLE_SCUTE(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("scutes"), new BaseItem("turtle_scute")),
+	TURTLE_HELMET(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("scutes"), new ItemTurtleHelmet()),
+	PHANTOM_MEMBRANE(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("phantom_membranes"), new BaseItem("phantom_membrane")),
+	TRIDENT(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("tridents"), new ItemTrident()),
+	NAUTILUS_SHELL(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("nautilus_shells"), new BaseItem("nautilus_shell")),
 	MUTTON_RAW(ConfigBlocksItems.enableMutton, new BaseFood(2, 0.3F, true).setNames("mutton")),
 	MUTTON_COOKED(ConfigBlocksItems.enableMutton, new BaseFood(6, 0.8F, true).setNames("cooked_mutton")),
 	PRISMARINE_SHARD(ConfigBlocksItems.enablePrismarine, new BaseItem("prismarine_shard")),
@@ -145,8 +145,8 @@ public enum ModItems {
 	//Debug Item
 	DEBUGGING_TOOL(Reference.DEV_ENVIRONMENT, new DebugTestItem()),
 	BANNER_PATTERN(ConfigBlocksItems.enableBanners, new ItemBannerPattern()),
-	TRIAL_KEY(true, new BaseItem("trial_key")),
-	OMINOUS_TRIAL_KEY(true, new BaseItem("ominous_trial_key")),
+	TRIAL_KEY(ConfigWorld.enableTrialChambers, new BaseItem("trial_key")),
+	OMINOUS_TRIAL_KEY(ConfigWorld.enableTrialChambers, new BaseItem("ominous_trial_key")),
 	ECHO_SHARD(ConfigExperiments.enableSculk, new BaseItem("echo_shard"));
 
 	public static final ModItems[] CHEST_BOATS = new ModItems[]{OAK_CHEST_BOAT, SPRUCE_CHEST_BOAT, BIRCH_CHEST_BOAT, JUNGLE_CHEST_BOAT, ACACIA_CHEST_BOAT, DARK_OAK_CHEST_BOAT, CHERRY_CHEST_BOAT, BAMBOO_CHEST_RAFT};
@@ -165,12 +165,9 @@ public enum ModItems {
 	public static final ModItems[] VALUES = values();
 
 	public static void init() {
-		for (ModItems item : VALUES) {
-			if (item.isEnabled()) { //Honestly what do you think it's doing lmfao
-				GameRegistry.registerItem(item.get(), item.name().toLowerCase());
-			}
-		}
-	}
+        // Saved item identities remain registered when new acquisition is disabled.
+        for (ModItems item : VALUES) GameRegistry.registerItem(item.get(), item.name().toLowerCase(java.util.Locale.ROOT));
+    }
 
 	final private boolean isEnabled;
 	final private Item theItem;

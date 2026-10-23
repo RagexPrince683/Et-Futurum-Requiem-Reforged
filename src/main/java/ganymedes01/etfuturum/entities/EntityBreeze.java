@@ -21,7 +21,7 @@ public class EntityBreeze extends EntityMob {
 		if (shotCooldown == 0 && onGround && canEntityBeSeen(target)) { EntityWindCharge charge = new EntityWindCharge(worldObj, this); charge.setThrowableHeading(target.posX - posX, target.posY + target.height / 2 - charge.posY, target.posZ - posZ, 1.2F, 2); worldObj.spawnEntityInWorld(charge); shotCooldown = 60; }
 		if (jumpCooldown == 0 && onGround) { double angle = rand.nextDouble() * Math.PI * 2, x = target.posX + Math.cos(angle) * 4, z = target.posZ + Math.sin(angle) * 4; if (worldObj.blockExists(MathHelper.floor_double(x), MathHelper.floor_double(posY), MathHelper.floor_double(z))) { motionX = (x - posX) * .08; motionZ = (z - posZ) * .08; motionY = .8; isAirBorne = true; velocityChanged = true; jumpCooldown = 100; } }
 	}
-	@Override protected void dropFewItems(boolean player, int looting) { if (player) entityDropItem(ganymedes01.etfuturum.ModItems.BREEZE_ROD.newItemStack(1 + rand.nextInt(2) + rand.nextInt(looting + 1)), 0); }
+	@Override protected void dropFewItems(boolean player, int looting) { if (player) ganymedes01.etfuturum.configuration.ContentAvailability.drop(this, ganymedes01.etfuturum.ModItems.BREEZE_ROD.newItemStack(1 + rand.nextInt(2) + rand.nextInt(looting + 1)), 0); }
 	@Override public void writeEntityToNBT(NBTTagCompound tag) { super.writeEntityToNBT(tag); tag.setInteger("ShotCooldown", shotCooldown); tag.setInteger("JumpCooldown", jumpCooldown); }
 	@Override public void readEntityFromNBT(NBTTagCompound tag) { super.readEntityFromNBT(tag); shotCooldown = MathHelper.clamp_int(tag.getInteger("ShotCooldown"), 0, 60); jumpCooldown = MathHelper.clamp_int(tag.getInteger("JumpCooldown"), 0, 100); }
 

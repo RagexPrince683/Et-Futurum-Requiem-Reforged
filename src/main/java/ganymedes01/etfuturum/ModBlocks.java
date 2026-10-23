@@ -24,18 +24,18 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 public enum ModBlocks {
-	SNIFFER_EGG(true, new BlockSnifferEgg()),
-	DRIED_GHAST(true, new BlockDriedGhast()),
-	TORCHFLOWER_CROP(true, new BlockSnifferCrop(false), null),
-	PITCHER_CROP(true, new BlockSnifferCrop(true), null),
-	TORCHFLOWER(true, new BlockSnifferPlant(false)),
-	PITCHER_PLANT(true, new BlockSnifferPlant(true)),
-	COPPER_CHEST(true, new BlockCopperChest()),
-	COPPER_GOLEM_STATUE(true, new BlockCopperGolemStatue()),
-	TRIAL_SPAWNER(true, new BlockTrialSpawner()),
-	SCULK_SHRIEKER(true, new BlockSculkShrieker()),
-	SEAGRASS(true, new BlockSeagrass()),
-	TURTLE_EGG(true, new BlockTurtleEgg()),
+	SNIFFER_EGG(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("sniffer_eggs"), new BlockSnifferEgg()),
+	DRIED_GHAST(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("dried_ghasts"), new BlockDriedGhast()),
+	TORCHFLOWER_CROP(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("ancient_plants"), new BlockSnifferCrop(false), null),
+	PITCHER_CROP(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("ancient_plants"), new BlockSnifferCrop(true), null),
+	TORCHFLOWER(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("ancient_plants"), new BlockSnifferPlant(false)),
+	PITCHER_PLANT(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("ancient_plants"), new BlockSnifferPlant(true)),
+	COPPER_CHEST(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("copper_chests"), new BlockCopperChest()),
+	COPPER_GOLEM_STATUE(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("copper_golem_statues"), new BlockCopperGolemStatue()),
+	TRIAL_SPAWNER(ConfigWorld.enableTrialChambers, new BlockTrialSpawner()),
+	SCULK_SHRIEKER(ConfigExperiments.enableSculk, new BlockSculkShrieker()),
+	SEAGRASS(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("seagrass"), new BlockSeagrass()),
+	TURTLE_EGG(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("scutes"), new BlockTurtleEgg()),
 	STONE(ConfigBlocksItems.enableStones && !ConfigModCompat.disableBaseBountifulStonesOnly, new BlockBountifulStone()),
 	PRISMARINE_BLOCK(ConfigBlocksItems.enablePrismarine, new BaseSubtypesBlock(Material.rock, "prismarine", "prismarine_bricks", "dark_prismarine")
 			.setHardness(1.5F).setResistance(10.0F)),
@@ -106,10 +106,10 @@ public enum ModBlocks {
 	RED_GLAZED_TERRACOTTA(ConfigBlocksItems.enableGlazedTerracotta, new BlockGlazedTerracotta(14)),
 	BLACK_GLAZED_TERRACOTTA(ConfigBlocksItems.enableGlazedTerracotta, new BlockGlazedTerracotta(15)),
 	COPPER_BLOCK(ConfigBlocksItems.enableCopper, new BlockCopper()),
-	CHISELED_COPPER(ConfigBlocksItems.enableCopper, new BlockChiseledCopper()),
-	COPPER_GRATE(ConfigBlocksItems.enableCopper, new BlockCopperGrate()),
-	COPPER_BULB(ConfigBlocksItems.enableCopper, new BlockCopperBulb(false)),
-	POWERED_COPPER_BULB(ConfigBlocksItems.enableCopper, new BlockCopperBulb(true), null),
+	CHISELED_COPPER(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockChiseledCopper()),
+	COPPER_GRATE(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperGrate()),
+	COPPER_BULB(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperBulb(false)),
+	POWERED_COPPER_BULB(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperBulb(true), null),
 	LIGHTNING_ROD(ConfigExperiments.enableLightningRod, new BlockLightningRod()),
 	DEEPSLATE(ConfigBlocksItems.enableDeepslate, new BlockDeepslate()),
 	COBBLED_DEEPSLATE(ConfigBlocksItems.enableDeepslate, new BaseBlock(Material.rock).setNames("cobbled_deepslate")
@@ -193,8 +193,8 @@ public enum ModBlocks {
 			.setBlockSound(ModSounds.soundDeepslate).setHardness(ConfigFunctions.useStoneHardnessForDeepslate ? 2.0f : 3.5f).setResistance(6)),
 	DEEPSLATE_BRICK_SLAB(ConfigBlocksItems.enableDeepslate, new BlockDeepslateBrickSlab(false)),
 	DOUBLE_DEEPSLATE_BRICK_SLAB(ConfigBlocksItems.enableDeepslate, new BlockDeepslateBrickSlab(true)),
-	TUFF_SLAB(ConfigBlocksItems.enableDeepslate, new BlockTuffSlab(false)),
-	DOUBLE_TUFF_SLAB(ConfigBlocksItems.enableDeepslate, new BlockTuffSlab(true)),
+	TUFF_SLAB(ConfigBlocksItems.enableTuff, new BlockTuffSlab(false)),
+	DOUBLE_TUFF_SLAB(ConfigBlocksItems.enableTuff, new BlockTuffSlab(true)),
 	MUD_BRICK_SLAB(ConfigBlocksItems.enableMud, new BaseSlab(false, Material.rock, "mud_bricks")
 			.setBlockSound(ModSounds.soundMudBricks).setHardness(3).setResistance(6)),
 	DOUBLE_MUD_BRICK_SLAB(ConfigBlocksItems.enableMud, new BaseSlab(true, Material.rock, "mud_bricks")
@@ -263,23 +263,23 @@ public enum ModBlocks {
 	MUD_BRICK_WALL(ConfigBlocksItems.enableMud, new BaseWall(Material.rock, "mud_bricks").setBlockSound(ModSounds.soundMudBricks)
 			.setHardness(1.5F).setResistance(3.0F)),
 	
-	COPPER_DOOR(ConfigBlocksItems.enableCopper, new BlockCopperDoor(0)),
-	EXPOSED_COPPER_DOOR(ConfigBlocksItems.enableCopper, new BlockCopperDoor(1)),
-	WEATHERED_COPPER_DOOR(ConfigBlocksItems.enableCopper, new BlockCopperDoor(2)),
-	OXIDIZED_COPPER_DOOR(ConfigBlocksItems.enableCopper, new BlockCopperDoor(3)),
-	WAXED_COPPER_DOOR(ConfigBlocksItems.enableCopper, new BlockCopperDoor(8)),
-	WAXED_EXPOSED_COPPER_DOOR(ConfigBlocksItems.enableCopper, new BlockCopperDoor(9)),
-	WAXED_WEATHERED_COPPER_DOOR(ConfigBlocksItems.enableCopper, new BlockCopperDoor(10)),
-	WAXED_OXIDIZED_COPPER_DOOR(ConfigBlocksItems.enableCopper, new BlockCopperDoor(11)),
+	COPPER_DOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperDoor(0)),
+	EXPOSED_COPPER_DOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperDoor(1)),
+	WEATHERED_COPPER_DOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperDoor(2)),
+	OXIDIZED_COPPER_DOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperDoor(3)),
+	WAXED_COPPER_DOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperDoor(8)),
+	WAXED_EXPOSED_COPPER_DOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperDoor(9)),
+	WAXED_WEATHERED_COPPER_DOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperDoor(10)),
+	WAXED_OXIDIZED_COPPER_DOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperDoor(11)),
 
-	COPPER_TRAPDOOR(ConfigBlocksItems.enableCopper, new BlockCopperTrapdoor(0)),
-	EXPOSED_COPPER_TRAPDOOR(ConfigBlocksItems.enableCopper, new BlockCopperTrapdoor(1)),
-	WEATHERED_COPPER_TRAPDOOR(ConfigBlocksItems.enableCopper, new BlockCopperTrapdoor(2)),
-	OXIDIZED_COPPER_TRAPDOOR(ConfigBlocksItems.enableCopper, new BlockCopperTrapdoor(3)),
-	WAXED_COPPER_TRAPDOOR(ConfigBlocksItems.enableCopper, new BlockCopperTrapdoor(8)),
-	WAXED_EXPOSED_COPPER_TRAPDOOR(ConfigBlocksItems.enableCopper, new BlockCopperTrapdoor(9)),
-	WAXED_WEATHERED_COPPER_TRAPDOOR(ConfigBlocksItems.enableCopper, new BlockCopperTrapdoor(10)),
-	WAXED_OXIDIZED_COPPER_TRAPDOOR(ConfigBlocksItems.enableCopper, new BlockCopperTrapdoor(11)),
+	COPPER_TRAPDOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperTrapdoor(0)),
+	EXPOSED_COPPER_TRAPDOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperTrapdoor(1)),
+	WEATHERED_COPPER_TRAPDOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperTrapdoor(2)),
+	OXIDIZED_COPPER_TRAPDOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperTrapdoor(3)),
+	WAXED_COPPER_TRAPDOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperTrapdoor(8)),
+	WAXED_EXPOSED_COPPER_TRAPDOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperTrapdoor(9)),
+	WAXED_WEATHERED_COPPER_TRAPDOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperTrapdoor(10)),
+	WAXED_OXIDIZED_COPPER_TRAPDOOR(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorative_copper"), new BlockCopperTrapdoor(11)),
 
 	IRON_TRAPDOOR(ConfigBlocksItems.enableIronTrapdoor, new BlockIronTrapdoor()),
 	MAGMA(ConfigBlocksItems.enableMagmaBlock, new BlockMagma()),
@@ -354,7 +354,7 @@ public enum ModBlocks {
 
 	PINK_PETALS(ConfigBlocksItems.enableCherryBlocks, new BlockPinkPetals(), ItemBlock.class), //Should not be potable
 	SAPLING(ConfigBlocksItems.enableCherryBlocks || ConfigExperiments.enableMangroveBlocks, new BlockModernSapling()),
-	BAMBOO_SAPLING(ConfigBlocksItems.enableBambooBlocks, new BlockBambooShoot(), null),
+	BAMBOO_SAPLING(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("bamboo_plants"), new BlockBambooShoot(), null),
 	LEAVES(ConfigBlocksItems.enableCherryBlocks || ConfigExperiments.enableMangroveBlocks, new BlockModernLeaves()),
 	WOOD_PLANKS(ConfigBlocksItems.woodVariants, new BlockModernWoodPlanks()),
 	WOOD_SLAB(ConfigBlocksItems.woodVariants, new BlockModernWoodSlab(false)),
@@ -366,7 +366,7 @@ public enum ModBlocks {
 	MANGROVE_LOG(ConfigExperiments.enableMangroveBlocks, new BaseLog("mangrove")),
 	CHERRY_LOG(ConfigBlocksItems.enableCherryBlocks, new BaseLog("cherry").setBlockSound(ModSounds.soundCherryWood)),
 	BAMBOO_BLOCK(ConfigBlocksItems.enableBambooBlocks, new BlockBambooBlock("bamboo").setBlockSound(ModSounds.soundBambooWood)),
-	BAMBOO(ConfigBlocksItems.enableBambooBlocks, new BlockBamboo(), null),
+	BAMBOO(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("bamboo_plants"), new BlockBamboo(), null),
 
 	//new wood stairs
 	CRIMSON_STAIRS(ConfigExperiments.enableCrimsonBlocks, new BaseStairs(WOOD_PLANKS.get(), 0).setBlockSound(ModSounds.soundNetherWood).setUnlocalizedNameWithPrefix("crimson")),
@@ -584,10 +584,10 @@ public enum ModBlocks {
 	PEARLESCENT_FROGLIGHT(ConfigEntities.enableFrogs, new BlockFroglight("pearlescent_froglight")),
 	REINFORCED_DEEPSLATE(ConfigExperiments.enableSculk, new BlockReinforcedDeepslate()),
 	SCULK_SENSOR(ConfigExperiments.enableSculk, new BlockSculkSensor()),
-	VAULT(true, new BlockVault()),
-	CANDLE(true, new BlockStructureDecoration("candle", "candle_one_candle").setLightLevel(.2F)),
-	DECORATED_POT(true, new BlockDecoratedPot()),
-	HEAVY_CORE(true, new BlockStructureDecoration("heavy_core", "heavy_core").setHardness(10).setResistance(30))
+	VAULT(ConfigWorld.enableTrialChambers, new BlockVault()),
+	CANDLE(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("candles"), new BlockStructureDecoration("candle", "candle_one_candle").setLightLevel(.2F)),
+	DECORATED_POT(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("decorated_pots"), new BlockDecoratedPot()),
+	HEAVY_CORE(ganymedes01.etfuturum.configuration.ContentAvailability.enabled("heavy_cores"), new BlockStructureDecoration("heavy_core", "heavy_core").setHardness(10).setResistance(30))
 	;
 
 	public static final ModBlocks[] DOORS = new ModBlocks[]{DOOR_SPRUCE, DOOR_BIRCH, DOOR_JUNGLE, DOOR_ACACIA, DOOR_DARK_OAK, CRIMSON_DOOR, WARPED_DOOR, MANGROVE_DOOR, CHERRY_DOOR, BAMBOO_DOOR};
@@ -627,19 +627,15 @@ public enum ModBlocks {
 
 	public static final ModBlocks[] VALUES = values();
 	public static void init() {
-		for (ModBlocks block : VALUES) {
-			if (block.isEnabled()) {
-				if (block.getItemBlock() != null || !block.getHasItemBlock()) {
-					GameRegistry.registerBlock(block.get(), block.getItemBlock(), block.name().toLowerCase());
-					//This part is used if the getItemBlock() is not ItemBlock.class, so we register a custom ItemBlock class as the ItemBlock
-					//It is also used if the getItemBlock() == null and getHasItemBlock() is false, meaning we WANT to register it as null, making the block have no inventory item.
-				} else {
-					GameRegistry.registerBlock(block.get(), block.name().toLowerCase());
-					//Used if getItemBlock() == null but getHasItemBlock() is true, registering it with a default inventory item.
-				}
-			}
-		}
-	}
+        // Saved block identities remain registered when new acquisition is disabled.
+        for (ModBlocks block : VALUES) {
+            if (block.getItemBlock() != null || !block.getHasItemBlock()) {
+                GameRegistry.registerBlock(block.get(), block.getItemBlock(), block.name().toLowerCase(java.util.Locale.ROOT));
+            } else {
+                GameRegistry.registerBlock(block.get(), block.name().toLowerCase(java.util.Locale.ROOT));
+            }
+        }
+    }
 
 	private final boolean isEnabled;
 	private final Block theBlock;

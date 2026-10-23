@@ -178,17 +178,8 @@ public class ConfigFunctions extends ConfigBase {
 	static final String catClient = "client";
 	static final String catCommands = "client";
 
-	public ConfigFunctions(File file) {
-		super(file);
-		setCategoryComment(catChanges, "Changes to existing content.");
-		setCategoryComment(catSettings, "Settings for Et Futurum content.");
-		setCategoryComment(catCommands, "New commands");
-		setCategoryComment(catClient, "Client-side settings or changes.");
-
-		configCats.add(getCategory(catChanges));
-		configCats.add(getCategory(catSettings));
-		configCats.add(getCategory(catCommands));
-		configCats.add(getCategory(catClient));
+	public ConfigFunctions() {
+		super("functions");
 	}
 
 	@Override
@@ -283,7 +274,7 @@ public class ConfigFunctions extends ConfigBase {
 				ConfigFunctions.enablePlayerSkinOverlay = false;
 				Logger.warn("Another skin backporting mod is in use, which introduce changes to player skins.");
 				Logger.warn("Either Ears, FoamFix, MorePlayerModels, SkinPort, Dragon Block C or OptiFine is installed.");
-				Logger.warn("Et Futurum Requiem's skin backport has been disabled to prevent conflicts.");
+				Logger.warn("UAB's skin backport has been disabled to prevent conflicts.");
 			}
 		}
 	}

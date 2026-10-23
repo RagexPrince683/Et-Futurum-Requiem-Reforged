@@ -40,19 +40,8 @@ public class ConfigEntities extends ConfigBase {
 	static final String catPlayer = "player";
 	static final String catMisc = "misc";
 
-	public ConfigEntities(File file) {
-		super(file);
-		setCategoryComment(catHostile, "Hostile entities.");
-		setCategoryComment(catNeutral, "Neutral entities.");
-		setCategoryComment(catPassive, "Passive entities.");
-		setCategoryComment(catPlayer, "These settings effect the player directly.");
-		setCategoryComment(catMisc, "Entity settings that don't fit into any other category.");
-
-		configCats.add(getCategory(catHostile));
-		configCats.add(getCategory(catNeutral));
-		configCats.add(getCategory(catPassive));
-		configCats.add(getCategory(catMisc));
-		configCats.add(getCategory(catPlayer));
+	public ConfigEntities() {
+		super("entities");
 	}
 
 	@Override
@@ -82,7 +71,7 @@ public class ConfigEntities extends ConfigBase {
 		guardianPopulation = getInt("guardianPopulation", catHostile, 70, 1, 256, "Natural monument guardian budget per 256 eligible loaded chunks. Persistent elders are excluded.");
 		limitVanillaSquid = getBoolean("limitVanillaSquid", catPassive, false, "Optional strict natural admission and local density limits for the exact vanilla squid class. Other mods' squid subclasses and existing squid are untouched.");
 		squidPopulation = getInt("squidPopulation", catPassive, 5, 1, 256, "Natural vanilla squid budget per 256 eligible loaded chunks when limitVanillaSquid is enabled; independent of EFR shared budgets.");
-		turtleSpawnWeight = getInt("turtleSpawnWeight", catPassive, 5, 0, 100, "Turtle spawn weight on non-cold beaches; zero disables natural turtle spawning.");
+		turtleSpawnWeight = 5; // Compatibility field; the authoritative per-species value is applied by SpawnSettings. zero disables natural turtle spawning.");
 		enableGuardians = getBoolean("enableGuardians", catHostile, true, "Guardians spawn in saved ocean-monument bounds. Three persistent elders guard each new monument and drop wet sponge when killed by a player.");
 		enableNetherMobs = getBoolean("enableNetherMobs", catNeutral, true, "Enables piglins, brutes, hoglins, zoglins and striders, including bartering, conversion and riding. Natural spawns use the enabled Nether biomes; brutes belong to bastions. The Nether master toggle takes precedence.") && ConfigBlocksItems.masterNetherToggle;
 		//passive

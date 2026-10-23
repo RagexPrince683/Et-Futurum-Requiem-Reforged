@@ -12,9 +12,10 @@ import java.util.*;
 /** Operator-only, bounded sampling of the real configured biome pipeline without generating chunks. */
 public final class CommandGameplayAudit extends CommandBase {
 	private static final Map<World, Sampling> JOBS = new IdentityHashMap<>();
-	@Override public String getCommandName() { return "efr_audit"; }
+	@Override public String getCommandName() { return "uab_audit"; }
+	@Override public java.util.List<String> getCommandAliases() { return java.util.Collections.singletonList("efr_audit"); }
 	@Override public int getRequiredPermissionLevel() { return 2; }
-	@Override public String getCommandUsage(ICommandSender sender) { return "/efr_audit aquatic [reset] | biomes <surface|nether> <seed> <radius:256..16384> [stride:4..64] | cancel"; }
+	@Override public String getCommandUsage(ICommandSender sender) { return "/uab_audit aquatic [reset] | biomes <surface|nether> <seed> <radius:256..16384> [stride:4..64] | cancel"; }
 	@Override public void processCommand(ICommandSender sender, String[] args) {
 		World world = sender.getEntityWorld();
 		if (args.length >= 1 && args[0].equals("aquatic")) {
@@ -23,7 +24,7 @@ public final class CommandGameplayAudit extends CommandBase {
 		}
 		if (args.length == 1 && args[0].equals("cancel")) { JOBS.remove(world); output(sender, "Biome sampling cancelled."); return; }
 		if (args.length < 4 || !args[0].equals("biomes") || !args[1].equals("surface") && !args[1].equals("nether")) throw new WrongUsageException(getCommandUsage(sender));
-		if (JOBS.containsKey(world)) throw new CommandException("A biome sample is already running in this world; use /efr_audit cancel first.");
+		if (JOBS.containsKey(world)) throw new CommandException("A biome sample is already running in this world; use /uab_audit cancel first.");
 		long seed;
 		try { seed = Long.parseLong(args[2]); } catch (NumberFormatException exception) { throw new NumberInvalidException("commands.generic.num.invalid", args[2]); }
 		int radius = parseIntBounded(sender, args[3], 256, 16384), stride = args.length > 4 ? parseIntBounded(sender, args[4], 4, 64) : 16;
@@ -36,9 +37,9 @@ public final class CommandGameplayAudit extends CommandBase {
 	public static void tick(World world) {
 		Sampling job = JOBS.get(world); if (job == null) return;
 		try { if (job.row()) { JOBS.remove(world); job.finish(); } }
-		catch (RuntimeException exception) { JOBS.remove(world); output(job.sender, "Biome sampling failed: " + exception); org.apache.logging.log4j.LogManager.getLogger("EFR gameplay audit").error("Biome sampling failed", exception); }
+		catch (RuntimeException exception) { JOBS.remove(world); output(job.sender, "Biome sampling failed: " + exception); org.apache.logging.log4j.LogManager.getLogger("UAB gameplay audit").error("Biome sampling failed", exception); }
 	}
-	private static void output(ICommandSender sender, String line) { sender.addChatMessage(new ChatComponentText(line)); org.apache.logging.log4j.LogManager.getLogger("EFR gameplay audit").info("[Gameplay audit] " + line); }
+	private static void output(ICommandSender sender, String line) { sender.addChatMessage(new ChatComponentText(line)); org.apache.logging.log4j.LogManager.getLogger("UAB gameplay audit").info("[Gameplay audit] " + line); }
 	private static final class Sampling {
 		final ICommandSender sender;
 		final WorldChunkManager manager;

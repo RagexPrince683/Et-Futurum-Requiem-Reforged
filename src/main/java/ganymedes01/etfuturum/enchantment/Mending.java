@@ -10,7 +10,7 @@ public class Mending extends Enchantment {
 
 	public Mending() {
 		super(ConfigEnchantsPotions.mendingID, 1, EnumEnchantmentType.breakable);
-		Enchantment.addToBookList(this);
+		if (ConfigEnchantsPotions.enableMending) Enchantment.addToBookList(this);
 		setName("mending");
 	}
 
@@ -26,6 +26,6 @@ public class Mending extends Enchantment {
 
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack) {
-		return stack != null && stack.getItem() == Items.book;
+		return ConfigEnchantsPotions.enableMending && stack != null && stack.getItem() == Items.book;
 	}
 }

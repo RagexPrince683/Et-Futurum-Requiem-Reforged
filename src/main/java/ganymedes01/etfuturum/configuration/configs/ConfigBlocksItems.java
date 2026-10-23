@@ -162,21 +162,8 @@ public class ConfigBlocksItems extends ConfigBase {
 	public static final String catItemEntity = "entity items";
 	public static final String catItemMisc = "misc items";
 
-	public ConfigBlocksItems(File file) {
-		super(file);
-		setCategoryComment(catBlockNatural, "Blocks that can generate naturally in your world. Check world.cfg for generation values.");
-		setCategoryComment(catBlockFunc, "Blocks that have a specific function, whether right clicked or otherwise.");
-		setCategoryComment(catBlockMisc, "Blocks that don't fit in any other category.");
-		setCategoryComment(catItemEquipment, "Tools, armor, and other equipment items.");
-		setCategoryComment(catItemEntity, "Entity items. (Armor stand, boat, etc)");
-		setCategoryComment(catItemMisc, "Items that don't fit in any other category.");
-
-		configCats.add(getCategory(catBlockNatural));
-		configCats.add(getCategory(catBlockFunc));
-		configCats.add(getCategory(catBlockMisc));
-		configCats.add(getCategory(catItemEquipment));
-		configCats.add(getCategory(catItemEntity));
-		configCats.add(getCategory(catItemMisc));
+	public ConfigBlocksItems() {
+		super("blocksitems");
 	}
 
 	@Override
@@ -207,18 +194,12 @@ public class ConfigBlocksItems extends ConfigBase {
 		enableDeepslateOres = getBoolean("enableDeepslateOres", catBlockNatural, true, "Enable deepslate ores for copper ore and vanilla ores when deepslate generates over them.");
 		enableAmethyst = getBoolean("enableAmethyst", catBlockNatural, true, "Enables tinted glass, amethyst blocks, budding amethyst and amethyst crystals. Also enables the item too.");
 		enableMud = getBoolean("enableMud", catBlockNatural, true, "Enables mud, packed mud and mud bricks, as well as the mud brick stairs, slabs and walls.");
-//		enableMoss = getBoolean("enableMoss", catBlockNatural, true, "Enables moss blocks and carpets");
-//		enableCrimsonBlocks = getBoolean("enableCrimsonBlocks", catBlockMisc, true, "Enables the crimson nylium, wood, and plants. This must be on for the crimson forest biome to generate unless Netherlicious is installed.\nThe nether wart block is still a separate toggle, both this and the wart toggle must be turned off to disable the nether wart block, because crimson trees need the wart blocks.");
-//		enableWarpedBlocks = getBoolean("enableWarpedBlocks", catBlockMisc, true, "Enables the warped nylium, wood, and plants. This must be on for the warped forest biome to generate unless Netherlicious is installed.");
 		enableBlackstone = getBoolean("enableBlackstone", catBlockMisc, true, "This must be on for the basalt deltas biome to generate unless Netherlicious is installed.");
 		enableSoulSoil = getBoolean("enableSoulSoil", catBlockNatural, true, "Not required for the Soul Sand Valley to generate.");
 		enableSoulLighting = getBoolean("enableSoulLighting", catBlockNatural, true, "Soul torches and soul lanterns.");
 		enableBasalt = getBoolean("enableBasalt", catBlockNatural, true, "This must be on for the basalt deltas biome to generate unless Netherlicious is installed.");
 		enableGlowLichen = getBoolean("enableGlowLichen", catBlockNatural, true, "");
 		enableGlowBerries = getBoolean("enableGlowBerries", catBlockNatural, true, "");
-		if (ConfigExperiments.enableCrimsonBlocks) {
-			enableNetherwartBlock = true;
-		}
 
 		masterNetherToggle = getBoolean("masterNetherToggle", catBlockNatural, true,
 				"NOTE: Currently the content below is referring to some things which are behind an experimental toggle." +
@@ -233,15 +214,11 @@ public class ConfigBlocksItems extends ConfigBase {
 		if (!masterNetherToggle) {
 			ConfigExperiments.enableCrimsonBlocks = ConfigExperiments.enableWarpedBlocks = enableNetherwartBlock = enableBlackstone = enableSoulSoil = enableSoulLighting = enableBasalt = false;
 		}
-
-//		enableMangroveBlocks = getBoolean("enableMangroveBlocks", catBlockNatural, true, "Enables mangrove wood and all of its wood subtypes, and the roots (+ muddy versions).");
 		enableCherryBlocks = getBoolean("enableCherryBlocks", catBlockNatural, true, "Enables cherry wood and all of its wood subtypes.");
 		enableBambooBlocks = getBoolean("enableBambooBlocks", catBlockNatural, true, "Enables bamboo wood and all of its wood subtypes, including the bamboo stalks themselves.");
 
 		// Check if we enable wood variants at all. Used by blocks where all the wood is 1 ID
 		woodVariants = ConfigExperiments.enableCrimsonBlocks || ConfigExperiments.enableWarpedBlocks || ConfigExperiments.enableMangroveBlocks || enableCherryBlocks || enableBambooBlocks;
-
-//		enableSculk = getBoolean("enableSculk", catBlockNatural, true, "Enables sculk-related blocks.");
 
 		//Function Blocks
 		enableIronTrapdoor = getBoolean("enableIronTrapdoor", catBlockFunc, true, "");
@@ -375,11 +352,8 @@ public class ConfigBlocksItems extends ConfigBase {
 		newBoatSpeed = getFloat("newBoatSpeed", catItemEntity, 1F, 0.1F, 2, "The speed multiplier for boats while in water. Use this if you want to make the boats faster or slower. 1 = no speed change");
 		newBoatPassengerSeat = getBoolean("newBoatPassengerSeat", catItemEntity, true, "If disabled, only one person can sit in the new boat at a time. The new seat is actually an invisible entity that follows new boats.");
 		Property newBoatEntityBlacklistProp = get(catItemEntity, "newBoatEntityBlacklist", new String[]{});
-		newBoatEntityBlacklistProp.comment = "What entities shouldn't be able to sit in the boat? This is ONLY for new boats. You can either provide an entity ID (modid.entityid, for vanilla entities type just entity ID), or search for a string in the classpath (classpath:stringtofind).\nSeparate entries in the list by a new line. Note that players can always sit even if blacklisted, and some entities, like horses, water mobs or nonliving entities, will never be allowed to sit in boats.\nIt's a little hard to explain, a more detailed explanation and list of examples can be found here: https://gist.github.com/Roadhog360/0a9975d113217e65cc6b06c494454e4f";
+
 		newBoatEntityBlacklist = newBoatEntityBlacklistProp.getStringList();
 		newBoatEntityBlacklistAsWhitelist = getBoolean("newBoatEntityBlacklistAsWhitelist", catItemEntity, false, "Treat the entity blacklist as a whitelist, ONLY entities matching that criteria will be allowed.");
-
-		//      endGatewaySpawnColor = getInt("endGatewaySpawnColor", catAbandoned, 2, 0, 15, "The color of the end gateway beam when the gateway first appears.");
-//      endGatewayEntryColor = getInt("endGatewayEntryColor", catAbandoned, 2, 0, 15, "The color of the end gateway beam when an entity enters it. Originally, this value was 4 (yellow) before version 1.11.");
 	}
 }

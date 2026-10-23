@@ -54,7 +54,7 @@ public class EntityPhantom extends EntityMob {
 		if (length > 1) { double speed = swooping ? .8 : .35; motionX += (dx / length * speed - motionX) * .1; motionY += (dy / length * speed - motionY) * .1; motionZ += (dz / length * speed - motionZ) * .1; rotationYaw = (float) (Math.atan2(dz, dx) * 180 / Math.PI) - 90; rotationPitch = (float) (-Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * 180 / Math.PI); renderYawOffset = rotationYaw; }
 		moveEntity(motionX, motionY, motionZ);
 	}
-	@Override protected void dropFewItems(boolean player, int looting) { if (player) { int count = rand.nextInt(2) + rand.nextInt(looting + 1); if (count > 0) entityDropItem(ModItems.PHANTOM_MEMBRANE.newItemStack(count), 0); } }
+	@Override protected void dropFewItems(boolean player, int looting) { if (player) { int count = rand.nextInt(2) + rand.nextInt(looting + 1); if (count > 0) ganymedes01.etfuturum.configuration.ContentAvailability.drop(this, ModItems.PHANTOM_MEMBRANE.newItemStack(count), 0); } }
 	@Override public void writeEntityToNBT(NBTTagCompound tag) { super.writeEntityToNBT(tag); tag.setInteger("Size", getPhantomSize()); tag.setDouble("AX", anchorX); tag.setDouble("AY", anchorY); tag.setDouble("AZ", anchorZ); }
 	@Override public void readEntityFromNBT(NBTTagCompound tag) { super.readEntityFromNBT(tag); dataWatcher.updateObject(16, MathHelper.clamp_int(tag.getInteger("Size"), 0, 64)); anchorX = tag.hasKey("AX") ? tag.getDouble("AX") : posX; anchorY = tag.hasKey("AY") ? tag.getDouble("AY") : posY + 10; anchorZ = tag.hasKey("AZ") ? tag.getDouble("AZ") : posZ; if (!Double.isFinite(anchorX) || !Double.isFinite(anchorY) || !Double.isFinite(anchorZ)) { anchorX = posX; anchorY = posY + 10; anchorZ = posZ; } }
 }

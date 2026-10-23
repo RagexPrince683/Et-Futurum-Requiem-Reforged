@@ -30,18 +30,8 @@ public class ConfigModCompat extends ConfigBase {
 	static final String catMisc = "misc";
 	static final String catRPLE = "RPLE";
 
-	public ConfigModCompat(File file) {
-		super(file);
-
-		getCategory(catMisc).setComment("""
-				When modded deepslate or raw ore support is enabled, OreDictionary tags will be given to the needed Lord of the Rings ores since they don't have any tags for some reason.\
-				LoTR Ores that have no raw/deepslate modded alternative will not be tagged.""");
-		getCategory(catRPLE).setComment("""
-				RPLE color values for things that don't use normal block/meta states and thus can't be in the RPLE config.
-				I would have put these in the RPLE config folder but venn got mad at me and told me not to. :(""");
-
-		configCats.add(getCategory(catMisc));
-		configCats.add(getCategory(catRPLE));
+	public ConfigModCompat() {
+		super("modcompat");
 	}
 
 

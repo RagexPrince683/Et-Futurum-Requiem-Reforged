@@ -42,7 +42,7 @@ public class DynamicSoundsResourcePack implements IResourcePack {
 
 	@Override
 	public String getPackName() {
-		return "Et Futurum Requiem dynamic sounds.json";
+		return "UAB dynamic sounds.json";
 	}
 
 	public InputStream getInputStream(ResourceLocation resLoc) {

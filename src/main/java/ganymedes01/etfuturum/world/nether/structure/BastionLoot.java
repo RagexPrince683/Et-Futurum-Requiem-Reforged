@@ -29,7 +29,7 @@ public final class BastionLoot {
 			add(table, ModBlocks.GILDED_BLACKSTONE.newItemStack(), 1, 5, 5);
 			add(table, ModItems.NETHERITE_SCRAP.newItemStack(), 1, 1, 2);
 			add(table, ModItems.PIGSTEP_RECORD.newItemStack(), 1, 1, 1);
-			if (ganymedes01.etfuturum.ModEnchantments.soulSpeed != null) table.addItem(new WeightedRandomChestContent(new ItemStack(Items.book), 1, 1, 5) {
+			if (ganymedes01.etfuturum.configuration.configs.ConfigEnchantsPotions.enableSoulSpeed) table.addItem(new WeightedRandomChestContent(new ItemStack(Items.book), 1, 1, 5) {
 				@Override protected ItemStack[] generateChestContent(java.util.Random random, net.minecraft.inventory.IInventory inventory) {
 					return new ItemStack[]{Items.enchanted_book.getEnchantedItemStack(new net.minecraft.enchantment.EnchantmentData(ganymedes01.etfuturum.ModEnchantments.soulSpeed, 1 + random.nextInt(3)))};
 				}

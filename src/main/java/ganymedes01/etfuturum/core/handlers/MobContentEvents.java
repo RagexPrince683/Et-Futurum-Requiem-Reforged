@@ -69,7 +69,7 @@ public final class MobContentEvents {
 		if (zombie.worldObj.spawnEntityInWorld(drowned)) { for (int slot = 0; slot < 5; slot++) zombie.setCurrentItemOrArmor(slot, null); zombie.setDead(); }
 	}
 	@SubscribeEvent public void bonemeal(BonemealEvent event) {
-		if (event.block == ModBlocks.SEAGRASS.get()) return; // IGrowable owns tall-seagrass growth.
+		if (!ModBlocks.SEAGRASS.isEnabled() || event.block == ModBlocks.SEAGRASS.get()) return; // IGrowable owns tall-seagrass growth.
 		if (event.block.getMaterial() != Material.water || event.world.getBlockMetadata(event.x, event.y, event.z) != 0 || !ModBlocks.SEAGRASS.get().canPlaceBlockAt(event.world, event.x, event.y, event.z)) return;
 		if (!event.world.isRemote) event.world.setBlock(event.x, event.y, event.z, ModBlocks.SEAGRASS.get(), 0, 2);
 		event.setResult(Event.Result.ALLOW);
@@ -87,14 +87,14 @@ public final class MobContentEvents {
 		if (MobChestIndex.chest(event.world.getTileEntity(event.x, event.y, event.z))) MobChestIndex.add(event.world, event.x, event.y, event.z);
 		if (event.placedBlock == Blocks.pumpkin && ModBlocks.COPPER_BLOCK.isEnabled() && event.world.getBlock(event.x, event.y - 1, event.z) == ModBlocks.COPPER_BLOCK.get()) {
 			EntityCopperGolem golem = new EntityCopperGolem(event.world); golem.setLocationAndAngles(event.x + .5, event.y, event.z + .5, 0, 0);
-			if (event.world.spawnEntityInWorld(golem)) { event.world.setBlockToAir(event.x, event.y, event.z); event.world.setBlock(event.x, event.y - 1, event.z, ModBlocks.COPPER_CHEST.get(), 0, 3); MobChestIndex.add(event.world, event.x, event.y - 1, event.z); }
+			if (event.world.spawnEntityInWorld(golem)) { event.world.setBlockToAir(event.x, event.y, event.z); if (ModBlocks.COPPER_CHEST.isEnabled()) { event.world.setBlock(event.x, event.y - 1, event.z, ModBlocks.COPPER_CHEST.get(), 0, 3); MobChestIndex.add(event.world, event.x, event.y - 1, event.z); } }
 		}
 	}
 	@SubscribeEvent public void breakBlock(BlockEvent.BreakEvent event) { if (!event.world.isRemote) { MobChestIndex.remove(event.world, event.x, event.y, event.z); vibration(event.getPlayer(), event.x, event.y, event.z); } }
 	@SubscribeEvent public void note(NoteBlockEvent.Play event) { if (!event.world.isRemote) { AxisAlignedBB area = AxisAlignedBB.getBoundingBox(event.x - 16, event.y - 16, event.z - 16, event.x + 17, event.y + 17, event.z + 17); for (Object object : event.world.getEntitiesWithinAABB(EntityAllay.class, area)) ((EntityAllay) object).hearNote(event.x, event.y, event.z); } }
 	@SubscribeEvent public void spawnList(WorldEvent.PotentialSpawns event) {
 		if (event.type == net.minecraft.entity.EnumCreatureType.monster && ConfigEntities.enableOutposts && event.world.provider.dimensionId == 0 && RaidProgress.get(event.world).isOutpost(event.x, event.z) && event.y >= event.world.getTopSolidOrLiquidBlock(event.x, event.z) - 12) {
-			event.list.clear(); event.list.add(new net.minecraft.world.biome.BiomeGenBase.SpawnListEntry(EntityPillager.class, 1, 1, 3));
+			event.list.clear(); ganymedes01.etfuturum.configuration.SpawnSettings.add(event.list, EntityPillager.class, 1, 1, 3);
 		}
 	}
 	private static void vibration(net.minecraft.entity.Entity source, double x, double y, double z) { for (Object object : source.worldObj.getEntitiesWithinAABB(EntityWarden.class, source.boundingBox.expand(16, 16, 16))) ((EntityWarden) object).vibration(source, x, y, z); }

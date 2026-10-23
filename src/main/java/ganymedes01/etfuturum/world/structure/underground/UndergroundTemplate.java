@@ -70,10 +70,10 @@ final class UndergroundTemplate {
 		else if (name.equals("red_concrete") || name.equals("white_concrete")) { block = enabled(ModBlocks.CONCRETE); subtype = name.startsWith("red_") ? 14 : 0; direct = true; }
 		else if (name.equals("reinforced_deepslate")) block = enabled(ModBlocks.REINFORCED_DEEPSLATE);
 		else if (name.equals("sculk_sensor")) { block = enabled(ModBlocks.SCULK_SENSOR); direct = true; }
-		else if (name.equals("trial_spawner")) { block = ModBlocks.TRIAL_SPAWNER.get(); direct = true; }
-		else if (name.equals("vault")) { block = ModBlocks.VAULT.get(); direct = true; subtype = directionIndex(props.get("facing")) | (Boolean.parseBoolean(props.get("ominous")) ? 4 : 0); }
-		else if (name.endsWith("candle")) { block = ModBlocks.CANDLE.get(); direct = true; subtype = Boolean.parseBoolean(props.get("lit")) ? 4 : 0; }
-		else if (name.equals("decorated_pot")) { block = ModBlocks.DECORATED_POT.get(); direct = true; }
+		else if (name.equals("trial_spawner")) { block = enabled(ModBlocks.TRIAL_SPAWNER); direct = true; }
+		else if (name.equals("vault")) { block = enabled(ModBlocks.VAULT); direct = true; subtype = directionIndex(props.get("facing")) | (Boolean.parseBoolean(props.get("ominous")) ? 4 : 0); }
+		else if (name.endsWith("candle")) { block = enabled(ModBlocks.CANDLE); direct = true; subtype = Boolean.parseBoolean(props.get("lit")) ? 4 : 0; }
+		else if (name.equals("decorated_pot")) { block = enabled(ModBlocks.DECORATED_POT); direct = true; }
 		else if (name.equals("torch")) { block = Blocks.torch; subtype = 5; direct = true; }
 		else if (name.equals("wall_torch")) { block = Blocks.torch; subtype = "east".equals(props.get("facing")) ? 1 : "west".equals(props.get("facing")) ? 2 : "south".equals(props.get("facing")) ? 3 : 4; direct = true; }
 		else if (name.equals("chiseled_deepslate")) { block = enabled(ModBlocks.DEEPSLATE_BRICKS); subtype = 4; }

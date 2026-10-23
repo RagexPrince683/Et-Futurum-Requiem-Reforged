@@ -23,13 +23,8 @@ public class ConfigEnchantsPotions extends ConfigBase {
 	static final String catPotions = "potions";
 
 
-	public ConfigEnchantsPotions(File file) {
-		super(file);
-		setCategoryComment(catEnchants, "Settings for enchantments.\nBy default, only IDs up to 255 are allowed, only assign a larger value if an ID extension is present.");
-		setCategoryComment(catPotions, "Settings for potions.\nBy default, only IDs up to 31 are allowed, only assign a larger value if an ID extension is present.");
-
-		configCats.add(getCategory(catEnchants));
-		configCats.add(getCategory(catPotions));
+	public ConfigEnchantsPotions() {
+		super("enchantspotions");
 	}
 
 	@Override

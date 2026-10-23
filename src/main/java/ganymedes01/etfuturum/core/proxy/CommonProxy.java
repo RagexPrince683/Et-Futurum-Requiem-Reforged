@@ -72,80 +72,80 @@ public class CommonProxy implements IGuiHandler {
 	}
 
 	public void registerEntities() {
-		if (ConfigEntities.enableGuardians) {
+		{
 			ganymedes01.etfuturum.world.structure.MonumentSpawning.init();
 			ModEntityList.registerEntity(EntityGuardian.class, "guardian", 34, EtFuturum.instance, 80, 3, true, 0x5A8272, 0xF17D30);
 		}
-		if (ConfigEntities.enableFrogs) {
+		{
 			ModEntityList.registerEntity(EntityFrog.class, "frog", 32, EtFuturum.instance, 80, 3, true, 0xD07444, 0xFFC77C);
 			ModEntityList.registerEntity(EntityTadpole.class, "tadpole", 33, EtFuturum.instance, 64, 3, true, 0x6D533D, 0x160A00);
-			EntityRegistry.addSpawn(EntityFrog.class, 10, 2, 5, EnumCreatureType.creature, BiomeDictionary.getBiomesForType(Type.SWAMP));
+			ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityFrog.class, 10, 2, 5, EnumCreatureType.creature, BiomeDictionary.getBiomesForType(Type.SWAMP));
 		}
-		if (ConfigExperiments.enablePaleGarden) {
+		{
 			GameRegistry.registerTileEntity(TileEntityCreakingHeart.class, Utils.getUnlocalisedName("creaking_heart"));
 			ModEntityList.registerEntity(EntityCreaking.class, "creaking", 31, EtFuturum.instance, 80, 3, true, 0x5F5F4C, 0xFC7812);
 		}
-		if (ConfigEntities.enableNetherMobs) {
+		{
 			ganymedes01.etfuturum.world.nether.NetherSpawning.init();
 			ModEntityList.registerEntity(EntityPiglin.class, "piglin", 26, EtFuturum.instance, 80, 3, true, 0x995F40, 0xF9F3A4);
 			ModEntityList.registerEntity(EntityPiglinBrute.class, "piglin_brute", 27, EtFuturum.instance, 80, 3, true, 0x592A10, 0xF9F3A4);
 			ModEntityList.registerEntity(EntityHoglin.class, "hoglin", 28, EtFuturum.instance, 80, 3, true, 0xC66E55, 0x5F6464);
 			ModEntityList.registerEntity(EntityZoglin.class, "zoglin", 29, EtFuturum.instance, 80, 3, true, 0xC66E55, 0xE6E6E6);
 			ModEntityList.registerEntity(EntityStrider.class, "strider", 30, EtFuturum.instance, 80, 3, true, 0x9C3436, 0x4D494D);
-			EntityRegistry.addSpawn(EntityPiglin.class, 15, 2, 4, EnumCreatureType.monster, BiomeGenBase.hell);
+			ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityPiglin.class, 15, 2, 4, EnumCreatureType.monster, BiomeGenBase.hell);
 		}
-		if (ModBlocks.LIGHTNING_ROD.isEnabled())
+
 			GameRegistry.registerTileEntity(TileEntityLightningRod.class, Utils.getUnlocalisedName("lightning_rod"));
-		if (ModBlocks.BREWING_STAND.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntityNewBrewingStand.class, Utils.getUnlocalisedName("brewing_stand"));
 		}
-		if (ModBlocks.BEACON.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntityNewBeacon.class, Utils.getUnlocalisedName("beacon"));
 		}
-		if (ModBlocks.BARREL.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntityBarrel.class, Utils.getUnlocalisedName("barrel"));
 			if(ModsList.IRON_CHEST.isLoaded()) {
 				GameRegistry.registerTileEntity(TileEntityBarrel.ClearTE.class, Utils.getUnlocalisedName("clear_barrel"));
 			}
 		}
-		if (ModBlocks.SMOKER.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntitySmoker.class, Utils.getUnlocalisedName("smoker"));
 		}
-		if (ModBlocks.BLAST_FURNACE.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntityBlastFurnace.class, Utils.getUnlocalisedName("blast_furnace"));
 		}
-		if (ConfigBlocksItems.enableVanillaSigns || ConfigBlocksItems.enableNewSigns) {
+		{
 			GameRegistry.registerTileEntity(TileEntityWoodSign.class, Utils.getUnlocalisedName("sign"));
 		}
-		if (ModBlocks.SCULK_CATALYST.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntitySculkCatalyst.class, Utils.getUnlocalisedName("sculk_catalyst"));
 		}
-		if (ModBlocks.END_GATEWAY.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntityGateway.class, Utils.getUnlocalisedName("end_gateway"));
 		}
-		if (ModBlocks.SHULKER_BOX.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntityShulkerBox.class, Utils.getUnlocalisedName("shulker_box"));
 		}
-		if (ModBlocks.POTION_CAULDRON.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntityCauldronPotion.class, Utils.getUnlocalisedName("potion_cauldron"));
 		}
-		if (ModBlocks.BANNER.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntityBanner.class, Utils.getUnlocalisedName("banner"));
 		}
-		if (ModBlocks.BEEHIVE.isEnabled() || ModBlocks.BEE_NEST.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntityBeeHive.class, Utils.getUnlocalisedName("hive"));
 		}
-		
-		if (ModBlocks.GLOW_LICHEN.isEnabled()) {
+
+		{
 			GameRegistry.registerTileEntity(TileEntityGlowLichen.class, Utils.getUnlocalisedName("glow_lichen"));
 		}
-		if (ModBlocks.CAVE_VINE.isEnabled()) {
+		{
 			GameRegistry.registerTileEntity(TileEntityCaveVines.class, Utils.getUnlocalisedName("cave_vines"));
 		}
-		if (ConfigEntities.enableRabbit) {
+		{
 			ModEntityList.registerEntity(EntityRabbit.class, "rabbit", 3, EtFuturum.instance, 80, 3, true, 0x995F40, 0x734831);
 
-			EntityRegistry.addSpawn(EntityRabbit.class, 3, 1, 3, EnumCreatureType.creature, BiomeDictionary.getBiomesForType(Type.SANDY));
+			ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityRabbit.class, 3, 1, 3, EnumCreatureType.creature, BiomeDictionary.getBiomesForType(Type.SANDY));
 			BiomeGenBase[] array = BiomeDictionary.getBiomesForType(Type.SNOWY);
 			array = ArrayUtils.addAll(array, BiomeDictionary.getBiomesForType(Type.PLAINS));
 			array = ArrayUtils.addAll(array, BiomeDictionary.getBiomesForType(Type.FOREST));
@@ -154,22 +154,22 @@ public class CommonProxy implements IGuiHandler {
 					array = ArrayUtils.removeElement(array, biome);
 				}
 			}
-			EntityRegistry.addSpawn(EntityRabbit.class, 6, 1, 3, EnumCreatureType.creature, array);
+			ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityRabbit.class, 6, 1, 3, EnumCreatureType.creature, array);
 		}
 
-		if (ConfigBlocksItems.enableArmourStand) {
+		{
 			ModEntityList.registerEntity(EntityArmourStand.class, "wooden_armorstand", 0, EtFuturum.instance, 64, 1, true);
 		}
 
-		if (ConfigEntities.enableEndermite) {
+		{
 			ModEntityList.registerEntity(EntityEndermite.class, "endermite", 1, EtFuturum.instance, 64, 1, true, 0x161616, 0x6E6E6E);
 		}
 
-		if (ConfigBlocksItems.enableTippedArrows) {
+		{
 			ModEntityList.registerEntity(EntityTippedArrow.class, "tipped_arrow", 2, EtFuturum.instance, 64, 20, true);
 		}
 
-		if (ConfigBlocksItems.enableSpectralArrows) {
+		{
 			ModEntityList.registerEntity(EntitySpectralArrow.class, "spectral_arrow", 25, EtFuturum.instance, 64, 20, true);
 		}
 
@@ -184,10 +184,10 @@ public class CommonProxy implements IGuiHandler {
 			}
 		}
 
-		if (ConfigEntities.enableHusk) {
+		{
 			ModEntityList.registerEntity(EntityHusk.class, "husk", 4, EtFuturum.instance, 80, 3, true, 0x777561, 0xE0D991);
 
-			if (ConfigWorld.oldHuskSpawning) {
+			if (ConfigEntities.enableHusk && ConfigWorld.oldHuskSpawning) {
 				List<BiomeGenBase> biomes = new ArrayList<>(Arrays.asList(BiomeDictionary.getBiomesForType(Type.SANDY)));
 				biomes.retainAll(Arrays.asList(BiomeDictionary.getBiomesForType(Type.DRY)));
 				biomes.retainAll(Arrays.asList(BiomeDictionary.getBiomesForType(Type.HOT)));
@@ -196,57 +196,57 @@ public class CommonProxy implements IGuiHandler {
 				//change spawn weights
 				EntityRegistry.removeSpawn(EntityZombie.class, EnumCreatureType.monster, biomeArray);
 
-				EntityRegistry.addSpawn(EntityZombie.class, 20, 4, 4, EnumCreatureType.monster, biomeArray);
-				EntityRegistry.addSpawn(EntityHusk.class, 80, 4, 4, EnumCreatureType.monster, biomeArray);
+				ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityZombie.class, 20, 4, 4, EnumCreatureType.monster, biomeArray);
+				ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityHusk.class, 80, 4, 4, EnumCreatureType.monster, biomeArray);
 			}
 		}
 
-		if (ConfigEntities.enableStray) {
+		{
 			ModEntityList.registerEntity(EntityStray.class, "stray", 5, EtFuturum.instance, 80, 3, true, 0x617778, 0xE6EAEA);
 
-			if (ConfigWorld.oldStraySpawning) {
+			if (ConfigEntities.enableStray && ConfigWorld.oldStraySpawning) {
 				//change spawn weights
 				EntityRegistry.removeSpawn(EntitySkeleton.class, EnumCreatureType.monster, BiomeDictionary.getBiomesForType(Type.SNOWY));
 
-				EntityRegistry.addSpawn(EntitySkeleton.class, 20, 4, 4, EnumCreatureType.monster, BiomeDictionary.getBiomesForType(Type.SNOWY));
-				EntityRegistry.addSpawn(EntityStray.class, 80, 4, 4, EnumCreatureType.monster, BiomeDictionary.getBiomesForType(Type.SNOWY));
+				ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntitySkeleton.class, 20, 4, 4, EnumCreatureType.monster, BiomeDictionary.getBiomesForType(Type.SNOWY));
+				ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityStray.class, 80, 4, 4, EnumCreatureType.monster, BiomeDictionary.getBiomesForType(Type.SNOWY));
 			}
 		}
 
 		if (ConfigEntities.enableNetherEndermen) {
-			EntityRegistry.addSpawn(EntityEnderman.class, 1, 4, 4, EnumCreatureType.monster, BiomeGenBase.hell);
-//			if (ModBlocks.NYLIUM.isEnabled()) {
+			ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityEnderman.class, 1, 4, 4, EnumCreatureType.monster, BiomeGenBase.hell);
+//			 {
 //				EntityEnderman.setCarriable(ModBlocks.NYLIUM.get(), true);
 //			}
 		}
 
-		if (ConfigBlocksItems.enableLingeringPotions) {
+		{
 			ModEntityList.registerEntity(EntityLingeringPotion.class, "lingering_potion", 6, EtFuturum.instance, 64, 10, true);
 			ModEntityList.registerEntity(EntityLingeringEffect.class, "lingering_effect", 7, EtFuturum.instance, 64, 1, true);
 		}
 
-		if (ConfigEntities.enableVillagerZombies)
+
 			ModEntityList.registerEntity(EntityZombieVillager.class, "villager_zombie", 8, EtFuturum.instance, 80, 3, true, 0x00AFAF, 0x799C65);
 
-		if (ConfigEntities.enableDragonRespawn) {
+		{
 			ModEntityList.registerEntity(EntityPlacedEndCrystal.class, "end_crystal", 9, EtFuturum.instance, 256, Integer.MAX_VALUE, false);
 			ModEntityList.registerEntity(EntityRespawnedDragon.class, "ender_dragon", 10, EtFuturum.instance, 160, 3, true);
 		}
 
-		if (ConfigEntities.enableShearableSnowGolems)
+
 			ModEntityList.registerEntity(EntityNewSnowGolem.class, "snow_golem", 11, EtFuturum.instance, 80, 3, true);
 
-		if (ConfigEntities.enableBrownMooshroom)
+
 			ModEntityList.registerEntity(EntityBrownMooshroom.class, "brown_mooshroom", 12, EtFuturum.instance, 80, 3, true);
 
 		ModEntityList.registerEntity(EntityItemUninflammable.class, "fireproof_item", 15, EtFuturum.instance, 64, 1, true);
 
-		if (ConfigEntities.enableShulker) {
+		{
 			ModEntityList.registerEntity(EntityShulker.class, "shulker", 16, EtFuturum.instance, 80, 1, false, 0x946794, 0x4D3852);
 			ModEntityList.registerEntity(EntityShulkerBullet.class, "shulker_candy", 17, EtFuturum.instance, 64, 1, true);
 
 			if (ConfigTweaks.shulkersSpawnAnywhere) {
-				EntityRegistry.addSpawn(EntityShulker.class, 1, 1, 2, EnumCreatureType.monster, BiomeDictionary.getBiomesForType(Type.END));
+				ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityShulker.class, 1, 1, 2, EnumCreatureType.monster, BiomeDictionary.getBiomesForType(Type.END));
 			}
 		}
 
@@ -254,42 +254,42 @@ public class CommonProxy implements IGuiHandler {
 //          ModEntityList.registerEntity(EntityFallingDripstone.class, "falling_dripstone", 18, EtFuturum.instance, 64, 1, true);
 //      }
 
-		if (ConfigBlocksItems.enableNewBoats) {
+		{
 			ModEntityList.registerEntity(EntityNewBoat.class, "new_boat", 13, EtFuturum.instance, 64, 1, true);
 			ModEntityList.registerEntity(EntityNewBoatWithChest.class, "chest_boat", 19, EtFuturum.instance, 64, 1, true);
 			ModEntityList.registerEntity(EntityNewBoatSeat.class, "new_boat_seat", 14, EtFuturum.instance, 64, 1, false);
 		}
 
-		if (ConfigMixins.enableElytra) {
+		{
 			ModEntityList.registerEntity(EntityBoostingFireworkRocket.class, "boosting_firework_rocket", 20, EtFuturum.instance, 64, 1, true);
 		}
 
-		if (ConfigEntities.enableBees) {
+		{
 			ModEntityList.registerEntity(EntityBee.class, "bee", 21, EtFuturum.instance, 80, 1, true, 0xEDC343, 0x43241B);
 		}
 
-		if (ConfigEntities.enableFoxes) {
+		{
 			ModEntityList.registerEntity(EntityFox.class, "fox", 22, EtFuturum.instance, 64, 1, true, 0xD5B69F, 0xCC6920);
-			EntityRegistry.addSpawn(EntityFox.class, 8, 2, 4, EnumCreatureType.creature, BiomeDictionary.getBiomesForType(Type.CONIFEROUS));
+			ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityFox.class, 8, 2, 4, EnumCreatureType.creature, BiomeDictionary.getBiomesForType(Type.CONIFEROUS));
 		}
 
-		if (ConfigEntities.enablePolarBears) {
+		{
 			ModEntityList.registerEntity(EntityPolarBear.class, "polar_bear", 23, EtFuturum.instance, 80, 3, true, 0xF2F2F2, 0x959590);
-			EntityRegistry.addSpawn(EntityPolarBear.class, 1, 1, 2, EnumCreatureType.creature, BiomeDictionary.getBiomesForType(Type.SNOWY));
+			ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityPolarBear.class, 1, 1, 2, EnumCreatureType.creature, BiomeDictionary.getBiomesForType(Type.SNOWY));
 		}
 
-		if (ConfigEntities.enableGoats) {
+		{
 			ModEntityList.registerEntity(EntityGoat.class, "goat", 24, EtFuturum.instance, 80, 3, true, 0xA5947C, 0x55493E);
 			List<BiomeGenBase> goatBiomes = new ArrayList<>(Arrays.asList(BiomeDictionary.getBiomesForType(Type.MOUNTAIN)));
 			goatBiomes.retainAll(Arrays.asList(BiomeDictionary.getBiomesForType(Type.SNOWY)));
 			if (!goatBiomes.isEmpty()) {
-				EntityRegistry.addSpawn(EntityGoat.class, 5, 1, 3, EnumCreatureType.creature, goatBiomes.toArray(new BiomeGenBase[goatBiomes.size()]));
+				ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityGoat.class, 5, 1, 3, EnumCreatureType.creature, goatBiomes.toArray(new BiomeGenBase[goatBiomes.size()]));
 			}
 		}
 
 		//make magmas slightly more common, hopefully.
 		EntityRegistry.removeSpawn(EntityMagmaCube.class, EnumCreatureType.monster, BiomeGenBase.hell);
-		EntityRegistry.addSpawn(EntityMagmaCube.class, 2, 4, 4, EnumCreatureType.monster, BiomeGenBase.hell);
+		ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityMagmaCube.class, 2, 4, 4, EnumCreatureType.monster, BiomeGenBase.hell);
 		ganymedes01.etfuturum.world.surface.SurfaceBiomeManager.finishSpawns();
 		ganymedes01.etfuturum.world.MobSpawning.init();
 		ganymedes01.etfuturum.world.ModernMobs.init();

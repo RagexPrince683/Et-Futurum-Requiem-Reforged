@@ -13,8 +13,8 @@ import java.io.File;
 
 public class ConfigWorld extends ConfigBase {
 
-	//TODO: CHANGE THIS
-	public static boolean enableNewNether;
+	/** @deprecated Use ConfigExperiments.netherDimensionProvider. */
+	@Deprecated public static boolean enableNewNether;
 
 	public static String fossilBlockID;
 	public static String amethystOuterBlockID;
@@ -89,17 +89,8 @@ public class ConfigWorld extends ConfigBase {
 	public static final String catBiomes = "biomes";
 	public static final String catMisc = "miscellaneous";
 
-	public ConfigWorld(File file) {
-		super(file);
-		setCategoryComment(catClient, "Client-side only effects.");
-		setCategoryComment(catGeneration, "Generation settings.");
-		setCategoryComment(catBiomes, "Biome ID and weight settings. These do not disable the respective blocks, go to blocksitems.cfg to disable their blocks. Nether biomes can currently only be enabled via experiments.cfg");
-		setCategoryComment(catMisc, "For things that affect the world but don't belong in any other category.");
-
-		configCats.add(getCategory(catClient));
-		configCats.add(getCategory(catGeneration));
-		configCats.add(getCategory(catBiomes));
-		configCats.add(getCategory(catMisc));
+	public ConfigWorld() {
+		super("world");
 	}
 
 	@Override
@@ -125,58 +116,24 @@ public class ConfigWorld extends ConfigBase {
 		deepslateGenerationMode = getInt("deepslateGenerationMode", catGeneration, 0, -1, 1, "If 0, deepslate replaces all stone below the specified value, with a shattering effect near the top similar to bedrock. If 1, it generates in clusters using the deepslate cluster settings. -1 disables Et Futurum deepslate generation entirely.");
 		enableOceanMonuments = getBoolean("enableOceanMonuments", catGeneration, true, "Generates saved ocean-monument structures in deep oceans. New monuments are placed in clipped chunks without retrogen; guardians are controlled separately in the entity configuration.");
 		enableFossils = getBoolean("enableFossils", catGeneration, true, "");
-		if (hasKey(catGeneration, "fossilBoneBlock")) {
-			Property oldFossilIDProp = get(catGeneration, "fossilBoneBlock", 0);
-			int oldID = oldFossilIDProp.getInt();
-			switch (oldID) {
-				default:
-					fossilBlockID = "etfuturum:bone";
-					break;
-				case 1:
-					fossilBlockID = "netherlicious:BoneBlock";
-					break;
-				case 2:
-					fossilBlockID = "uptodate:bone_block";
-					break;
-			}
-			getCategory(catGeneration).remove("fossilBoneBlock");
-			get(catGeneration, "fossilBlockID", "etfuturum:bone").set(fossilBlockID);
-			save();
-		}
+
 		fossilBlockID = getString("fossilBlockID", catGeneration, "etfuturum:bone", "Use a namespaced ID, + optionally meta (max 3) to choose the block that makes up fossils. The max meta is 3 because the rotations will change the meta. North/South is the meta + 4 and East/West is + 8.\nNetherlicious bone block is \"netherlicious:BoneBlock\" and UpToDate bone block is \"uptodate:bone_block\".\nIf the chosen block does not exist then fossils will not generate. If Netherlicious is installed, its bone block will be used if this is set to \"etfutrum:bone\" and Et Futurum Requiem bone blocks are disabled.");
 
-		if (hasKey(catGeneration, "amethystOuterBlock")) {
-			Property oldAmethystOuterIDProp = get(catGeneration, "amethystOuterBlock", 0);
-			int oldID = oldAmethystOuterIDProp.getInt();
-			switch (oldID) {
-				default:
-					amethystOuterBlockID = "etfuturum:smooth_basalt";
-					break;
-				case 1:
-					amethystOuterBlockID = "etfuturum:tuff";
-					break;
-				case 2:
-					amethystOuterBlockID = "netherlicious:BasaltBricks:6";
-					break;
-			}
-			getCategory(catGeneration).remove("amethystOuterBlock");
-			get(catGeneration, "amethystOuterBlockID", "etfuturum:bone").set(amethystOuterBlockID);
-			save();
-		}
+
 		amethystOuterBlockID = getString("amethystOuterBlockID", catGeneration, "etfuturum:smooth_basalt", "Use a namespaced ID, + optionally meta (max 15) to choose the block that makes up the outer layer of amethyst geodes.\nThe outer layer was formerly \"etfuturum:tuff\" before it was changed in later 1.17 snapshots. Netherlicious smooth basalt is \"netherlicious:BasaltBricks:6\"\nIf the chosen block does not exist then amethyst geodes will not generate.");
 
 		amethystMiddleBlockID = getString("amethystMiddleBlockID", catGeneration, "etfuturum:calcite", "Use a namespaced ID, + optionally meta (max 15) to choose the block that makes up the middle layer of amethyst geodes.\nIf the chosen block does not exist then amethyst geodes will not generate.");
 
 		Property fossilBlacklistProp = get(catGeneration, "fossilDimensionBlacklist", new int[]{});
-		fossilBlacklistProp.comment = "The dimension IDs of the dimensions the fossil structures should not spawn in. Fossils will also not spawn in any dimension that is not an instance of WorldProviderSurface";
+
 		fossilDimensionBlacklist = fossilBlacklistProp.getIntList();
 		fossilDimensionBlacklistAsWhitelist = getBoolean("fossilDimensionBlacklistAsWhitelist", catGeneration, false, "Treat the fossil dimension blacklist as a whitelist instead, so fossils will ONLY generate in those dimensions, instead of excluding those dimensions from generation.");
 		Property deepslateBlacklistProp = get(catGeneration, "deepslateLayerDimensionBlacklist", new int[]{-1, 1});
-		deepslateBlacklistProp.comment = "The dimensions the deepslate layer (deepslate generation mode 0) should not spawn in. Does nothing if other deepslate generation modes are used.";
+
 		deepslateLayerDimensionBlacklist = deepslateBlacklistProp.getIntList();
 		deepslateLayerDimensionBlacklistAsWhitelist = getBoolean("deepslateLayerDimensionBlacklistAsWhitelist", catGeneration, false, "Treat the deepslate layer dimension blacklist as a whitelist instead, so it will ONLY generate in those dimensions, instead of excluding those dimensions from generation.");
 		Property replaceAllStoneWithDeepslateDimensionWhitelistProp = get(catGeneration,"replaceAllStoneWithDeepslateDimensionWhitelist",new int[]{});
-		replaceAllStoneWithDeepslateDimensionWhitelistProp.comment="The dimensions the deepslate layer (deepslate generation mode 0) should replace ALL stone in, rather than adhering to the deepslateMaxY limit. Does nothing if other deepslate generation modes are used. Useful if you have a mod that adds more \"layers\" to the overworld, for example.";
+
 		replaceAllStoneWithDeepslateDimensionWhitelist = replaceAllStoneWithDeepslateDimensionWhitelistProp.getIntList();
 		maxTuffPerCluster = getInt("tuffClusterSize", catGeneration, 32, 0, 64, "Max vein size for tuff blocks in a cluster");
 		enableExtraMesaGold = getBoolean("enableExtraMesaGold", catGeneration, true, "Generate 20 more veins of gold ore from Y 32 to Y 80 in any Mesa biome.");
@@ -185,7 +142,7 @@ public class ConfigWorld extends ConfigBase {
 		enableAmethystGeodes = getBoolean("enableAmethystGeodes", catGeneration, true, "");
 		buddingAmethystMode = getInt("buddingAmethystMode", catGeneration, 0, 0, 2, "0 = Budding amethyst cannot be obtained at all even with silk touch. When using this option, attempting to push them using a piston will break it.\n1 = Budding amethyst will drop if you use a silk touch pickaxe.\n2 = Budding amethyst does not need silk touch, just a pickaxe.");
 		Property amethystBlacklistProp = get(catGeneration, "amethystDimensionBlacklist", new int[]{-1, 1});
-		amethystBlacklistProp.comment = "What dimensions should we ban amethyst geodes from generating in?";
+
 		amethystDimensionBlacklist = amethystBlacklistProp.getIntList();
 		amethystDimensionBlacklistAsWhitelist = getBoolean("amethystDimensionBlacklistAsWhitelist", catGeneration, false, "Treat the amethyst dimension blacklist as a whitelist instead, so geodes will ONLY generate in those dimensions, instead of excluding those dimensions from generation.");
 		amethystRarity = getInt("amethystRarity", catGeneration, 53, 1, Byte.MAX_VALUE, "How rare should amethyst geodes be? 1/x chance per chunk, 1 means a geode attempts to appear every chunk");
@@ -237,6 +194,7 @@ public class ConfigWorld extends ConfigBase {
 
 	@Override
 	protected void initValues() {
+		enableNewNether = ConfigExperiments.netherDimensionProvider;
 		if (enableFossils) {
 			if (ModsList.NETHERLICIOUS.isLoaded() && (fossilBlockID.equals("etfuturum:bone") || fossilBlockID.equals("etfuturum:bone_block")) && !ModBlocks.BONE.isEnabled()) {
 				fossilBlock = new BlockMetaPair(ExternalContent.Blocks.NETHERLICIOUS_BONE_BLOCK.get(), 0);

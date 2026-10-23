@@ -36,19 +36,8 @@ public class ConfigSounds extends ConfigBase {
 	static final String catMisc = "misc";
 	static final String catAmbient = "ambient";
 
-	public ConfigSounds(File file) {
-		super(file);
-		setCategoryComment(catPlayer, "");
-		setCategoryComment(catBlocksItems, "Sounds for blocks and items.");
-		setCategoryComment(catEntity, "Sounds for entities.");
-		setCategoryComment(catAmbient, "Ambient sounds.");
-		setCategoryComment(catMisc, "Sounds that don't fit in any other category.\nNote some sound settings may be in mixins.cfg");
-
-		configCats.add(getCategory(catPlayer));
-		configCats.add(getCategory(catBlocksItems));
-		configCats.add(getCategory(catEntity));
-		configCats.add(getCategory(catAmbient));
-		configCats.add(getCategory(catMisc));
+	public ConfigSounds() {
+		super("sounds");
 	}
 
 	@Override

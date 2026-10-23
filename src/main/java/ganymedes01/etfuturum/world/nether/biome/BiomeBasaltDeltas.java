@@ -13,7 +13,7 @@ public class BiomeBasaltDeltas extends NetherBiomeBase {
 		fillerBlock = ModBlocks.BASALT.get();
 
 		spawnableMonsterList.clear();
-		this.spawnableMonsterList.add(new SpawnListEntry(EntityGhast.class, 40, 1, 1));
-		this.spawnableMonsterList.add(new SpawnListEntry(EntityMagmaCube.class, 100, 2, 5));
+		ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableMonsterList, EntityGhast.class, 40, 1, 1);
+		ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableMonsterList, EntityMagmaCube.class, 100, 2, 5);
 	}
 }

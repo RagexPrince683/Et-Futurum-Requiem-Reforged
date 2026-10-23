@@ -24,33 +24,7 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 	public static final MixinEnvironment.Side side = MixinEnvironment.getCurrentEnvironment().getSide();
 
 	public void initConfigs() {
-		final String configDir = "config" + File.separator + Tags.MOD_ID;
-
-//	  File from before Et Futurum Requiem (Not in a subdirectory)
-		File olderFile = new File(Launch.minecraftHome, "config" + File.separator + "etfuturum.cfg");
-//	  File from before Et Futurum Requiem 2.2.2
-		File oldFile = new File(Launch.minecraftHome, configDir + File.separator + "etfuturum.cfg");
-
-		oldFile.getParentFile().mkdirs();
-		if (olderFile.exists()) {
-			try {
-				Files.copy(olderFile.toPath(), oldFile.toPath());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			olderFile.delete();
-			Reference.launchConfigWarning = true;
-		}
-
-		if (oldFile.exists()) {
-			Reference.launchConfigWarning = true;
-		}
-
 		ConfigBase.initializeConfigs();
-
-//	  if(oldFile.exists()) {
-//		  ConfigBase.loadBaseConfig(oldFile);
-//	  }
 
 		CompatMisc.doLwjgl3ifyCompat();
 	}
@@ -67,6 +41,8 @@ public class EtFuturumEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoade
 
 		List<String> mixins = new ArrayList<>();
 		mixins.add("potionids.MixinHandshakeModList");
+		mixins.add("configuration.MixinWorldFeatureAcquisition");
+		mixins.add("configuration.MixinEnchantmentAvailability");
 
 		// Core APIs owned by Et Futurum: metadata-aware tags and nested generation tracking.
 		mixins.add("tags.MixinBlock");

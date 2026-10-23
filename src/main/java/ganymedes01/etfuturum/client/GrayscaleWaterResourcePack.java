@@ -154,7 +154,7 @@ public class GrayscaleWaterResourcePack implements IResourcePack {
 
 	@Override
 	public String getPackName() {
-		return "Et Futurum Requiem dynamic greyscale water for potion cauldrons";
+		return "UAB dynamic greyscale water for potion cauldrons";
 	}
 
 	@SuppressWarnings("unchecked")

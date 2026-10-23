@@ -21,16 +21,16 @@ public class NetherBiomeManager {
 	public static BiomeGenBase basaltDeltas;
 
 	public static void init() {
-		if (ConfigWorld.crimsonForestID != -1 && ConfigExperiments.enableCrimsonBlocks) {
+		if (ConfigWorld.crimsonForestID != -1) {
 			crimsonForest = new BiomeCrimsonForest(RegistrySafety.requireVacant(BiomeGenBase.getBiomeGenArray(), ConfigWorld.crimsonForestID, "Crimson Forest")).setBiomeName("Crimson Forest");
 		}
-		if (ConfigWorld.warpedForestID != -1 && ConfigExperiments.enableWarpedBlocks) {
+		if (ConfigWorld.warpedForestID != -1) {
 			warpedForest = new BiomeWarpedForest(RegistrySafety.requireVacant(BiomeGenBase.getBiomeGenArray(), ConfigWorld.warpedForestID, "Warped Forest")).setBiomeName("Warped Forest");
 		}
 		if (ConfigWorld.soulSandValleyID != -1) {
 			soulSandValley = new BiomeSoulSandValley(RegistrySafety.requireVacant(BiomeGenBase.getBiomeGenArray(), ConfigWorld.soulSandValleyID, "Soul Sand Valley")).setBiomeName("Soul Sand Valley");
 		}
-		if (ConfigWorld.basaltDeltasID != -1 && ModBlocks.BASALT.isEnabled() && ModBlocks.BLACKSTONE.isEnabled()) {
+		if (ConfigWorld.basaltDeltasID != -1) {
 			basaltDeltas = new BiomeBasaltDeltas(RegistrySafety.requireVacant(BiomeGenBase.getBiomeGenArray(), ConfigWorld.basaltDeltasID, "Basalt Deltas")).setBiomeName("Basalt Deltas");
 		}
 
@@ -59,18 +59,18 @@ public class NetherBiomeManager {
 	}
 
 	public static int provideCrimsonForestWeight() {
-		return crimsonForest != null ? ConfigWorld.crimsonForestWeight : -1;
+		return crimsonForest != null && ganymedes01.etfuturum.configuration.ContentAvailability.enabled("generate_crimson_forest") ? ConfigWorld.crimsonForestWeight : -1;
 	}
 
 	public static int provideWarpedForestWeight() {
-		return warpedForest != null ? ConfigWorld.warpedForestWeight : -1;
+		return warpedForest != null && ganymedes01.etfuturum.configuration.ContentAvailability.enabled("generate_warped_forest") ? ConfigWorld.warpedForestWeight : -1;
 	}
 
 	public static int provideSoulSandValleyWeight() {
-		return soulSandValley != null ? ConfigWorld.soulSandValleyWeight : -1;
+		return soulSandValley != null && ganymedes01.etfuturum.configuration.ContentAvailability.enabled("generate_soul_sand_valley") ? ConfigWorld.soulSandValleyWeight : -1;
 	}
 
 	public static int provideBasaltDeltasWeight() {
-		return basaltDeltas != null ? ConfigWorld.basaltDeltasWeight : -1;
+		return basaltDeltas != null && ganymedes01.etfuturum.configuration.ContentAvailability.enabled("generate_basalt_deltas") ? ConfigWorld.basaltDeltasWeight : -1;
 	}
 }

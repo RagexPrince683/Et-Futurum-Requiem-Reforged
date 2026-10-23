@@ -23,7 +23,6 @@ import ganymedes01.etfuturum.client.SpawnChunkProgress;
 import ganymedes01.etfuturum.client.WorldIconManager;
 import ganymedes01.etfuturum.client.loading.LoadingScreenHooks;
 import ganymedes01.etfuturum.client.loading.LoadingScreenStateTracker;
-import ganymedes01.etfuturum.client.gui.GuiConfigWarning;
 import ganymedes01.etfuturum.client.gui.GuiGamemodeSwitcher;
 import ganymedes01.etfuturum.client.particle.CustomParticles;
 import ganymedes01.etfuturum.client.particle.DeferredBubbleFX;
@@ -188,7 +187,7 @@ public class ClientEventHandler {
 					player.addChatComponentMessage(text);
 					text = new ChatComponentText(I18n.format("efr.warn.experimental.bugs"));
 					text.getChatStyle().setColor(EnumChatFormatting.AQUA);
-					text.getChatStyle().setChatClickEvent(new ClickEvent(Action.OPEN_URL, "https://github.com/Roadhog360/Et-Futurum-Requiem/issues"));
+					text.getChatStyle().setChatClickEvent(new ClickEvent(Action.OPEN_URL, "https://github.com/RagexPrince683/Et-Futurum-Requiem-Reforged/issues"));
 					player.addChatComponentMessage(text);
 				} else {
 					Logger.warn(I18n.format("efr.log.experimental", ConfigExperiments.buildLoadedExperimentsList(false)));
@@ -896,16 +895,7 @@ public class ClientEventHandler {
 	public void openMainMenu(GuiOpenEvent event) {
 		if (event.gui instanceof GuiMainMenu) {
 			this.showedDebugWarning = false;
-			if (Reference.launchConfigWarning && main_menu_display_count++ < 20) {
-				Reference.launchConfigWarning = false;
-				Configuration oldConfig = new Configuration(new File(Launch.minecraftHome, ConfigBase.configDir + "etfuturum.cfg"));
-				oldConfig.setCategoryComment("warned", "This is added if we've warned you this file exists.\nUsed by versions that split the config into different files, rendering this file unused.\nThis was done because the current file was becoming difficult to navigate.");
-				if (!oldConfig.getBoolean("configWarningShown", "warned", false, "")) {
-					event.gui = new GuiConfigWarning(event.gui, oldConfig);
-				}
-				oldConfig.getCategory("warned").get("configWarningShown").comment = "";
-				oldConfig.save();
-			}
+
 		} else if (ConfigBlocksItems.enableNewBoats && event.gui instanceof GuiInventory) {
 			if (mc.thePlayer.ridingEntity instanceof EntityNewBoatWithChest) {
 				event.setCanceled(true);

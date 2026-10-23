@@ -29,7 +29,7 @@ public class EntityCopperGolem extends EntityGolem {
 	@Override public void onLivingUpdate() {
 		super.onLivingUpdate(); if (worldObj.isRemote) return;
 		if (!isWaxed() && --oxidationTicks <= 0) { oxidationTicks = 6000 + rand.nextInt(6000); if (rand.nextInt(3) == 0) setOxidation(getOxidation() + 1); }
-		if (getOxidation() == 3) { getNavigator().clearPathEntity(); int x = MathHelper.floor_double(posX), y = MathHelper.floor_double(posY), z = MathHelper.floor_double(posZ); if (worldObj.isAirBlock(x, y, z) && worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing") && worldObj.setBlock(x, y, z, ModBlocks.COPPER_GOLEM_STATUE.get(), isWaxed() ? 4 : 0, 3)) { if (getHeldItem() != null) { entityDropItem(getHeldItem(), 0); setCurrentItemOrArmor(0, null); } setDead(); } return; }
+		if (getOxidation() == 3) { getNavigator().clearPathEntity(); int x = MathHelper.floor_double(posX), y = MathHelper.floor_double(posY), z = MathHelper.floor_double(posZ); if (ModBlocks.COPPER_GOLEM_STATUE.isEnabled() && worldObj.isAirBlock(x, y, z) && worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing") && worldObj.setBlock(x, y, z, ModBlocks.COPPER_GOLEM_STATUE.get(), isWaxed() ? 4 : 0, 3)) { if (getHeldItem() != null) { entityDropItem(getHeldItem(), 0); setCurrentItemOrArmor(0, null); } setDead(); } return; }
 		if (searchCooldown > 0) { --searchCooldown; return; }
 		if (destination == null) {
 			double nearest = Double.MAX_VALUE; ItemStack held = getHeldItem();

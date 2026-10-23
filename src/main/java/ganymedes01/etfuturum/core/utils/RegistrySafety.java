@@ -10,7 +10,7 @@ public final class RegistrySafety {
 					+ (registry.length - 1) + "). Check the configuration and installed ID expansion.");
 		if (registry[id] != null)
 			throw new IllegalArgumentException(name + " ID " + id + " is already occupied by " + registry[id]
-					+ ". Choose an unused ID explicitly; Et Futurum will not remap saved IDs.");
+					+ ". Choose an unused ID explicitly; UAB will not remap saved IDs.");
 		return id;
 	}
 }

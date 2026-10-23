@@ -1,13 +1,38 @@
-name: Release tagged build
-
+name: Release UAB
 on:
   push:
-    tags: [ '*' ]
-
+    tags: ['v*']
 permissions:
   contents: write
-
+concurrency:
+  group: uab-release-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
-  release-tags:
-    uses: GTNewHorizons/GTNH-Actions-Workflows/.github/workflows/release-tags.yml@master
-    secrets: inherit
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Verify release version and build
+        run: ./gradlew build --no-configuration-cache
+      - name: Publish to configured mod hosts
+        run: ./gradlew publish --no-configuration-cache
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+      - name: Read authoritative version
+        id: version
+        shell: bash
+        run: echo "value=$(sed -n 's/^modVersion=//p' version.properties | tr -d '\r')" >> "$GITHUB_OUTPUT"
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: Universal Adaptive Backporter ${{ steps.version.outputs.value }}
+          generate_release_notes: true
+          files: |
+            build/libs/uab-${{ steps.version.outputs.value }}+mc1.7.10.jar
+            build/release/uab-update.json
+          fail_on_unmatched_files: true

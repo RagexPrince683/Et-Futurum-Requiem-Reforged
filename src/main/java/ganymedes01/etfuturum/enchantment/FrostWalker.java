@@ -10,7 +10,7 @@ public class FrostWalker extends Enchantment {
 
 	public FrostWalker() {
 		super(ConfigEnchantsPotions.frostWalkerID, 1, EnumEnchantmentType.armor_feet);
-		Enchantment.addToBookList(this);
+		if (ConfigEnchantsPotions.enableFrostWalker) Enchantment.addToBookList(this);
 		setName("frost_walker");
 	}
 
@@ -31,6 +31,6 @@ public class FrostWalker extends Enchantment {
 
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack) {
-		return stack != null && stack.getItem() == Items.book;
+		return ConfigEnchantsPotions.enableFrostWalker && stack != null && stack.getItem() == Items.book;
 	}
 }

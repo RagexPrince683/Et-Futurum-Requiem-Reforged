@@ -1,101 +1,61 @@
-# Et Futurum Requiem
+# Universal Adaptive Backporter (UAB)
 
-**Download: [CurseForge](https://www.curseforge.com/minecraft/mc-mods/et-futurum-requiem/files)
-| [Modrinth](https://modrinth.com/mod/etfuturum/versions)**
+UAB adapts modern Minecraft content to **Minecraft 1.7.10 with Forge 10.13.4.1614**. Its content reference extends through **Java Edition 1.21.11**. Blocks, items, mobs, biomes, structures and selected gameplay conveniences use implementations suited to the legacy game.
 
-## [Legacy Modding Discord Server!](https://discord.gg/jBHQn3Nmsh)
-(check out the _Roadhog360's mods_ category)
+## What UAB supplies
 
-WARNING!
+- Building materials and wood families, functional workstations, copper and netherite progression, crops, equipment and modern mob families.
+- Modern surface and ocean biomes within the native world height, optional Nether biomes, outer End islands and End Cities.
+- Saved ocean monuments, bastions, outposts, Ancient Cities and Trial Chambers, with native placement, encounters and loot adaptations.
+- One configuration file organized by the update that introduced each feature. Feature families share controls; individual mobs have their own availability and applicable natural-spawning settings.
 
-Though this project is licensed under the LGPL-3.0 a lot of the code featured here is a direct copy or adaptation of
-Mojangs original code. So be careful with what you do with it.
+Some mechanics are adapted or incomplete. The [content catalog](CONTENT_CATALOG.md), [mob coverage](MOB_COVERAGE.md) and [world-generation reference](WORLD_GENERATION.md) describe those boundaries. Registration or a modern name does not imply complete parity with the modern game.
 
-This project is jss2a98aj's fork of KryptonCaptain's Et Futurum build, as well as a merge of my own (Roadhog460's)
-changes I made to Et Futurum and never published anywhere. Thanks to other incredible notable contributors such as
-makamys among various things, including helping setup mixins, contributed hugely useful changes like porting the
-expanded container code for Iron Shulker Boxes, and CI + nomixin to the gradle and GitHub scripts. And embeddedt who
-contributed some incredibly large-scale backports like the Backlytra port and spectator mode, the F3 gamemode switcher
-and other really good contributions.
+## Installation
 
-The mod uses MCLib's AssetDirector module to download assets from Mojang's servers.
-Check [its wiki page](https://github.com/makamys/MCLib/wiki/AssetDirector) for more information.
+Use Forge **10.13.4.1614** and Java **8**, with [UniMixins](https://modrinth.com/mod/unimixins), including its GTNH Mixins module. Place the UAB production JAR in the client and dedicated server `mods` folders. Remove the previous EFR/EFR-R JAR when upgrading; both use the same technical mod ID and cannot be installed together.
 
-## About This Fork
+UAB does not require HogUtils, FastUtil, GTNHLib or GTNHExtLib. Optional integrations include NEI, Waila, CraftTweaker and Iron Chests. Their presence is not required to load UAB. Sounds and some other Minecraft assets are supplied through the bundled MCLib AssetDirector integration; an initial asset download may be required.
 
-Et Futurum Requiem Reforged is maintained primarily for the RageCraft modpack and for the maintainer's own goals. This fork may make different architecture, compatibility, and dependency choices from upstream for those reasons.
+Back up existing worlds before upgrading. UAB deliberately retains the `etfuturum` registry namespace, resource domain, Java package, entity identities and saved-data keys. Keep configured biome, potion and enchantment IDs stable.
 
-Reforged aims to remain self-contained for players. When practical, required functionality is kept inside the project instead of requiring extra runtime library mods. This keeps RageCraft installation and maintenance simpler.
+## Configuration
 
-These choices are specific to Reforged. They are not a claim that the upstream project's architecture or dependency choices are wrong.
+Edit **`config/uab.cfg`**, or open UAB's configuration from Forge's Mods menu. Categories use player-facing names such as **Minecraft 1.16 - Nether Update**, with controls for feature families and their useful parameters. There is no separate experiments file or global experiments switch.
 
-Upstream Et Futurum Requiem remains the foundation of this project and retains full credit for its original work.
+An update switch disables its features while remembering their individual preferences. Dependencies are checked before generation and acquisition. Disabling a feature retains its registry identities and existing saved objects; new recipes, acquisition, generation and spawning are controlled where applicable. It does not remove already generated terrain or erase existing inventories.
 
-![JProfiler](https://www.ej-technologies.com/images/product_banners/jprofiler_large.png)  
-This mod is tested and profiled with JProfiler! JProfiler combines high-level analytics with low-level JVM data to pinpoint performance bottlenecks, memory leaks, slow JDBC queries, costly HTTP calls, and much more. Free open-source projects may be eligible for a **free** license. You can learn more about JProfiler here:  
-https://www.ej-technologies.com/jprofiler
+Restart Minecraft or the dedicated server after changing content, world generation, spawn parameters or compatibility settings. A small set of client preferences can be applied through the configuration screen without restarting. Clients and servers must agree on common gameplay settings; client preferences may differ.
 
-## Dependencies
+Existing recognized EFR configuration values are imported once, with existing UAB settings taking precedence. Original files and adjacent `.uab.bak` backups are retained. Read the startup log for obsolete or unrecognized values. See the [configuration reference](CONFIGURATION.md) for layout, migration and spawn semantics.
 
-- [UniMixins](https://modrinth.com/mod/unimixins)
-  - Specifically, its GTNH Mixins module supplies the early and late Mixin loader interfaces.
-HogUtils, FastUtil, GTNHLib, and GTNHExtLib are not runtime dependencies. Their formerly used functionality is either owned by Et Futurum or supplied by Minecraft and Forge 1.7.10 APIs already present in the target environment.
+## Scope and approach
 
-## Contributing
+UAB is a content backporter. It retains the legacy world height, loader, save model and authoritative server behavior. It does not replace Minecraft's terrain engine, introduce a general combat rewrite or take over the responsibilities of separate cave-generation projects. Missing prerequisites are deferred rather than replaced with unrelated ingredients.
 
-To enable incomplete test features, add `-Detfuturum.testing=true` to your JVM arguments. This also enables a debug item
+Feature support follows behavior and practical use on 1.7.10. UAB can use project-owned lifecycle tracking, retained model data, native structure assembly and bounded gameplay systems when those provide a coherent legacy implementation. Shared technical identifiers are retained for compatibility; internal architecture can change substantially.
 
-Configuration files are under `config/etfuturum`. Restart Minecraft or the dedicated server after editing them; a world reload does not reapply content registration, recipes or Mixins. Keep content and Mixin options consistent between clients and servers. Disabling registered content in an existing world can produce Forge missing-mapping warnings and remove saved content.
+## Lineage
 
-## Surface and Nether content
+UAB began as a fork of **Et Futurum Requiem (EFR)**, initially maintained as **Et Futurum Requiem Reforged**. EFR itself builds on ganymedes01's Et Futurum and the work of KryptonCaptain, jss2a98aj, Roadhog360, embeddedt, makamys and other contributors.
 
-The runtime remains Forge 1.7.10; the modern content reference stops at Minecraft 1.21.11. Modern surface biomes use native climate generation and the legacy world height. Their IDs are configurable in `world.cfg`; keep those IDs stable in existing saves. `enableSurfaceBiomes=false` disables new placement while retaining registered biome identities. Individual `generateCherryGrove`, `generateMangroveSwamp`, `generatePaleGarden` and equivalent biome switches provide the same control for each added biome. No automatic retrogen is performed.
+UAB has developed its own approach to core feature support and to supplying modern content on an old Minecraft version. Its configuration, content dependencies, native runtime adaptations, structure support and project-owned support systems follow UAB's requirements. Its architecture and feature-support philosophy differ substantially from the original EFR project. UAB is maintained primarily for RageCraft and the maintainer's own goals; upstream EFR remains an independent project with its own direction.
 
-Mangrove and Pale Garden content remain behind `enableMangroveBlocks` and `enablePaleGarden` in `experiments.cfg`. The EFR Nether provider remains experimental and is enabled separately by `netherDimensionProvider`; bastion generation has its own `enableBastions` switch and also respects Generate Structures. Nether mobs honor the existing Nether master toggle. Full Netherlicious provider compatibility is not supplied by these options.
+The lineage and inherited contributions retain full credit. The project code uses the existing LGPL-3.0 license; Minecraft assets and other third-party material retain their own rights. See [third-party notices](THIRD_PARTY_NOTICES.md) and the asset credits included in the repository.
 
-Stonecutters, looms and cartography tables provide native processing interfaces and NEI recipe views. Loom special patterns are reusable items crafted from paper and the existing pattern ingredient. Cartography supports copying, expansion and permanent map locking with glass panes. Guardians spawn in newly saved monument bounds; enableGuardians controls them independently. The experimental End keeps native dragon combat and creates up to twenty saved victory gateways.
+## Building and contributing
 
-Modern mobs include aquatic life, illagers and raids, allays, sniffers, wardens, armadillos, copper golems, happy ghasts and the 1.21.11 mounts. Spawning and acquisition use native 1.7.10 biomes, villages and structures. Breeze/Bogged fights retain converted vanilla dungeons and also use modular Trial Chambers with keys and per-player vault rewards. Experimental Sculk enables adapted Ancient Cities with local Deep Dark caverns. See [world generation and progression](WORLD_GENERATION.md) for switches, height adaptation, discovery and supported mechanics. See [mob coverage](MOB_COVERAGE.md) for survival paths, configuration boundaries and remaining differences.
+Use the checked-in Gradle wrapper and its pinned Java toolchains. The build daemon uses Java 25; production classes target Java 8. No wrapper or dependency upgrade is needed for normal development.
 
-See [the content catalog](CONTENT_CATALOG.md) for supported content, survival paths, deliberate exclusions and experimental limitations. Biome presence does not imply complete modern terrain, ecology or gameplay parity.
+```text
+./gradlew configurationTest
+./gradlew build
+```
 
-Aquatic spawning uses per-species budgets plus shared animal/hostile and local-density limits in `entities.cfg`. Named, tamed and bucket-released animals retain their persistence. `limitVanillaSquid=false` leaves ordinary vanilla squid admission unchanged; enable it for optional strict natural squid limits. Netherite uses this fork's existing two-input smithing progression, with recipes and usages available in NEI; smithing templates are not implemented.
+The root **`version.properties`** supplies the release version. The production artifact is **`build/libs/uab-<modVersion>+mc1.7.10.jar`**. Development and source artifacts have classifier suffixes. Normal builds and tests never increment or rewrite the release version.
 
-Operators can use `/efr_audit aquatic` to inspect loaded natural populations and spawn/rejection counters, or `/efr_audit aquatic reset` to start a measurement interval. `/efr_audit biomes surface 20261022 4096 16` samples the real configured biome pipeline for that seed across an 8192×8192 region at a 16-block stride. Replace `surface` with `nether` to sample the configured Nether manager. Sampling advances one row per server tick and does not generate chunks; `/efr_audit cancel` stops it. Results are also written to the server log.
+The repository currently has one runtime target, Forge 1.7.10. `src/main/java` contains its implementation, `src/main/resources` contains assets and feature metadata, and `src/test/java` contains the native configuration regression checks. Local development mods follow [devmods/README.md](devmods/README.md).
 
-## Polar bears
+Release tags use `v<modVersion>` and must match `version.properties`. GitHub Actions builds and attaches the production JAR and generated update metadata. Modrinth and CurseForge publishing require this project's own hosting IDs and credentials; inherited upstream project IDs are not used. See [RELEASING.md](RELEASING.md).
 
-Adult polar bears are hostile to players by default when `polarBearRealism` is enabled in the neutral entity configuration. Set this option to `false` to restore the modern neutral behavior, where adults attack players only while defending nearby cubs.
-
-## Contributors
-<a href="https://github.com/Roadhog360/Et-Futurum-Requiem/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Roadhog360/Et-Futurum-Requiem" />
-</a>
-
-*The below is legacy information and is only kept for documentation purposes.*
-
-### About `nomixin` builds (Obsolete)
-
-From versions 2.4.1 to 2.6.0, the mod came in two flavors:
-
-* The regular version embeds Mixin 0.7.11, allowing the mod to run standalone. However, this makes the jar a bit larger,
-  and can cause problems in certain use cases.
-* The version marked with `nomixin` doesn't embed Mixin, which lets it avoid these problems. But it requires a
-  separate [Mixin bootstrap mod](https://gist.github.com/makamys/7cb74cd71d93a4332d2891db2624e17c#mixin-bootstrap-mods)
-  to be installed in order to run. If you have one installed already, getting this version is recommended.
-
-From those versions, mixin code will also not work if you do not
-add `--tweakClass org.spongepowered.asm.launch.MixinTweaker --mixin mixins.etfuturum.json` to your program arguments.
-# Potion allocation
-
-Potion IDs are allocated automatically on new installations. Keep `config/legacy-potion-ids.properties` with your saves and distribute the same file to clients and server. Existing configured IDs are preserved, including reservations for disabled effects. Updated Farmer's Delight Legacy 1.7.10 cooperates with the same allocator. Conflicting saved IDs or mismatched network mappings fail explicitly; see [configuration guidance](CONFIGURATION_AUDIT.md#persistent-potion-allocation-on-1710) before upgrading an existing pack.
-
-# Vanilla functional-block compatibility
-
-EFR augments the Minecraft 1.7.10 enchanting table, brewing stand, beacon, and anvil when their corresponding feature toggles are enabled. Normal recipes and placement therefore retain the vanilla block identity expected by legacy mods. The historical EFR replacement blocks and tile entities remain registered and functional for save compatibility.
-
-`tileReplacementMode` is only a legacy migration control: `-1` performs no conversion, `0` converts vanilla blocks to legacy EFR replacements, and `1` converts legacy replacements back to vanilla blocks. Modern behavior does not require conversion. The optional old base daylight sensor remains on its existing one-way compatibility migration because its inverted-sensor pairing is separate from the functional-container backports.
-
-### Optional legacy wood-family compatibility
-
-When Biomes O' Plenty or Witchery is installed, EFR resolves its known 1.7.10 plank and log registry entries during pre-initialization and adds enabled modern derivatives. Missing optional registry entries are warned about and skipped rather than becoming hard dependencies. Compatibility follows the equivalent `enableNew*`, `enableStrippedLogs`, and `enableBarkLogs` feature switches; modded buttons and pressure plates use `enableNewWoodRedstone`.
+Report reproducible problems in this repository's issue tracker with the exact JAR name, Forge/Java versions, relevant settings and logs. For world-generation issues include the seed, dimension and coordinates. Static checks, a successful build and a short runtime probe are separate evidence from a complete gameplay acceptance test.

@@ -31,9 +31,9 @@ public final class ModernMobs {
 			spawn(EntityLlama.class, 5, 2, 4, Type.MOUNTAIN, Type.SAVANNA); spawn(EntityArmadillo.class, 6, 2, 3, Type.SAVANNA, Type.MESA); spawn(EntityCamel.class, 1, 1, 1, Type.SANDY);
 		}
 		if (ConfigEntities.enableModernHostileSpawning) {
-			for (BiomeGenBase biome : BiomeDictionary.getBiomesForType(Type.SWAMP)) EntityRegistry.addSpawn(EntityBogged.class, 15, 1, 3, EnumCreatureType.monster, biome);
-			for (BiomeGenBase biome : BiomeDictionary.getBiomesForType(Type.SANDY)) if (!BiomeDictionary.isBiomeOfType(biome, Type.COLD) && !BiomeDictionary.isBiomeOfType(biome, Type.NETHER)) { EntityRegistry.addSpawn(EntityParched.class, 15, 1, 3, EnumCreatureType.monster, biome); EntityRegistry.addSpawn(EntityCamelHusk.class, 1, 1, 1, EnumCreatureType.monster, biome); }
+			for (BiomeGenBase biome : BiomeDictionary.getBiomesForType(Type.SWAMP)) ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityBogged.class, 15, 1, 3, EnumCreatureType.monster, biome);
+			for (BiomeGenBase biome : BiomeDictionary.getBiomesForType(Type.SANDY)) if (!BiomeDictionary.isBiomeOfType(biome, Type.COLD) && !BiomeDictionary.isBiomeOfType(biome, Type.NETHER)) { ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityParched.class, 15, 1, 3, EnumCreatureType.monster, biome); ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(EntityCamelHusk.class, 1, 1, 1, EnumCreatureType.monster, biome); }
 		}
 	}
-	private static void spawn(Class<? extends EntityLiving> entity, int weight, int low, int high, Type... types) { Set<BiomeGenBase> added = new HashSet<>(); for (Type type : types) for (BiomeGenBase biome : BiomeDictionary.getBiomesForType(type)) if (added.add(biome) && !BiomeDictionary.isBiomeOfType(biome, Type.NETHER) && !BiomeDictionary.isBiomeOfType(biome, Type.END)) EntityRegistry.addSpawn(entity, weight, low, high, EnumCreatureType.creature, biome); }
+	private static void spawn(Class<? extends EntityLiving> entity, int weight, int low, int high, Type... types) { Set<BiomeGenBase> added = new HashSet<>(); for (Type type : types) for (BiomeGenBase biome : BiomeDictionary.getBiomesForType(type)) if (added.add(biome) && !BiomeDictionary.isBiomeOfType(biome, Type.NETHER) && !BiomeDictionary.isBiomeOfType(biome, Type.END)) ganymedes01.etfuturum.configuration.SpawnSettings.addSpawn(entity, weight, low, high, EnumCreatureType.creature, biome); }
 }

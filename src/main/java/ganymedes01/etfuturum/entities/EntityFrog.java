@@ -58,7 +58,7 @@ public class EntityFrog extends EntityAnimal {
 				int x = bx + dx, z = bz + dz;
 				if (!worldObj.blockExists(x, by, z)) continue;
 				for (int y = by - 1; y <= by + 1; y++) if (worldObj.isAirBlock(x, y, z) && worldObj.getBlock(x, y - 1, z).getMaterial() == Material.water) {
-					if (worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing") && worldObj.setBlock(x, y, z, ModBlocks.FROGSPAWN.get(), 0, 2)) { pregnant = false; return; }
+					if (ModBlocks.FROGSPAWN.isEnabled() && worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing") && worldObj.setBlock(x, y, z, ModBlocks.FROGSPAWN.get(), 0, 2)) { pregnant = false; return; }
 				}
 			}
 		}

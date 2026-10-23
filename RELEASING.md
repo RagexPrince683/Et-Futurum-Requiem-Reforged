@@ -1,0 +1,11 @@
+# Releasing UAB
+
+The root `version.properties` is the only release version source. Set `modVersion` deliberately before preparing a release. Versions use `major.minor.patch` with an optional prerelease suffix. Builds never increment it or derive a different release version from a Git commit distance.
+
+Run the checked-in wrapper's `build` task. It runs configuration regression checks, packages/remaps the production JAR and generates `build/release/uab-update.json`. Verify the final JAR and exercise the affected production runtime before publishing. The Forge 1.7.10 artifact is `uab-<modVersion>+mc1.7.10.jar`; metadata uses `<modVersion>` and identifies Minecraft separately.
+
+A GitHub release tag must be `v<modVersion>` (the build also accepts the exact unprefixed version). The tag workflow checks that it agrees with the file, builds from that tag and attaches the production JAR plus update metadata. Releases use the existing repository URL until the repository itself is renamed. A repository rename is an external administration action and is not needed to preserve save identities.
+
+The Gradle convention's Modrinth and CurseForge tasks use the same `modVersion` provider and the same remapped production artifact. Set `modrinthProjectId` and `curseForgeProjectId` to UAB's own hosting projects and provide the corresponding tokens before invoking those publication tasks. These fields are intentionally blank: inherited IDs pointed at the upstream EFR project. UAB's display name and metadata are already supplied by `modName`. Maven coordinates use artifact ID `uab` and the same release version. Conflicting `VERSION`, `RELEASE_VERSION` or command-line `modVersion` overrides fail instead of silently publishing a different version.
+
+Update `CHANGELOG.md` with dated implementation notes. Do not put generated artifacts, test worlds, logs or screenshots into Git. The checked-in license, lineage and third-party notices remain part of every release's attribution.

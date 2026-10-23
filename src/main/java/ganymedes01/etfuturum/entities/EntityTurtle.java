@@ -47,13 +47,13 @@ public class EntityTurtle extends EntityAquaticAnimal {
 	@Override public void onLivingUpdate() {
 		super.onLivingUpdate(); if (worldObj.isRemote) return;
 		if (!hasHome) setHome(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
-		if (hadChildAge && !isChild() && worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot")) entityDropItem(ModItems.TURTLE_SCUTE.newItemStack(), .1F);
+		if (hadChildAge && !isChild() && worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot")) ganymedes01.etfuturum.configuration.ContentAvailability.drop(this, ModItems.TURTLE_SCUTE.newItemStack(), .1F);
 		hadChildAge = isChild();
 		int x = MathHelper.floor_double(posX), y = MathHelper.floor_double(posY), z = MathHelper.floor_double(posZ);
 		if (hasEgg() && !isInWater()) {
 			if (Math.abs(x - homeX) < 9 && Math.abs(z - homeZ) < 9 && worldObj.getBlock(x, y - 1, z) == Blocks.sand && worldObj.isAirBlock(x, y, z)) {
 				getNavigator().clearPathEntity();
-				if (++diggingTicks >= 200 && worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing") && worldObj.setBlock(x, y, z, ModBlocks.TURTLE_EGG.get(), rand.nextInt(4) << 2, 3)) { dataWatcher.updateObject(20, (byte) 0); diggingTicks = 0; setGrowingAge(600); }
+				if (++diggingTicks >= 200 && ModBlocks.TURTLE_EGG.isEnabled() && worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing") && worldObj.setBlock(x, y, z, ModBlocks.TURTLE_EGG.get(), rand.nextInt(4) << 2, 3)) { dataWatcher.updateObject(20, (byte) 0); diggingTicks = 0; setGrowingAge(600); }
 			} else if (ticksExisted % 40 == 0 && worldObj.blockExists(homeX, homeY, homeZ)) getNavigator().tryMoveToXYZ(homeX + .5, homeY, homeZ + .5, 1);
 		} else {
 			diggingTicks = 0;

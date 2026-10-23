@@ -5,9 +5,10 @@ import net.minecraft.command.*;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 public final class CommandLocateUnderground extends CommandBase {
-	@Override public String getCommandName() { return "efr_locate"; }
+	@Override public String getCommandName() { return "uab_locate"; }
+	@Override public java.util.List<String> getCommandAliases() { return java.util.Collections.singletonList("efr_locate"); }
 	@Override public int getRequiredPermissionLevel() { return 2; }
-	@Override public String getCommandUsage(ICommandSender sender) { return "/efr_locate <ancient_city|trial_chambers>"; }
+	@Override public String getCommandUsage(ICommandSender sender) { return "/uab_locate <ancient_city|trial_chambers>"; }
 	@Override public void processCommand(ICommandSender sender, String[] args) {
 		if (args.length != 1 || !args[0].equals("ancient_city") && !args[0].equals("trial_chambers")) throw new WrongUsageException(getCommandUsage(sender));
 		World world = sender.getEntityWorld(); if (world.provider.dimensionId != 0) throw new CommandException("These structures generate in the Overworld.");

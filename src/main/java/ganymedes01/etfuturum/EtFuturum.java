@@ -78,8 +78,8 @@ import java.util.*;
 		modid = Tags.MOD_ID,
 		name = Tags.MOD_NAME,
 		version = Tags.VERSION,
-		dependencies = Reference.DEPENDENCIES
-//		guiFactory = Tags.MOD_GROUP + ".configuration.ConfigGuiFactory"
+		dependencies = Reference.DEPENDENCIES,
+		guiFactory = Tags.MOD_GROUP + ".configuration.ConfigGuiFactory"
 )
 
 public class EtFuturum {
@@ -95,7 +95,7 @@ public class EtFuturum {
 	@cpw.mods.fml.common.network.NetworkCheckHandler
 	public boolean checkNetwork(java.util.Map<String, String> remote, Side side) {
 		if (!remote.containsKey(Tags.MOD_ID)) return side == Side.SERVER;
-		return Tags.VERSION.equals(remote.get(Tags.MOD_ID)) && ModPotions.IDS.matches(remote);
+		return Tags.VERSION.equals(remote.get(Tags.MOD_ID)) && ModPotions.IDS.matches(remote) && ganymedes01.etfuturum.configuration.UabConfiguration.get().matches(remote);
 	}
 
 	@EventHandler
@@ -125,6 +125,8 @@ public class EtFuturum {
 				p_78018_1_.add(firework);
 			}
 			for (int i : ModEntityList.eggIDs) {
+				Class<?> entityType = (Class<?>) net.minecraft.entity.EntityList.IDtoClassMapping.get(i);
+				if (entityType != null && !ganymedes01.etfuturum.configuration.ContentAvailability.mobEnabled(entityType)) continue;
 				p_78018_1_.add(new ItemStack(Items.spawn_egg, 1, i));
 			}
 			super.displayAllReleventItems(p_78018_1_);
@@ -222,6 +224,7 @@ public class EtFuturum {
 
 		ModBlocks.init();
 		ModItems.init();
+		ganymedes01.etfuturum.configuration.ContentAvailability.indexContent();
 		ExternalWoodCompat.initContent();
 		ModEnchantments.init();
 		ModPotions.init();
@@ -250,9 +253,7 @@ public class EtFuturum {
 			DynamicSoundsResourcePack.inject();
 		}
 
-		if (ConfigExperiments.netherDimensionProvider) {
-			NetherBiomeManager.init();
-		}
+		NetherBiomeManager.init();
 		ganymedes01.etfuturum.world.surface.SurfaceBiomeManager.init();
 
 		GameRegistry.registerWorldGenerator(EtFuturumEarlyWorldGenerator.INSTANCE, Integer.MIN_VALUE);

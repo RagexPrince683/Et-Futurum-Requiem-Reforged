@@ -18,17 +18,17 @@ public class BiomeLayerNetherBiomes extends BiomeLayerNether {
 		super(par1);
 		parent = par3GenLayer;
 		this.netherBiomes.add(new BiomeEntry(BiomeGenBase.hell, ConfigWorld.netherWastesWeight));
-		if (NetherBiomeManager.crimsonForest != null) {
-			this.netherBiomes.add(new BiomeEntry(NetherBiomeManager.crimsonForest, ConfigWorld.crimsonForestWeight));
+		if (NetherBiomeManager.provideCrimsonForestWeight() > 0) {
+			this.netherBiomes.add(new BiomeEntry(NetherBiomeManager.crimsonForest, NetherBiomeManager.provideCrimsonForestWeight()));
 		}
-		if (NetherBiomeManager.warpedForest != null) {
-			this.netherBiomes.add(new BiomeEntry(NetherBiomeManager.warpedForest, ConfigWorld.warpedForestWeight));
+		if (NetherBiomeManager.provideWarpedForestWeight() > 0) {
+			this.netherBiomes.add(new BiomeEntry(NetherBiomeManager.warpedForest, NetherBiomeManager.provideWarpedForestWeight()));
 		}
-		if (NetherBiomeManager.soulSandValley != null) {
-			this.netherBiomes.add(new BiomeEntry(NetherBiomeManager.soulSandValley, ConfigWorld.soulSandValleyWeight));
+		if (NetherBiomeManager.provideSoulSandValleyWeight() > 0) {
+			this.netherBiomes.add(new BiomeEntry(NetherBiomeManager.soulSandValley, NetherBiomeManager.provideSoulSandValleyWeight()));
 		}
-		if (NetherBiomeManager.basaltDeltas != null) {
-			this.netherBiomes.add(new BiomeEntry(NetherBiomeManager.basaltDeltas, ConfigWorld.basaltDeltasWeight));
+		if (NetherBiomeManager.provideBasaltDeltasWeight() > 0) {
+			this.netherBiomes.add(new BiomeEntry(NetherBiomeManager.basaltDeltas, NetherBiomeManager.provideBasaltDeltasWeight()));
 		}
 //
 //      if (Loader.isModLoaded("BiomesOPlenty")) {

@@ -16,7 +16,7 @@ public class BiomeWarpedForest extends NetherBiomeBase {
 		this.fillerBlock = Blocks.netherrack;
 
 		spawnableMonsterList.clear();
-		this.spawnableMonsterList.add(new SpawnListEntry(EntityEnderman.class, 1, 1, 4));
+		ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableMonsterList, EntityEnderman.class, 1, 1, 4);
 	}
 
 	@Override

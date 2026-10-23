@@ -1,120 +1,55 @@
 package ganymedes01.etfuturum.configuration;
 
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import ganymedes01.etfuturum.Tags;
 import ganymedes01.etfuturum.configuration.configs.*;
-import ganymedes01.etfuturum.mixinplugin.EtFuturumEarlyMixins;
-import ganymedes01.etfuturum.core.utils.Logger;
 import net.minecraft.launchwrapper.Launch;
-import net.minecraftforge.common.config.ConfigCategory;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import org.spongepowered.asm.mixin.MixinEnvironment;
-
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
-public abstract class ConfigBase extends Configuration {
-	protected final List<ConfigCategory> configCats = new ArrayList<>();
-	private static final Set<ConfigBase> CONFIGS = new LinkedHashSet<>();
-
-	public static final String configDir = "config" + File.separator + Tags.MOD_ID + File.separator;
-
-	public static final ConfigBase EXPERIMENTS = new ConfigExperiments(createConfigFile("experiments"));
-
-	public static final ConfigBase BLOCKS_ITEMS = new ConfigBlocksItems(createConfigFile("blocksitems"));
-	public static final ConfigBase ENCHANTS_POTIONS = new ConfigEnchantsPotions(createConfigFile("enchantspotions"));
-	public static final ConfigBase FUNCTIONS = new ConfigFunctions(createConfigFile("functions"));
-	public static final ConfigBase TWEAKS = new ConfigTweaks(createConfigFile("tweaks"));
-	public static final ConfigBase WORLD = new ConfigWorld(createConfigFile("world"));
-	public static final ConfigBase ENTITIES = new ConfigEntities(createConfigFile("entities"));
-	public static final ConfigBase SOUNDS = new ConfigSounds(createConfigFile("sounds"));
-	public static final ConfigBase MOD_COMPAT = new ConfigModCompat(createConfigFile("modcompat"));
-
-	public static final ConfigBase MIXINS = new ConfigMixins(createConfigFile("mixins"));
-
-	public ConfigBase(File file) {
-		super(file);
-		CONFIGS.add(this);
-	}
-
-	private static File createConfigFile(String name) {
-		return new File(Launch.minecraftHome, configDir + name + ".cfg");
-	}
-
-	public static void initializeConfigs() {
-		for (ConfigBase config : CONFIGS) {
-			config.syncConfig();
-		}
-	}
-
-	private void syncConfig() {
-		syncConfigOptions();
-
-		for (ConfigCategory cat : configCats) {
-			cat.setRequiresMcRestart(true);
-			if (EtFuturumEarlyMixins.side == MixinEnvironment.Side.SERVER) {
-				if (cat.getName().toLowerCase().contains("client")) {
-					for (Property prop : cat.getOrderedValues()) {
-						cat.remove(prop.getName());
-					}
-				}
-			}
-
-			if (cat.isEmpty() && !cat.getName().toLowerCase().contains("experiment")) {
-				removeCategory(cat);
-			}
-		}
-
-		if (hasChanged()) {
-			save();
-		}
-	}
-
-	protected abstract void syncConfigOptions();
-
-	@Override
-	public float getFloat(String name, String category, float defaultValue, float minValue, float maxValue, String comment) {
-		float value = super.getFloat(name, category, defaultValue, minValue, maxValue, comment);
-		if (!Float.isFinite(value)) {
-			Logger.warn("Invalid non-finite value for " + category + "." + name + "; using " + defaultValue);
-			get(category, name, defaultValue).set(defaultValue);
-			return defaultValue;
-		}
-		return value;
-	}
-
-	/**
-	 * Used in case we need to wait until after preInit to initialize values.
-	 */
-	protected void initValues() {
-	}
-
-	public static void init() {
-		for (ConfigBase config : CONFIGS) {
-			config.initValues();
-		}
-	}
-
-	/**
-	 * Used in case we need to wait until after mixin phase to initialize values.
-	 */
-	protected void onConstructingValues() {
-	}
-
-	public static void onConstructing() {
-		for (ConfigBase config : CONFIGS) {
-			config.onConstructingValues();
-		}
-	}
-
-	@SubscribeEvent
-	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-		if (Tags.MOD_ID.equals(eventArgs.modID))
-			syncConfig();
-	}
+/** Compatibility field bindings. UabConfiguration alone owns configuration state and IO. */
+public abstract class ConfigBase {
+ public static final String configDir = "config" + File.separator + "etfuturum" + File.separator;
+ public static final ConfigBase EXPERIMENTS = new ConfigExperiments();
+ public static final ConfigBase BLOCKS_ITEMS = new ConfigBlocksItems();
+ public static final ConfigBase ENCHANTS_POTIONS = new ConfigEnchantsPotions();
+ public static final ConfigBase FUNCTIONS = new ConfigFunctions();
+ public static final ConfigBase TWEAKS = new ConfigTweaks();
+ public static final ConfigBase WORLD = new ConfigWorld();
+ public static final ConfigBase ENTITIES = new ConfigEntities();
+ public static final ConfigBase SOUNDS = new ConfigSounds();
+ public static final ConfigBase MOD_COMPAT = new ConfigModCompat();
+ public static final ConfigBase MIXINS = new ConfigMixins();
+ private static final List<ConfigBase> BINDINGS = Arrays.asList(EXPERIMENTS, BLOCKS_ITEMS, ENCHANTS_POTIONS, FUNCTIONS, TWEAKS, WORLD, ENTITIES, SOUNDS, MOD_COMPAT, MIXINS);
+ private static boolean initialized;
+ private final String source;
+ protected ConfigBase(String source) { this.source = source; }
+ public static synchronized void initializeConfigs() {
+  if (initialized) return;
+  UabConfiguration.open(new File(Launch.minecraftHome, "config"), ganymedes01.etfuturum.mixinplugin.EtFuturumEarlyMixins.side == org.spongepowered.asm.mixin.MixinEnvironment.Side.CLIENT);
+  for (ConfigBase binding : BINDINGS) binding.syncConfigOptions();
+  ContentAvailability.initialize();
+  SpawnSettings.initialize();
+  UabConfiguration.get().finish();
+  initialized = true;
+ }
+ public static synchronized void reloadClient() {
+  if (!initialized) return;
+  UabConfiguration.get().reloadClient();
+  for (ConfigBase binding : BINDINGS) binding.syncConfigOptions();
+  UabConfiguration.get().finish();
+ }
+ protected abstract void syncConfigOptions();
+ protected void initValues() { }
+ protected void onConstructingValues() { }
+ public static void init() { for (ConfigBase binding : BINDINGS) binding.initValues(); }
+ public static void onConstructing() { for (ConfigBase binding : BINDINGS) binding.onConstructingValues(); }
+ protected boolean getBoolean(String name, String category, boolean value, String ignored) { return UabConfiguration.get().bool(source, name, value); }
+ protected int getInt(String name, String category, int value, int min, int max, String ignored) { return UabConfiguration.get().integer(source, name, value, min, max); }
+ protected float getFloat(String name, String category, float value, float min, float max, String ignored) { return UabConfiguration.get().decimal(source, name, value, min, max); }
+ protected String getString(String name, String category, String value, String ignored) { return get(category, name, value).getString(); }
+ protected String[] getStringList(String name, String category, String[] value, String ignored) { return get(category, name, value).getStringList(); }
+ protected Property get(String category, String name, String value) { return UabConfiguration.get().property(source, name, value, Property.Type.STRING); }
+ protected Property get(String category, String name, int[] value) { return UabConfiguration.get().property(source, name, value, Property.Type.INTEGER); }
+ protected Property get(String category, String name, String[] value) { return UabConfiguration.get().property(source, name, value, Property.Type.STRING); }
 }

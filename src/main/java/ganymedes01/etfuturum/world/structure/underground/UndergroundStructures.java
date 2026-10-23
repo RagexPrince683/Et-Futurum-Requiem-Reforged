@@ -156,7 +156,7 @@ public final class UndergroundStructures extends MapGenStructure {
 					String name = type.equals("minecraft:single_pool_element") ? e.get("location").getAsString().replace("minecraft:", "") : type.equals("minecraft:feature_pool_element") ? "@sculk" : "";
 					// The released city no_corners pool itself references an absent stairs_5 asset.
 					if (!name.isEmpty() && !name.equals("@sculk") && UndergroundStructures.class.getResource("/data/structure/" + name + ".nbt") == null) {
-						if (MISSING_TEMPLATES.add(name)) org.apache.logging.log4j.LogManager.getLogger("EFR underground structures").warn("Skipping unavailable released template: {}", name);
+						if (MISSING_TEMPLATES.add(name)) org.apache.logging.log4j.LogManager.getLogger("UAB underground structures").warn("Skipping unavailable released template: {}", name);
 						continue;
 					}
 					for (int i = 0; i < entry.get("weight").getAsInt(); i++) p.elements.add(new Element(name, e.has("processors") && e.get("processors").isJsonPrimitive() ? e.get("processors").getAsString() : "minecraft:empty"));

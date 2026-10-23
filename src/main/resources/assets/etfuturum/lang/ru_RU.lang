@@ -1,6 +1,6 @@
 # Вкладки творческого меню (Creative Tab)
-itemGroup.etfuturum.items=Et Futurum: Предметы
-itemGroup.etfuturum.blocks=Et Futurum: Блоки
+itemGroup.etfuturum.items=UAB Items
+itemGroup.etfuturum.blocks=UAB Blocks
 
 # Зачарования (Enchantments)
 enchantment.frost_walker=Ледяная поступь
@@ -53,8 +53,8 @@ gui.smithing.upgrade=Улучшить снаряжение
 gui.warn.continue=Продолжить...
 gui.warn.dismiss=Не показывать это снова.
 gui.warn.notice=ВНИМАНИЕ:
-gui.warn.configSplit1=Из-за того, что основная конфигурация Et Futurum Requiem стала очень длинной и сложной для навигации, она была разделена на несколько файлов. Вы видите это предупреждение, потому что у Вас есть конфигурация из предыдущей версии в "configs/etfuturum.cfg". Не существует системы для автоматического переноса Ваших настроек, поэтому обязательно проверьте новые файлы!
-gui.warn.configSplit2=Когда закончите, Вы можете удалить или переименовать старый файл конфигурации или поставить галочку в поле ниже, чтобы это предупреждение больше не отображалось.
+gui.warn.configSplit1=UAB imports recognized legacy settings into config/uab.cfg and retains the original files.
+gui.warn.configSplit2=UAB imports recognized legacy settings into config/uab.cfg and retains the original files.
 gui.chat.update=%1$s доступна версия %2$s!
 gui.chat.update.download=Нажмите здесь, чтобы загрузить обновление на %s!
 
@@ -1638,9 +1638,9 @@ efr.nei.weight=Вес
 
 efr.decoration.only=Только декоративный
 
-efr.warn.prerelease.version=§c§l[Отладка]: §rВы используете предварительную версию §bEt §bFuturum §bRequiem§r. Эта версия может быть нестабильной. Нажмите здесь, чтобы перейти на GitHub и сообщить об ошибках.
-efr.log.prerelease.version=ВНИМАНИЕ: используется предварительная версия Et Futurum Requiem! Эта сборка может быть нестабильной, ожидайте больше ошибок, чем обычно.
-efr.warn.prerelease.version.bugs=Обязательно сообщайте об ошибках по адресу https://github.com/Roadhog360/Et-Futurum-Requiem/issues.
+efr.warn.prerelease.version=§c§l[Отладка]: §rВы используете предварительную версию §bUAB§r. Эта версия может быть нестабильной. Нажмите здесь, чтобы перейти на GitHub и сообщить об ошибках.
+efr.log.prerelease.version=ВНИМАНИЕ: используется предварительная версия UAB! Эта сборка может быть нестабильной, ожидайте больше ошибок, чем обычно.
+efr.warn.prerelease.version.bugs=Обязательно сообщайте об ошибках по адресу https://github.com/RagexPrince683/Et-Futurum-Requiem-Reforged/issues.
 efr.critical.badbetterfpsalgorithm1=§4§l[КРИТИЧНО]: §bBetterFPS §rнастроен с плохим алгоритмом.
 efr.critical.badbetterfpsalgorithm2= "rivens-half" или "taylors" не должны использоваться для предотвращения ущерба вашему миру. Настоятельно рекомендуется зайти в его конфигурацию и изменить "algorithm" на что-нибудь другое, желательно "vanilla".
 efr.critical.badbetterfpsalgorithm3= Это показано вам, потому что вышеупомянутые математические алгоритмы содержат ошибки и генерируют неверные числа, что приводит к возможному блокированию сохранения.

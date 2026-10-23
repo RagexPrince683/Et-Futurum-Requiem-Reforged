@@ -1,0 +1,72 @@
+# UAB configuration
+
+## Files and precedence
+
+`config/uab.cfg` is the primary native Forge configuration. There are no separate block, entity, world, sound or experiments files to maintain. The in-game Forge configuration screen uses update and feature names.
+
+Existing potion allocations remain in `config/legacy-potion-ids.properties`, shared with cooperating legacy mods. This is persistent identity data, not another feature configuration. Do not delete or regenerate it in an existing installation.
+
+The precedence order is: an existing UAB value, a recognized split legacy value under `config/etfuturum/`, a recognized monolithic legacy value (`config/etfuturum/etfuturum.cfg`, then `config/etfuturum.cfg`), and the UAB default. Exact legacy categories are preferred; a monolithic key is matched across categories only when unique. Conflicting aliases for a consolidated boolean preserve a disabled setting.
+
+Migration creates an adjacent `.uab.bak` copy before importing, leaves original files untouched, and records completion in the UAB file. Later starts do not re-import legacy files. Customized generation values, biome/enchantment/potion IDs, dimension lists and the historical turtle weight are retained. Old numeric fossil/geode block selectors are translated to namespaced block names. Unmapped values are reported in the log and remain available in the originals and backups. Invalid scalar/list types, numbers and ranges use a validated default or a bounded value with a warning. Backups are never overwritten.
+
+## Categories and feature families
+
+Categories cover only implemented content relevant to Forge 1.7.10, from the Bountiful Update through Mounts of Mayhem (1.21.11), plus General. Minor updates have distinct categories where needed, including 1.16.2, 1.20.5, 1.21.4, 1.21.6, 1.21.7 and 1.21.9. Empty update categories are not displayed.
+
+Each update has an `enabled` switch. Feature families have their own `enabled` switch and useful parameters alongside it. There are no separate controls for each slab, stair, color, waxed state or plant growth stage. New mobs have individual switches. General contains cross-update policies, optional compatibility and custom conveniences; advanced identity settings are kept out of ordinary GUI navigation.
+
+For example, `update_1_16.netherite.enabled` controls the netherite family, with its equipment parameters in the same category. `update_1_21.decorative_copper.enabled` controls chiseled copper, grates, bulbs, doors and trapdoors together. `update_1_13.mobs.cod` contains cod availability and natural spawn parameters.
+
+Disabling an update does not overwrite its children's requested values. Dependent features become unavailable when prerequisites are disabled. End Cities require outer islands and chorus blocks; Ancient Cities require sculk and deepslate; Trial Chambers require copper, tuff and cobbled deepslate; bastions require the Nether provider and blackstone. The Nether content switch also controls dependent Nether blocks, biomes and mobs.
+
+Ordinary ready content is enabled by default. Genuinely incomplete features remain explicitly labeled and disabled by default: sculk catalyst support, the replacement Nether provider, spectator mode, inventory return-on-close and unsupported extra skin layers. There is no global experimental override. Catalyst XP spreading remains unimplemented even when sculk blocks are enabled.
+
+## Disabling content and existing worlds
+
+Registries, entity identities and tile-entity types remain available so saved objects can load. Availability controls new recipes, loot, natural selection, direct mob creation, biome placement and the relevant generation hooks. Existing blocks, items, entities, placed structures and generated terrain remain; disabling is not a world-cleanup operation. Already running saved block behavior may continue to preserve its state. No live unregistration or automatic retrogen occurs.
+
+Registry identities and native rendering support are retained independently of acquisition controls. A disabled mob cannot be newly created through natural spawning, structures, breeding or conversions, but chunk deserialization still loads already saved mobs. Missing content dependencies suppress the affected new structure instead of substituting unrelated materials.
+
+## Natural spawning
+
+Applicable mobs expose `spawnWeight`, `minGroupSize` and `maxGroupSize` in their feature category. `-1` retains the original value for each biome or mechanism; this preserves intentional biome differences. Weight `0` disables that natural spawn entry. Other weights are relative selection weights, not absolute probabilities. Group sizes must be positive, with maximum at least minimum. Out-of-range values are bounded and invalid combinations are corrected with a warning.
+
+cod, salmon, tropical fish, pufferfish, dolphin, turtle, axolotl, glow squid, drowned, nautilus, zombie nautilus, guardian, piglin, hoglin, strider, cat, panda, llama, armadillo, camel, bogged, parched, camel husk, frog, rabbit, fox, goat, polar bear, husk, stray, shulker have native list-based spawn settings. The existing aquatic population budgets remain separate limits on admission. Changing weights does not change biome eligibility, water, light, depth, dimension or collision requirements. Drowned retain the existing darkness/depth predicate: exposed shallow daytime spawning is rejected; deep or fully dark water can remain eligible.
+
+Special acquisition uses feature switches rather than invented spawn weights: insomnia phantoms, patrols, raids, traders, spawners, structure encounters, conversions, breeding and constructed or hatched mobs. Husk/stray weights affect their optional list-based spawning mode, not the sky-exposed vanilla replacement ratio. Guardian weights apply inside saved monument bounds. Spawn changes apply after restarting; initialization replaces entries instead of appending duplicates.
+
+## Reloads and multiplayer
+
+Content, generation, spawning, recipe, asset and compatibility settings require restarting Minecraft or the dedicated server. The GUI marks this requirement. Saving advanced tooltip, gamemode-switcher, F3-key, transparent-armour, shulker-tooltip-line and subtitle-filter preferences can update their directly read client settings without changing registries. Changes to restart settings remain pending until the next launch.
+
+Common active settings are compared during Forge's existing handshake, alongside the existing version and potion-ID checks. A mismatch is rejected before gameplay; copy the server's UAB configuration and restart. Client-only preferences are excluded from this comparison and are not generated on dedicated servers. The old field-binding classes remain internal compatibility adapters; they neither own nor save configuration files.
+
+## Feature counts
+
+The catalog contains **358 distinct feature switches**, counting shared legacy aliases once and excluding update parent switches and numeric or presentation parameters. These represent gameplay behaviors, systems, content families and individual mobs, rather than every registered block.
+
+| Origin | Feature switches |
+| --- | ---: |
+| General / cross-update | 29 |
+| 1.8 | 40 |
+| 1.9 | 62 |
+| 1.10 | 13 |
+| 1.11 | 12 |
+| 1.12 | 6 |
+| 1.13 | 29 |
+| 1.14 | 49 |
+| 1.15 | 5 |
+| 1.16 | 30 |
+| 1.16.2 | 1 |
+| 1.17 | 27 |
+| 1.18 | 7 |
+| 1.19 | 10 |
+| 1.20 | 9 |
+| 1.20.5 | 2 |
+| 1.21 | 10 |
+| 1.21.4 | 1 |
+| 1.21.6 | 4 |
+| 1.21.7 | 1 |
+| 1.21.9 | 5 |
+| 1.21.11 | 6 |

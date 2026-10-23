@@ -21,14 +21,14 @@ public class EntitySniffer extends EntityAnimal {
 	@Override protected void applyEntityAttributes() { super.applyEntityAttributes(); getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(14); getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(.1); }
 	public boolean isDigging() { return dataWatcher.getWatchableObjectByte(20) != 0; }
 	@Override public boolean isBreedingItem(ItemStack stack) { return stack != null && stack.getItem() == ModItems.TORCHFLOWER_SEEDS.get(); }
-	@Override public EntityAgeable createChild(EntityAgeable mate) { entityDropItem(ganymedes01.etfuturum.ModBlocks.SNIFFER_EGG.newItemStack(), .1F); setGrowingAge(6000); mate.setGrowingAge(6000); resetInLove(); ((EntityAnimal) mate).resetInLove(); return null; }
+	@Override public EntityAgeable createChild(EntityAgeable mate) { ganymedes01.etfuturum.configuration.ContentAvailability.drop(this, ganymedes01.etfuturum.ModBlocks.SNIFFER_EGG.newItemStack(), .1F); setGrowingAge(6000); mate.setGrowingAge(6000); resetInLove(); ((EntityAnimal) mate).resetInLove(); return null; }
 	private long location(int x, int y, int z) { return ((long) (x & 0x3FFFFFF) << 38) | ((long) (z & 0x3FFFFFF) << 12) | (y & 4095); }
 	@Override public void onLivingUpdate() {
 		super.onLivingUpdate(); if (worldObj.isRemote || isChild()) return;
 		if (digCooldown > 0) --digCooldown;
 		if (digging > 0) {
 			getNavigator().clearPathEntity(); motionX = motionZ = 0;
-			if (--digging == 0) { int x = MathHelper.floor_double(posX), y = MathHelper.floor_double(posY) - 1, z = MathHelper.floor_double(posZ); if (worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing")) { entityDropItem((rand.nextBoolean() ? ModItems.TORCHFLOWER_SEEDS : ModItems.PITCHER_POD).newItemStack(), .1F); explored.addLast(location(x, y, z)); while (explored.size() > 20) explored.removeFirst(); } digCooldown = 9600; dataWatcher.updateObject(20, (byte) 0); }
+			if (--digging == 0) { int x = MathHelper.floor_double(posX), y = MathHelper.floor_double(posY) - 1, z = MathHelper.floor_double(posZ); if (worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing")) { ganymedes01.etfuturum.configuration.ContentAvailability.drop(this, (rand.nextBoolean() ? ModItems.TORCHFLOWER_SEEDS : ModItems.PITCHER_POD).newItemStack(), .1F); explored.addLast(location(x, y, z)); while (explored.size() > 20) explored.removeFirst(); } digCooldown = 9600; dataWatcher.updateObject(20, (byte) 0); }
 			return;
 		}
 		if (digCooldown == 0 && ticksExisted % 40 == 0 && onGround && !isInWater()) {

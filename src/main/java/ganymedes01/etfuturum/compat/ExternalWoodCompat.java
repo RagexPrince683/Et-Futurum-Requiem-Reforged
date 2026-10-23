@@ -139,13 +139,13 @@ public final class ExternalWoodCompat {
 			if (family.planks == null) continue;
 			ItemStack plank = new ItemStack(family.planks, 1, family.plankMeta);
 			if (family.fence != null) GameRegistry.addShapedRecipe(new ItemStack(family.fence, 3), "xyx", "xyx", 'x', plank, 'y', Items.stick);
-			if (family.button != null) GameRegistry.addShapelessRecipe(new ItemStack(family.button), plank);
+			if (family.button != null) ganymedes01.etfuturum.api.utils.RecipeHelper.addShapelessRecipe(new ItemStack(family.button), plank);
 			if (family.plate != null) GameRegistry.addShapedRecipe(new ItemStack(family.plate), "xx", 'x', plank);
 			if (family.door != null) GameRegistry.addShapedRecipe(new ItemStack(family.door, 3), "xx", "xx", "xx", 'x', plank);
 			if (family.trapdoor != null) GameRegistry.addShapedRecipe(new ItemStack(family.trapdoor, 2), "xxx", "xxx", 'x', plank);
 			if (family.boat != null) {
 				GameRegistry.addShapedRecipe(new ItemStack(family.boat), "x x", "xxx", 'x', plank);
-				GameRegistry.addShapelessRecipe(new ItemStack(family.chestBoat), Blocks.chest, family.boat);
+				ganymedes01.etfuturum.api.utils.RecipeHelper.addShapelessRecipe(new ItemStack(family.chestBoat), Blocks.chest, family.boat);
 			}
 		}
 	}

@@ -20,5 +20,6 @@ public abstract class MixinHandshakeModList {
 	@Inject(method = "<init>(Ljava/util/List;)V", at = @At("RETURN"), remap = false)
 	private void etfuturum$includePotionIds(List<ModContainer> mods, CallbackInfo ci) {
 		modTags.put(ModPotions.IDS.handshakeKey(), ModPotions.IDS.handshake());
+		modTags.put("uab:configuration", ganymedes01.etfuturum.configuration.UabConfiguration.get().handshake());
 	}
 }

@@ -12,16 +12,16 @@ public final class SurfaceBiomeManager {
 	public static BiomeGenBase cherryGrove, mangroveSwamp, paleGarden, meadow;
 	private SurfaceBiomeManager() { }
 	public static void init() {
-		if (ConfigBlocksItems.enableCherryBlocks) cherryGrove = add(ConfigWorld.cherryGroveID, "Cherry Grove", BiomeModernSurface.Kind.CHERRY, BiomeManager.BiomeType.COOL);
-		if (ConfigExperiments.enableMangroveBlocks && ModBlocks.MUD.isEnabled()) mangroveSwamp = add(ConfigWorld.mangroveSwampID, "Mangrove Swamp", BiomeModernSurface.Kind.MANGROVE, BiomeManager.BiomeType.WARM);
-		if (ConfigExperiments.enablePaleGarden) paleGarden = add(ConfigWorld.paleGardenID, "Pale Garden", BiomeModernSurface.Kind.PALE, BiomeManager.BiomeType.WARM);
+		cherryGrove = add(ConfigWorld.cherryGroveID, "Cherry Grove", BiomeModernSurface.Kind.CHERRY, BiomeManager.BiomeType.COOL);
+		mangroveSwamp = add(ConfigWorld.mangroveSwampID, "Mangrove Swamp", BiomeModernSurface.Kind.MANGROVE, BiomeManager.BiomeType.WARM);
+		paleGarden = add(ConfigWorld.paleGardenID, "Pale Garden", BiomeModernSurface.Kind.PALE, BiomeManager.BiomeType.WARM);
 		meadow = add(ConfigWorld.meadowID, "Meadow", BiomeModernSurface.Kind.MEADOW, BiomeManager.BiomeType.COOL);
 		add(ConfigWorld.groveID, "Grove", BiomeModernSurface.Kind.GROVE, BiomeManager.BiomeType.ICY);
 		add(ConfigWorld.snowySlopesID, "Snowy Slopes", BiomeModernSurface.Kind.SLOPES, BiomeManager.BiomeType.ICY);
 		add(ConfigWorld.jaggedPeaksID, "Jagged Peaks", BiomeModernSurface.Kind.JAGGED, BiomeManager.BiomeType.ICY);
 		add(ConfigWorld.frozenPeaksID, "Frozen Peaks", BiomeModernSurface.Kind.FROZEN, BiomeManager.BiomeType.ICY);
 		add(ConfigWorld.stonyPeaksID, "Stony Peaks", BiomeModernSurface.Kind.STONY, BiomeManager.BiomeType.WARM);
-		if (ConfigBlocksItems.enableBambooBlocks) add(ConfigWorld.bambooJungleID, "Bamboo Jungle", BiomeModernSurface.Kind.BAMBOO, BiomeManager.BiomeType.WARM);
+		add(ConfigWorld.bambooJungleID, "Bamboo Jungle", BiomeModernSurface.Kind.BAMBOO, BiomeManager.BiomeType.WARM);
 		OceanBiomeLayer.register();
 	}
 	private static BiomeGenBase add(int id, String name, BiomeModernSurface.Kind kind, BiomeManager.BiomeType climate) {

@@ -15,9 +15,9 @@ public class BiomeSoulSandValley extends NetherBiomeBase {
 		this.fillerBlock = Blocks.soul_sand;
 		removeMonster(EntityPigZombie.class);
 		removeMonster(EntityGhast.class);
-		this.spawnableMonsterList.add(new SpawnListEntry(EntitySkeleton.class, 20, 1, 5));
-		this.spawnableMonsterList.add(new SpawnListEntry(EntityGhast.class, 50, 1, 4));
-		this.spawnableMonsterList.add(new SpawnListEntry(EntityEnderman.class, 1, 1, 4));
+		ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableMonsterList, EntitySkeleton.class, 20, 1, 5);
+		ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableMonsterList, EntityGhast.class, 50, 1, 4);
+		ganymedes01.etfuturum.configuration.SpawnSettings.add(spawnableMonsterList, EntityEnderman.class, 1, 1, 4);
 	}
 
 	@Override
