@@ -1,5 +1,7 @@
 package ganymedes01.etfuturum.blocks.compat;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import ganymedes01.etfuturum.EtFuturum;
 import ganymedes01.etfuturum.blocks.BlockModernWoodFence;
 import ganymedes01.etfuturum.blocks.BlockWoodFence;
@@ -8,6 +10,7 @@ import ganymedes01.etfuturum.configuration.configs.ConfigFunctions;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -25,6 +28,13 @@ public class BlockExternalWoodFence extends BlockFence {
 		setResistance(5.0F);
 		setStepSound(Block.soundTypeWood);
 		setCreativeTab(EtFuturum.creativeTabBlocks);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister ignored) {
+		// The source planks own registration. getIcon delegates live, including after resource reloads.
+		// BlockFence's implementation would register the unused null constructor texture instead.
 	}
 
 	@Override

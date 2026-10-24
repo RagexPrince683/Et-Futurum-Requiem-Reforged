@@ -269,3 +269,8 @@
 - Select contained-water drawing with Forge's terrain render pass instead of its entity render pass. Declare the translucent pass for aquatic plants and dried ghasts so kelp, coral, sea pickles and hydrated ghasts retain their contained water surface even when a render section has no ordinary water blocks.
 - Restore guardian side/top/bottom geometry with its intended texture coordinates, correct the eye and twelve diagonal spines, and add the articulated three-part tail for both normal and elder textures. Preserve entity identities, elder scale, combat and networking.
 - Enable Sculk and Nether biomes by default so fresh configurations include Ancient City and bastion prerequisites. Preserve explicit existing disables, provider compatibility rules and the disabled catalyst XP-spreading path.
+
+2026-10-24 11:14 — Fix external wood fence texture registration
+
+- Give UAB's external wood fences the same delegated icon registration contract as its other plank-backed fences. Biomes O' Plenty and Witchery planks retain ownership of their side/metadata textures; fences read the current source icons after resource reloads instead of passing an unused null texture name to vanilla registration.
+- Preserve vanilla fence registration, fence/wall connectivity, rendering and saved block identities. Add focused registration, source-icon delegation and reload regression coverage to the normal verification tasks.

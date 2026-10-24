@@ -57,9 +57,20 @@ tasks.register("configurationTest", JavaExec) {
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(8) }
 }
 tasks.named("check") { dependsOn(tasks.named("configurationTest")) }
+
+tasks.register("fenceTextureTest", JavaExec) {
+    group = "verification"
+    description = "Checks native and delegated fence texture registration across resource reloads."
+    dependsOn(tasks.named("testClasses"))
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = "ganymedes01.etfuturum.blocks.FenceTextureTest"
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(8) }
+}
+tasks.named("check") { dependsOn(tasks.named("fenceTextureTest")) }
 tasks.named("test") {
     dependsOn(tasks.named("configurationTest"))
-    // The regression suite is a plain Java entry point using Forge's own parser, not a JUnit suite.
+    dependsOn(tasks.named("fenceTextureTest"))
+    // The regression suites use plain Java entry points rather than JUnit discovery.
     failOnNoDiscoveredTests = false
 }
 
