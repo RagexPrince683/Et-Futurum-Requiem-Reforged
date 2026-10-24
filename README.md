@@ -39,7 +39,7 @@ Feature support follows behavior and practical use on 1.7.10. UAB can use projec
 
 UAB began as a fork of **Et Futurum Requiem (EFR)**, initially maintained as **Et Futurum Requiem Reforged**. EFR itself builds on ganymedes01's Et Futurum and the work of KryptonCaptain, jss2a98aj, Roadhog360, embeddedt, makamys and other contributors.
 
-UAB has developed its own approach to core feature support and to supplying modern content on an old Minecraft version. Its configuration, content dependencies, native runtime adaptations, structure support and project-owned support systems follow UAB's requirements. Its architecture and feature-support philosophy differ substantially from the original EFR project. UAB is maintained primarily for RageCraft and the maintainer's own goals; upstream EFR remains an independent project with its own direction.
+UAB has developed its own approach to core feature support and to supplying modern content on an old Minecraft version. Its configuration, content dependencies, native runtime adaptations, structure support and project-owned support systems follow UAB's requirements. Its architecture and feature-support philosophy differ substantially from the original EFR project. Notably, this project intends for features to actually integrate into that version natively without rewriting the rest of the game's code, and promotes survival usability. 
 
 The lineage and inherited contributions retain full credit. The project code uses the existing LGPL-3.0 license; Minecraft assets and other third-party material retain their own rights. See [third-party notices](THIRD_PARTY_NOTICES.md) and the asset credits included in the repository.
 
