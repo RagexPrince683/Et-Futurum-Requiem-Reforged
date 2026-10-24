@@ -36,9 +36,11 @@ public class EntityDolphin extends EntityAquaticAnimal {
 			if (!worldObj.isRemote) {
 				if (!player.capabilities.isCreativeMode && --held.stackSize == 0) player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
 				treasureTicks = 1200; treasureKnown = false;
-				// Only saved, already generated monuments are eligible. This never generates terrain.
-				net.minecraft.world.ChunkPosition position = ganymedes01.etfuturum.world.structure.MapGenOceanMonument.nearestSaved(worldObj, posX, posZ);
-				if (position != null) { treasureKnown = true; treasureX = position.chunkPosX; treasureY = 58; treasureZ = position.chunkPosZ; }
+				// Prefer real saved treasure, retaining the existing monument fallback without generating terrain.
+				net.minecraft.world.ChunkPosition position = ganymedes01.etfuturum.world.structure.OceanTreasure.nearestSaved(worldObj, posX, posZ);
+				if (position == null) position = ganymedes01.etfuturum.world.structure.OceanSites.nearestSaved(worldObj, posX, posZ);
+				if (position == null) position = ganymedes01.etfuturum.world.structure.MapGenOceanMonument.nearestSaved(worldObj, posX, posZ);
+				if (position != null) { treasureKnown = true; treasureX = position.chunkPosX; treasureY = position.chunkPosY; treasureZ = position.chunkPosZ; }
 			}
 			return true;
 		}

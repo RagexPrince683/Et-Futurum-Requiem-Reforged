@@ -240,3 +240,32 @@
 - Import recognized legacy split and monolithic settings once, preserving explicit false values, customized values and original files with non-overwritten backups. Validate malformed input without allowing Forge to rename or destroy the source. Keep startup settings fixed until restart, with safe client preferences reloadable through the native GUI. Compare common active settings during the existing connection handshake.
 - Retain saved registrations independently of new acquisition. Apply availability to recipes, loot, enchantments, generation and new mob creation while preserving chunk-loaded entities, placed blocks and tile entities. Replace spawn-list entries on initialization, preserving original biome differences when no override is requested.
 - Make root `version.properties` authoritative for metadata, artifacts, publication and release-tag checks. Produce `uab-<version>+mc1.7.10.jar` and generated update metadata; remove competing version files and upstream hosting project IDs. Add native Forge configuration and migration regression coverage.
+
+## 2026-10-23 22:20 — Complete practical Update Aquatic content
+
+- Add source-water kelp with random-tick and bone-meal growth, supported columns, harvesting and water restoration. Add fast-eaten dried kelp, furnace/smoker processing, reversible nine-item storage and dried-kelp-block fuel for 20 furnace operations.
+- Add dry and submerged sea-pickle clusters, one-to-four placement, underwater light levels, bucket interactions, canonical item drops, lime-dye smelting and bone-meal propagation on living coral. Keep contained water local to these blocks without requiring a fluidlogging mod.
+- Decorate new eligible Overworld ocean chunks with kelp and warm-ocean sea pickles without retrogen or neighboring chunk generation. Add independent Update Aquatic content/generation settings, stable saved identities, ingredient dictionary entries, released animated textures/models and English names. Keep fish-spawning settings independent.
+- Add all five live/dead coral families with blocks, plants, floor/wall fans, native contained-water states, delayed drying death and Silk Touch harvesting. Generate bounded native warm-ocean coral formations.
+- Add Heart of the Sea, buried treasure and craftable conduits. Validate native prismarine frames on the server, scale wet-player buffs with the frame and attack wet hostiles at full strength. Use native timed potion effects and a retained static model; preserve independent configuration and saved tile identities.
+- Add released shipwreck and warm/cold ocean-ruin layouts with saved chunk-indexed plans, clipped once-only placement, native loot and drowned. Admit only new loaded footprints, retain consumed loot on restart and extend dolphin treasure guidance to real saved ocean sites. Defer unsupported exploration maps and unavailable rewards; leave general waterlogging and swimming-engine work separate.
+
+2026-10-24 02:38 — Woodland mansions, archaeology, pottery and template smithing
+
+- Add saved native woodland-mansion assembly using released rooms, mirrors, roofs, illager/allay encounters and treasure; limit new generation to suitable Roofed Forest terrain and preserve completed chunks across reloads.
+- Add suspicious sand/gravel, server-owned brushing and reward/progress persistence; extend new desert wells/pyramids and existing ocean ruins, and generate buried trail ruins from released pools and capped archaeology processors.
+- Add all 23 pottery sherds, four independent pot designs, shaped pottery crafting, item/world rendering, one-stack storage, hopper/comparator support and shattering. Migrate old dispenser-backed pots without losing overflow stacks; retain Trial Chamber decorations.
+- Add all 18 armor trim patterns and eleven trim materials, including Coast from shipwrecks and Tide from elder guardians. Supply corresponding template loot, exact-substrate duplication recipes, worn overlays, inventory marks and tooltips.
+- Migrate the Smithing Table to three inputs with consumed upgrade templates, preserve equipment NBT/damage and existing scripted two-input recipes, and add independent player-facing feature controls. Disabling upgrade templates retains earlier built-in progression.
+- Guard disabled Iron Chests upgrade enumeration when NEI is present without Iron Chests, preventing optional-class loading during item-list construction.
+
+2026-10-24 03:22 — Fix release metadata generation with the configuration cache
+
+- Capture the metadata output location and Minecraft version during Gradle configuration, avoiding unsupported script/project access when the task executes or is restored from the configuration cache. Track the Minecraft version as a task input while preserving the update metadata format and release version rules.
+
+2026-10-24 03:50 — Structure locating, aquatic rendering and enabled generation defaults
+
+- Expand `/uab_locate` with operator-only tab completion for eleven structure types, dimension checks, nearest saved-site lookup and bounded generation-candidate searches where supported. Preserve `/efr_locate` and `/locate_endcity`; distinguish recorded sites from candidates and avoid generating terrain during searches.
+- Select contained-water drawing with Forge's terrain render pass instead of its entity render pass. Declare the translucent pass for aquatic plants and dried ghasts so kelp, coral, sea pickles and hydrated ghasts retain their contained water surface even when a render section has no ordinary water blocks.
+- Restore guardian side/top/bottom geometry with its intended texture coordinates, correct the eye and twelve diagonal spines, and add the articulated three-part tail for both normal and elder textures. Preserve entity identities, elder scale, combat and networking.
+- Enable Sculk and Nether biomes by default so fresh configurations include Ancient City and bastion prerequisites. Preserve explicit existing disables, provider compatibility rules and the disabled catalyst XP-spreading path.

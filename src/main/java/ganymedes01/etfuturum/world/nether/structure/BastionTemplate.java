@@ -185,6 +185,7 @@ final class BastionTemplate {
 				if (tile instanceof IInventory) {
 					ChestGenHooks loot = BastionLoot.get(nbt.getString("LootTable"));
 					WeightedRandomChestContent.generateChestContents(random, loot.getItems(random), (IInventory) tile, loot.getCount(random));
+					ganymedes01.etfuturum.world.structure.ExplorationLoot.bastion((IInventory) tile, nbt.getString("LootTable"), random);
 				}
 			} else if (state.getBlock() == Blocks.mob_spawner) {
 				TileEntity tile = world.getTileEntity(wx, wy, wz);

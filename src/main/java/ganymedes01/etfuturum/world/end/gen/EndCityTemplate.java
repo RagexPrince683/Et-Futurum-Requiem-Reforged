@@ -302,6 +302,7 @@ public class EndCityTemplate extends NBTStructure {
 						rand, EtFuturumLootTables.END_CITY_TREASURE.getItems(rand),
 						(net.minecraft.inventory.IInventory) te, EtFuturumLootTables.END_CITY_TREASURE.getCount(rand)
 				);
+				if (rand.nextInt(15) == 0) ganymedes01.etfuturum.world.structure.ExplorationLoot.put((net.minecraft.inventory.IInventory) te, ganymedes01.etfuturum.ModItems.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, 1, rand);
 			} else {
 				System.out.println("EndCityTemplate: Missing or invalid chest TE at " + chestPos[0] + ", " + chestPos[1] + ", " + chestPos[2]);
 			}

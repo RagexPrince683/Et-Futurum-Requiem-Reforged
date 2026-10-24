@@ -43,6 +43,26 @@ public class MapGenBastion extends MapGenStructure {
 		return !ganymedes01.etfuturum.world.structure.NativeStructureReservations.fortress(worldObj, new Start(worldObj, x, z).getBoundingBox());
 	}
 	@Override protected StructureStart getStructureStart(int x, int z) { return new Start(worldObj, x, z); }
+	/** Reuses native placement and fortress-reservation checks without requesting chunks. */
+	public static net.minecraft.util.ChunkCoordinates nearestCandidate(World world, int x, int z) {
+		net.minecraft.world.chunk.IChunkProvider provider = world.getChunkProvider();
+		if (provider instanceof net.minecraft.world.gen.ChunkProviderServer) provider = ((net.minecraft.world.gen.ChunkProviderServer) provider).currentChunkProvider;
+		if (!(provider instanceof ganymedes01.etfuturum.world.nether.dimension.NetherChunkProvider)) return null;
+		MapGenBastion generator = new MapGenBastion(); generator.worldObj = world;
+		int spacing = ConfigWorld.bastionSpacing;
+		int gx = Math.floorDiv(x >> 4, spacing), gz = Math.floorDiv(z >> 4, spacing);
+		double best = Double.MAX_VALUE; net.minecraft.util.ChunkCoordinates result = null;
+		for (int dx = -2; dx <= 2; dx++) for (int dz = -2; dz <= 2; dz++) {
+			int rx = gx + dx, rz = gz + dz;
+			Random random = new Random(rx * 341873128712L + rz * 132897987541L + world.getSeed() + 30084232L);
+			int cx = rx * spacing + random.nextInt(spacing - 4), cz = rz * spacing + random.nextInt(spacing - 4);
+			if (!generator.canSpawnStructureAtCoords(cx, cz)) continue;
+			int px = cx * 16 + 8, pz = cz * 16 + 8;
+			double distance = ((double) px - x) * ((double) px - x) + ((double) pz - z) * ((double) pz - z);
+			if (distance < best) { best = distance; result = new net.minecraft.util.ChunkCoordinates(px, 33, pz); }
+		}
+		return result;
+	}
 
 	private static List<PoolElement> pool(String id) {
 		return POOLS.computeIfAbsent(id, key -> {

@@ -20,7 +20,7 @@ For example, `update_1_16.netherite.enabled` controls the netherite family, with
 
 Disabling an update does not overwrite its children's requested values. Dependent features become unavailable when prerequisites are disabled. End Cities require outer islands and chorus blocks; Ancient Cities require sculk and deepslate; Trial Chambers require copper, tuff and cobbled deepslate; bastions require the Nether provider and blackstone. The Nether content switch also controls dependent Nether blocks, biomes and mobs.
 
-Ordinary ready content is enabled by default. Genuinely incomplete features remain explicitly labeled and disabled by default: sculk catalyst support, the replacement Nether provider, spectator mode, inventory return-on-close and unsupported extra skin layers. There is no global experimental override. Catalyst XP spreading remains unimplemented even when sculk blocks are enabled.
+Ordinary ready content, Sculk and Nether biomes are enabled by default, including the prerequisites for Ancient Cities and bastions. Existing explicit disables are preserved during upgrades. The Nether provider remains incompatible with replacement Nether terrain providers such as Netherlicious. Spectator mode, inventory return-on-close and unsupported extra skin layers remain disabled by default. There is no global experimental override. Catalyst XP spreading remains unimplemented even when sculk blocks are enabled.
 
 ## Disabling content and existing worlds
 
@@ -70,3 +70,5 @@ The catalog contains **358 distinct feature switches**, counting shared legacy a
 | 1.21.7 | 1 |
 | 1.21.9 | 5 |
 | 1.21.11 | 6 |
+
+Woodland mansions have an Exploration Update generation control. Trails & Tales groups Archaeology, Brushes, Trail ruins, Decorated pots, Armor trims and Netherite upgrade templates separately. Trail ruins require Archaeology/Brushes; trimming and template upgrades require the Smithing Table. Turning off Netherite upgrade templates restores built-in two-input upgrades. Existing scripted two-input recipes remain available with the template slot empty. Acquisition/generation switches retain saved items, decorations, trim data and registered identities.

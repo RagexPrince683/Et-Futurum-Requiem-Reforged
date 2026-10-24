@@ -1,98 +1,48 @@
 package ganymedes01.etfuturum.command;
 
 import ganymedes01.etfuturum.world.end.dimension.ChunkProviderEFREnd;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommandSender;
+import ganymedes01.etfuturum.world.end.gen.MapGenEndCity;
+import net.minecraft.command.*;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-
+import net.minecraft.world.gen.ChunkProviderServer;
 import java.util.Random;
 
+/** Keeps the legacy command's wider search; the unified locator uses the bounded overload. */
 public class CommandLocateEndCity extends CommandBase {
-
-	@Override
-	public String getCommandName() {
-		return "locate_endcity";
-	}
-
-	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/locate_endcity";
-	}
-
-	@Override
-	public void processCommand(ICommandSender sender, String[] args) {
+	@Override public String getCommandName() { return "locate_endcity"; }
+	@Override public int getRequiredPermissionLevel() { return 2; }
+	@Override public String getCommandUsage(ICommandSender sender) { return "/locate_endcity"; }
+	@Override public void processCommand(ICommandSender sender, String[] args) {
+		if (args.length != 0) throw new WrongUsageException(getCommandUsage(sender));
 		World world = sender.getEntityWorld();
-		if (world.provider.dimensionId != 1) {
-			sender.addChatMessage(new ChatComponentText("You must be in the End to locate an End City."));
-			return;
-		}
-
+		if (world.provider.dimensionId != 1) throw new CommandException("You must be in the End to locate an End City.");
+		ChunkCoordinates origin = sender.getPlayerCoordinates();
+		ChunkCoordinates point = nearestCandidate(world, origin.posX, origin.posZ, 50);
+		sender.addChatMessage(new ChatComponentText(point == null ? "No End City candidate found within the search radius; check the active End provider."
+				: "End City candidate at X: " + point.posX + ", Z: " + point.posZ + "."));
+	}
+	public static ChunkCoordinates nearestCandidate(World world, int x, int z) {
+		return nearestCandidate(world, x, z, 2);
+	}
+	private static ChunkCoordinates nearestCandidate(World world, int x, int z, int radius) {
 		IChunkProvider provider = world.getChunkProvider();
-		if (provider instanceof net.minecraft.world.gen.ChunkProviderServer) {
-			provider = ((net.minecraft.world.gen.ChunkProviderServer) provider).currentChunkProvider;
+		if (provider instanceof ChunkProviderServer) provider = ((ChunkProviderServer) provider).currentChunkProvider;
+		if (!(provider instanceof ChunkProviderEFREnd)) return null;
+		ChunkProviderEFREnd end = (ChunkProviderEFREnd) provider;
+		int gx = Math.floorDiv(x >> 4, 20), gz = Math.floorDiv(z >> 4, 20);
+		double best = Double.MAX_VALUE; ChunkCoordinates result = null;
+		for (int dx = -radius; dx <= radius; dx++) for (int dz = -radius; dz <= radius; dz++) {
+			int rx = gx + dx, rz = gz + dz;
+			Random random = new Random(rx * 341873128712L + rz * 132897987541L + world.getSeed() + 10387313L);
+			int cx = rx * 20 + (random.nextInt(9) + random.nextInt(9)) / 2, cz = rz * 20 + (random.nextInt(9) + random.nextInt(9)) / 2;
+			if (!MapGenEndCity.isValidCityAt(end, cx, cz, world.getSeed())) continue;
+			int px = cx * 16 + 8, pz = cz * 16 + 8;
+			double distance = ((double) px - x) * ((double) px - x) + ((double) pz - z) * ((double) pz - z);
+			if (distance < best) { best = distance; result = new ChunkCoordinates(px, -1, pz); }
 		}
-
-		ChunkProviderEFREnd endProvider = null;
-		if (provider instanceof ChunkProviderEFREnd) {
-			endProvider = (ChunkProviderEFREnd) provider;
-		} else {
-			sender.addChatMessage(new ChatComponentText("The Et Futurum End provider is not active."));
-			return;
-		}
-
-		int playerChunkX = MathHelper.floor_double(sender.getPlayerCoordinates().posX / 16.0D);
-		int playerChunkZ = MathHelper.floor_double(sender.getPlayerCoordinates().posZ / 16.0D);
-
-		sender.addChatMessage(new ChatComponentText("Searching for nearest End City..."));
-
-		int nearestDistance = Integer.MAX_VALUE;
-		int nearestX = 0;
-		int nearestZ = 0;
-		boolean found = false;
-
-		// Scan a 100x100 region of the SPACING grid around the player
-		int SPACING = 20;
-		int SEPARATION = 11;
-		int SALT = 10387313;
-
-		int gridCenterXR = playerChunkX / SPACING;
-		int gridCenterZR = playerChunkZ / SPACING;
-
-		for (int dx = -50; dx <= 50; dx++) {
-			for (int dz = -50; dz <= 50; dz++) {
-				int gridX = gridCenterXR + dx;
-				int gridZ = gridCenterZR + dz;
-
-				Random random = world.setRandomSeed(gridX, gridZ, SALT);
-
-				int chunkX = gridX * SPACING;
-				int chunkZ = gridZ * SPACING;
-
-				chunkX += (random.nextInt(SPACING - SEPARATION) + random.nextInt(SPACING - SEPARATION)) / 2;
-				chunkZ += (random.nextInt(SPACING - SEPARATION) + random.nextInt(SPACING - SEPARATION)) / 2;
-
-				if (ganymedes01.etfuturum.world.end.gen.MapGenEndCity.isValidCityAt(endProvider, chunkX, chunkZ, world.getSeed())) {
-					int blockX = chunkX * 16 + 8;
-					int blockZ = chunkZ * 16 + 8;
-					
-					int distSq = (chunkX - playerChunkX) * (chunkX - playerChunkX) + (chunkZ - playerChunkZ) * (chunkZ - playerChunkZ);
-					if (distSq < nearestDistance) {
-						nearestDistance = distSq;
-						nearestX = blockX;
-						nearestZ = blockZ;
-						found = true;
-					}
-				}
-			}
-		}
-
-		if (found) {
-			sender.addChatMessage(new ChatComponentText("Nearest End City located at X: " + nearestX + ", Z: " + nearestZ));
-		} else {
-			sender.addChatMessage(new ChatComponentText("Could not find an End City within search radius."));
-		}
+		return result;
 	}
 }

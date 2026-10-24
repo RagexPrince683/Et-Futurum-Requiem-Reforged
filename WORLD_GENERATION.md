@@ -8,7 +8,17 @@ The content reference is released Java Edition 1.21.11. The runtime, saves, load
 
 The underground generators support the native `ChunkProviderGenerate` Overworld, including UAB's surface-biome selection. Superflat, replacement terrain providers, Nether and End terrain are excluded. No surface biome IDs or chunk formats change. Ancient Cities select elevated native biomes; they create their own local Deep Dark cavern rather than assigning a two-dimensional Deep Dark surface biome across the whole column.
 
-One deterministic candidate occupies each 48-chunk placement region. Its center varies within the central eight chunks; the seed selects a city or chamber. Disabled or unsuitable candidates remain empty rather than changing into another structure. Independent regions have enough separation for the 116-block assembly radius. `/uab_locate ancient_city` and `/uab_locate trial_chambers` search two placement regions in each direction for a saved structure or viable candidate. Searches can return no result. This is an operator command; cartographer exploration-map trades are not implemented.
+One deterministic candidate occupies each 48-chunk placement region. Its center varies within the central eight chunks; the seed selects a city or chamber. Disabled or unsuitable candidates remain empty rather than changing into another structure. Independent regions have enough separation for the 116-block assembly radius. The operator command `/uab_locate <structure>` supports discovery as described below; cartographer exploration-map trades are not implemented.
+
+### Locating structures
+
+Use `/uab_locate <structure>` with operator permission (level 2); press Tab to list or complete structure names. `/efr_locate` remains an alias. Run the command in the structure's dimension.
+
+Supported names are `ancient_city`, `trial_chambers`, `woodland_mansion`, `trail_ruins`, `ocean_monument`, `shipwreck`, `ocean_ruin`, `buried_treasure`, `pillager_outpost`, `bastion_remnant` and `end_city`.
+
+The command first finds the nearest recorded structure of that type across the dimension's saved starts, including when its generation setting is now disabled. Saved positions describe the original site; mined structures and consumed treasure are not restored. When no saved site exists, cities, chambers, mansions, trail ruins, monuments, bastions and End Cities can search two placement regions in each direction using their generation checks. Results distinguish saved sites from new-terrain candidates. Candidate placement still depends on subsequent generation and does not promise an existing structure in already explored terrain. Shipwrecks, ocean ruins, buried treasure and outposts search saved sites only because their admission depends on populated terrain or population randomness. No search generates or populates terrain. The older `/locate_endcity` command remains available.
+
+Sculk and Nether biomes default to enabled, so fresh configurations include the prerequisites for Ancient Cities and bastions. Existing explicit disables remain in effect. All new structure generation requires new terrain and the world's Generate Structures setting.
 
 The canonical layout is built before placement from released jigsaw templates and weighted pools. Connectors must match names, facing and, where applicable, top alignment. Contained decorations are allowed inside their owning room; unrelated piece bounds cannot overlap. Released fallback pools and closed outer connectors terminate rejected branches. Chamber mob-pool aliases are chosen once for the structure. Layouts are bounded to 256 pieces, seven city attachment levels or twenty chamber attachment levels. The legacy height window can reject a branch or a whole candidate; templates themselves are never cropped vertically.
 
@@ -63,6 +73,24 @@ Honey Blocks already exist under `enableHoney`, with their own renderer, sliding
 ## Crossbow presentation
 
 The crossbow adapts released item-display transforms after normalizing the legacy Forge hand transforms and correcting the legacy sprite plane by a quarter turn. Player loading uses a separate two-arm motion: the support arm pulls back over the enchantment-adjusted charge duration, then both arms adopt the charged aiming pose. Pillagers synchronize loading ticks from their server-owned attack task, retain charged state in their held stack, and distinguish walking/idle holding, loading and aiming. Their retained model uses its actual arm pivot rather than the legacy biped item transform.
+
+## Update Aquatic generation
+
+Kelp and sea-pickle decoration, warm-ocean coral formations, buried treasure, shipwrecks and underwater ruins have independent Update Aquatic controls. New decoration stays within its current chunk. Coral formations adapt tree, shelf and branching shapes to native ocean floors rather than replacing terrain or adding a fluid engine.
+
+Ocean structure plans are stored in `etfuturum_ocean_sites` world data and indexed by affected chunk. Released shipwrecks and warm/cold ruins are translated through explicit native block-state mappings. Plans require an already loaded footprint whose neighboring chunks have not been populated; each chunk is clipped and placed once. This conservative admission can skip sites under unusual generation order. Placement never forces neighboring chunks or regenerates old terrain. Cold masonry overlays do not repeat the primary piece's loot or drowned.
+
+Buried treasure stores once-only chest locations in `etfuturum_ocean_treasure`. Released loot includes a Heart of the Sea when conduits are enabled. Consumed loot and mined structure blocks survive revisiting and restart. Dolphin guidance uses nearby saved treasure and ocean sites, with the existing saved-monument fallback. Exploration-map rewards remain deferred; no map or treasure search generates terrain.
+
+## Woodland mansions and trail ruins
+
+The **Exploration Update / Woodland mansions** switch generates new mansions in native Roofed Forest and its mutated variant. Mansion candidates use 80-chunk regions with a 20-chunk separation margin. The released room-grid algorithm assembles all 73 available mansion templates, including mirrored rooms, connecting corridors, stairs, outer walls and roofs. Illager/allay data markers use the existing server-owned entities; spider rooms retain a native spider spawner. Furniture, chest loot and Vex templates are translated at their native boundaries.
+
+The **Trails & Tales / Trail ruins** switch depends on Archaeology and Brushes. Candidates use 34-chunk regions with an eight-chunk separation margin, in native coniferous, birch-forest and jungle terrain. Released tower/road/house pools assemble the 84 available templates, with a seven-attachment depth, 120-piece limit and 80-block assembly radius. The root begins fifteen blocks below the native surface. Released degradation rules and per-piece capped suspicious-gravel selections are prepared once from deterministic randomness, independently of chunk visitation order. Unimplemented campfire and grindstone decorations are omitted; they are not replaced with unrelated workstations.
+
+Both generators support the native Overworld terrain provider and Generate Structures. They sample native terrain without requesting chunks, yield to predicted village/temple bounds, reject footprints containing saved or previously populated chunks, and place only the current chunk. Mansions use the minimum sampled corner height, reject sea-level/steep sites and add native cobblestone foundations. The saved `UABSurfaceStructures` starts and `UABSurfacePiece` components retain layout, rotation, mirror, processor identity and completed chunks. Reloading does not refill loot or restore mined structure blocks. Provider replacements require a dedicated adapter. Mansion explorer-map trades are not supplied by the legacy profession system.
+
+Archaeology extends the existing saved ocean-ruin implementation rather than introducing another ocean generator. Desert wells receive buried suspicious sand; native desert pyramids gain a small excavation pocket beside the retained treasure/TNT chamber. These are bounded native placement adaptations, not modern terrain-engine or exact natural-distribution parity.
 
 ## Reference assets
 

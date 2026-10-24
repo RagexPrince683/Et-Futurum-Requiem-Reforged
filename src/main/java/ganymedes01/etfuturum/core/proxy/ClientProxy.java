@@ -87,6 +87,8 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	private void registerItemRenderers() {
+		MinecraftForge.EVENT_BUS.register(new ganymedes01.etfuturum.client.renderer.ArmorTrimRenderer());
+		MinecraftForgeClient.registerItemRenderer(ModBlocks.DECORATED_POT.getItem(), new ganymedes01.etfuturum.client.renderer.item.ItemDecoratedPotRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.BANNER.get()), new ItemBannerRenderer());
 		if (ConfigFunctions.enableFancySkulls) {
 			MinecraftForgeClient.registerItemRenderer(Items.skull, new ItemSkullRenderer());
@@ -113,6 +115,8 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	private void registerBlockRenderers() {
+		ClientRegistry.bindTileEntitySpecialRenderer(ganymedes01.etfuturum.tileentities.TileEntityDecoratedPot.class, new ganymedes01.etfuturum.client.renderer.tileentity.TileEntityDecoratedPotRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(ganymedes01.etfuturum.tileentities.TileEntityBrushable.class, new ganymedes01.etfuturum.client.renderer.tileentity.TileEntityBrushableRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodSign.class, new TileEntityWoodSignRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBanner.class, new TileEntityBannerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkull.class, new TileEntityFancySkullRenderer());

@@ -25,7 +25,7 @@ public class GuiSmithingTable extends GuiContainer {
 		final int offsetX = (this.width - this.xSize) / 2;
 		final int offsetY = (this.height - this.ySize) / 2;
 		drawTexturedModalRect(offsetX, offsetY, 0, 0, xSize, ySize);
-		if (container.unable()) drawTexturedModalRect(offsetX + 99, offsetY + 45, xSize, 0, 28, 21);
+		if (container.unable()) drawTexturedModalRect(offsetX + 114, offsetY + 45, xSize, 0, 28, 21);
 	}
 
 	@Override

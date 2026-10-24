@@ -181,7 +181,11 @@ public class EtFuturumWorldGenerator implements IWorldGenerator {
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if (!isFlatWorld(chunkGenerator) || world.getWorldInfo().getGeneratorOptions().contains("decoration")) {
 			ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.populate(world, chunkGenerator, chunkX, chunkZ);
+			ganymedes01.etfuturum.world.structure.surface.SurfaceStructures.populate(world, chunkGenerator, chunkX, chunkZ);
 			MobSpawning.seagrass(world, rand, chunkX, chunkZ);
+			ganymedes01.etfuturum.world.generate.decorate.OceanPlants.generate(world, rand, chunkX, chunkZ);
+			ganymedes01.etfuturum.world.structure.OceanTreasure.generate(world, chunkX, chunkZ);
+			ganymedes01.etfuturum.world.structure.OceanSites.populate(world, chunkX, chunkZ);
 			if (dripstoneGen != null) dripstoneGen.generate(world, rand, (chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
 			int x;
 			int z;

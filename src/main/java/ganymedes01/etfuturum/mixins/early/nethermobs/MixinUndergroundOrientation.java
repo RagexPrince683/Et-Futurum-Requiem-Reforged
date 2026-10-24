@@ -13,6 +13,6 @@ public class MixinUndergroundOrientation {
 	@Inject(method = "onBlockAdded", at = @At("HEAD"), cancellable = true)
 	private void etfu$templateOrientation(World world, int x, int y, int z, CallbackInfo ci) {
 		// A neighboring chunk may not contain its template wall/chest yet. The template owns facing.
-		if (UndergroundStructures.placingTemplate()) ci.cancel();
+		if (UndergroundStructures.placingTemplate() || ganymedes01.etfuturum.world.structure.surface.SurfaceStructures.placingTemplate()) ci.cancel();
 	}
 }

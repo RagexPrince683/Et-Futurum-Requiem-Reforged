@@ -422,6 +422,8 @@ public class EtFuturum {
 
 		EtFuturumLootTables.init();
 		ganymedes01.etfuturum.world.nether.structure.BastionLoot.init();
+		MapGenStructureIO.registerStructure(ganymedes01.etfuturum.world.structure.surface.SurfaceStructures.Start.class, "UABSurfaceStructures");
+		MapGenStructureIO.func_143031_a(ganymedes01.etfuturum.world.structure.surface.SurfaceStructures.Piece.class, "UABSurfacePiece");
 		MapGenStructureIO.registerStructure(ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.Start.class, "EFRUnderground");
 		MapGenStructureIO.func_143031_a(ganymedes01.etfuturum.world.structure.underground.UndergroundStructures.Piece.class, "EFRUndergroundPiece");
 		MapGenStructureIO.registerStructure(ganymedes01.etfuturum.world.nether.structure.MapGenBastion.Start.class, "EFRBastion");
@@ -537,7 +539,7 @@ public class EtFuturum {
 	public void serverStarting(FMLServerStartingEvent event) {
 		ServerPacketExecutor.start();
 		event.registerServerCommand(new ganymedes01.etfuturum.command.CommandGameplayAudit());
-		event.registerServerCommand(new ganymedes01.etfuturum.command.CommandLocateUnderground());
+		event.registerServerCommand(new ganymedes01.etfuturum.command.CommandLocateStructure());
 		if (ConfigFunctions.enableFillCommand) {
 			event.registerServerCommand(new CommandFill());
 		}
@@ -720,6 +722,7 @@ public class EtFuturum {
 		config.addSoundEvent(ver, "music_disc.tears", "record");
 		config.addSoundEvent(ver, "music_disc.lava_chicken", "record");
 		config.addSoundEvent(ver, "music_disc.5", "record");
+		config.addSoundEvent(ver, "music_disc.relic", "record");
 
 		config.addSoundEvent(ver, "item.elytra.flying", "player");
 		config.addSoundEvent(ver, "enchant.thorns.hit", "player");
@@ -843,7 +846,7 @@ public class EtFuturum {
 		config.addSoundEvent(ver, "entity.player.attack.weak", "player");
 		config.addSoundEvent(ver, "entity.player.splash.high_speed", "player");
 		config.addSoundEvent(ver, "weather.end_flash", "weather");
-		for (String sound : new String[]{"block.dried_ghast.spawn", "block.sculk_sensor.clicking", "block.sculk_sensor.clicking_stop", "block.vault.insert_item", "block.vault.eject_item", "block.trial_spawner.ominous_activate"}) config.addSoundEvent(ver, sound, "block");
+		for (String sound : new String[]{"block.dried_ghast.spawn", "block.sculk_sensor.clicking", "block.sculk_sensor.clicking_stop", "block.vault.insert_item", "block.vault.eject_item", "block.trial_spawner.ominous_activate", "block.conduit.activate", "block.conduit.deactivate", "block.conduit.attack.target"}) config.addSoundEvent(ver, sound, "block");
 
 		config.addSoundEvent(ver, "item.axe.scrape", "player");
 		config.addSoundEvent(ver, "item.axe.wax_off", "player");

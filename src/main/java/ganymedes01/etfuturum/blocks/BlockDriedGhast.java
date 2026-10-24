@@ -22,6 +22,7 @@ public class BlockDriedGhast extends BaseBlock {
 	@Override public void updateTick(World world, int x, int y, int z, Random random) { if (!world.isRemote) world.getTileEntity(x, y, z); }
 	@Override public void onNeighborBlockChange(World world, int x, int y, int z, net.minecraft.block.Block neighbor) { if (!world.isRemote) world.getTileEntity(x, y, z); }
 	@Override @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT) public boolean canRenderInPass(int pass) { return pass == 0 || pass == 1; }
+	@Override @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT) public int getRenderBlockPass() { return 1; }
 	@Override public int getMobilityFlag() { return 1; }
 	@Override public boolean hasTileEntity(int meta) { return true; }
 	@Override public TileEntity createTileEntity(World world, int meta) { return new ganymedes01.etfuturum.tileentities.TileEntityDriedGhast(); }

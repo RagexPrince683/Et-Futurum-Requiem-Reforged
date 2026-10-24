@@ -62,6 +62,8 @@ public class ModRecipes {
 
 	public static void init() {
 		MobRecipes.init();
+		ExplorationRecipes.init();
+		OceanRecipes.init();
 		ganymedes01.etfuturum.api.utils.RecipeHelper.addRecipe(ModItems.TURTLE_HELMET.newItemStack(), "sss", "s s", 's', ModItems.TURTLE_SCUTE.get());
 		if (ConfigBlocksItems.enableBanners) {
 			RecipeSorter.register(Tags.MOD_ID + ".RecipeDuplicatePattern", RecipeDuplicatePattern.class, Category.SHAPELESS, "after:minecraft:shapeless");

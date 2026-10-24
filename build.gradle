@@ -63,15 +63,18 @@ tasks.named("test") {
     failOnNoDiscoveredTests = false
 }
 
+def releaseMetadataOutput = layout.buildDirectory.file("release/uab-update.json")
+String releaseMinecraftVersion = project.minecraftVersion.toString()
 tasks.register("generateReleaseMetadata") {
     inputs.file(rootProject.file("version.properties"))
-    outputs.file(layout.buildDirectory.file("release/uab-update.json"))
+    inputs.property("minecraftVersion", releaseMinecraftVersion)
+    outputs.file(releaseMetadataOutput)
     doLast {
-        File output = layout.buildDirectory.file("release/uab-update.json").get().asFile
+        File output = releaseMetadataOutput.get().asFile
         output.parentFile.mkdirs()
         output.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([
             homepages: [GitHub: "https://github.com/RagexPrince683/Et-Futurum-Requiem-Reforged/releases/tag/v" + releaseVersion],
-            promos: [(project.minecraftVersion + "-latest"): releaseVersion]
+            promos: [(releaseMinecraftVersion + "-latest"): releaseVersion]
         ])) + "\n"
     }
 }

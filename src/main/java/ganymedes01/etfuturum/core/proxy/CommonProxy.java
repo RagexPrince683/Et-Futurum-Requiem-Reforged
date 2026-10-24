@@ -72,6 +72,10 @@ public class CommonProxy implements IGuiHandler {
 	}
 
 	public void registerEntities() {
+		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new ganymedes01.etfuturum.core.handlers.ExplorationEvents());
+		GameRegistry.registerTileEntity(ganymedes01.etfuturum.tileentities.TileEntityDecoratedPot.class, "etfuturum.decorated_pot");
+		GameRegistry.registerTileEntity(ganymedes01.etfuturum.tileentities.TileEntityBrushable.class, "etfuturum.brushable");
+		GameRegistry.registerTileEntity(ganymedes01.etfuturum.tileentities.TileEntityConduit.class, Utils.getUnlocalisedName("conduit"));
 		{
 			ganymedes01.etfuturum.world.structure.MonumentSpawning.init();
 			ModEntityList.registerEntity(EntityGuardian.class, "guardian", 34, EtFuturum.instance, 80, 3, true, 0x5A8272, 0xF17D30);

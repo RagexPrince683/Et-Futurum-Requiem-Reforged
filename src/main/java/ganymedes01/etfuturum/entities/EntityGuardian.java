@@ -102,6 +102,7 @@ public class EntityGuardian extends EntityMob {
 		} else super.moveEntityWithHeading(strafe, forward);
 	}
 	@Override protected void dropFewItems(boolean player, int looting) {
+		if (isElder() && rand.nextInt(5) == 0 && ModItems.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE.isEnabled()) entityDropItem(ModItems.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE.newItemStack(), 0);
 		int shards = rand.nextInt(3) + rand.nextInt(looting + 1);
 		if (shards > 0 && ModItems.PRISMARINE_SHARD.isEnabled()) entityDropItem(ModItems.PRISMARINE_SHARD.newItemStack(shards), 0);
 		int bonus = rand.nextInt(5);

@@ -126,6 +126,7 @@ public final class OutpostStructures extends WorldSavedData {
 				};
 				int slot = random.nextInt(chest.getSizeInventory()); for (int tries = 0; tries < chest.getSizeInventory() && chest.getStackInSlot(slot) != null; tries++) slot = (slot + 1) % chest.getSizeInventory(); chest.setInventorySlotContents(slot, stack);
 			}
+			if (random.nextInt(4) == 0) ganymedes01.etfuturum.world.structure.ExplorationLoot.put(chest, ModItems.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, 2, random);
 			chest.markDirty();
 		}
 	}

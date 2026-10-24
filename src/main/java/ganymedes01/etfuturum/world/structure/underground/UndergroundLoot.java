@@ -40,7 +40,7 @@ public final class UndergroundLoot {
 				if (type.equals("minecraft:loot_table")) { roll(chosen.get("value").getAsString(), random, result, depth + 1); continue; }
 				if (!type.equals("minecraft:item")) continue;
 				ItemStack stack = item(chosen.get("name").getAsString()); if (stack == null) continue;
-				if (chosen.has("functions")) for (JsonElement function : chosen.getAsJsonArray("functions")) stack = function(stack, function.getAsJsonObject(), random);
+				if (chosen.has("functions")) for (JsonElement function : chosen.getAsJsonArray("functions")) { if (stack == null) break; stack = function(stack, function.getAsJsonObject(), random); }
 				if (stack != null && stack.stackSize > 0) result.add(stack);
 			}
 		}
@@ -60,6 +60,7 @@ public final class UndergroundLoot {
 	}
 	private static ItemStack function(ItemStack stack, JsonObject f, Random random) {
 		String name = f.get("function").getAsString();
+		if (name.equals("minecraft:exploration_map")) { deferred("exploration map markers"); return null; }
 		if (name.equals("minecraft:set_count")) stack.stackSize = Math.min(stack.getMaxStackSize(), (int) number(f.get("count"), random, 1));
 		else if (name.equals("minecraft:set_damage")) stack.setItemDamage((int) ((1 - Math.min(1, number(f.get("damage"), random, 1))) * stack.getMaxDamage()));
 		else if (name.equals("minecraft:enchant_with_levels") || name.equals("minecraft:enchant_randomly")) stack = EnchantmentHelper.addRandomEnchantment(random, stack, (int) number(f.get("levels"), random, 20));
@@ -72,7 +73,17 @@ public final class UndergroundLoot {
 		else if (name.equals("minecraft:set_enchantments")) { deferred("Swift Sneak loot enchantment"); return null; }
 		else if (name.equals("minecraft:set_stew_effect")) {
 			JsonArray effects = f.getAsJsonArray("effects"); JsonObject effect = effects.get(random.nextInt(effects.size())).getAsJsonObject();
-			int id = effect.get("type").getAsString().endsWith("night_vision") ? net.minecraft.potion.Potion.nightVision.id : net.minecraft.potion.Potion.blindness.id;
+			String effectName = effect.get("type").getAsString().replace("minecraft:", "");
+			int id;
+			switch (effectName) {
+				case "night_vision": id = net.minecraft.potion.Potion.nightVision.id; break;
+				case "jump_boost": id = net.minecraft.potion.Potion.jump.id; break;
+				case "weakness": id = net.minecraft.potion.Potion.weakness.id; break;
+				case "blindness": id = net.minecraft.potion.Potion.blindness.id; break;
+				case "poison": id = net.minecraft.potion.Potion.poison.id; break;
+				case "saturation": id = net.minecraft.potion.Potion.field_76443_y.id; break;
+				default: deferred("stew effect " + effectName); return null;
+			}
 			net.minecraft.nbt.NBTTagCompound data = new net.minecraft.nbt.NBTTagCompound(), e = new net.minecraft.nbt.NBTTagCompound(); net.minecraft.nbt.NBTTagList list = new net.minecraft.nbt.NBTTagList();
 			e.setByte("EffectId", (byte) id); e.setInteger("EffectDuration", (int) number(effect.get("duration"), random, 5) * 20); list.appendTag(e); data.setTag("Effects", list); stack.setTagCompound(data);
 		} else throw new IllegalArgumentException("Unsupported loot function " + name);
@@ -80,10 +91,30 @@ public final class UndergroundLoot {
 	}
 	public static ItemStack item(String id) {
 		String name = id.replace("minecraft:", "");
+		if (name.equals("prismarine")) return ganymedes01.etfuturum.ModBlocks.PRISMARINE_BLOCK.isEnabled() ? ganymedes01.etfuturum.ModBlocks.PRISMARINE_BLOCK.newItemStack() : null;
+		if (name.equals("lapis_lazuli")) return new ItemStack(Items.dye, 1, 4);
+		if (name.equals("dead_bush")) return new ItemStack(net.minecraft.init.Blocks.deadbush);
+		if (name.endsWith("_stained_glass_pane")) {
+			String[] colors = {"white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
+			for (int color = 0; color < colors.length; color++) if (name.equals(colors[color] + "_stained_glass_pane")) return new ItemStack(net.minecraft.init.Blocks.stained_glass_pane, 1, color);
+		}
+		if (name.equals("dark_oak_sapling")) return new ItemStack(net.minecraft.init.Blocks.sapling, 1, 5);
+		if (name.equals("allium")) return new ItemStack(net.minecraft.init.Blocks.red_flower, 1, 2);
+		if (name.equals("terracotta")) return new ItemStack(net.minecraft.init.Blocks.hardened_clay);
+		if (name.equals("waxed_copper_block")) return ganymedes01.etfuturum.ModBlocks.COPPER_BLOCK.isEnabled() ? ganymedes01.etfuturum.ModBlocks.COPPER_BLOCK.newItemStack(1, 8) : null;
+		String[] dyes = {"black", "red", "green", "brown", "blue", "purple", "cyan", "light_gray", "gray", "pink", "lime", "yellow", "light_blue", "magenta", "orange", "white"};
+		for (int color = 0; color < dyes.length; color++) if (name.equals(dyes[color] + "_dye")) {
+			int modern = color == 15 ? 0 : color == 4 ? 1 : color == 3 ? 2 : color == 0 ? 3 : -1;
+			return modern < 0 ? new ItemStack(Items.dye, 1, color) : ModItems.DYE.isEnabled() ? ModItems.DYE.newItemStack(1, modern) : null;
+		}
+		if (name.equals("cod") || name.equals("salmon") || name.equals("cooked_cod") || name.equals("cooked_salmon")) return new ItemStack(name.startsWith("cooked_") ? Items.cooked_fished : Items.fish, 1, name.endsWith("salmon") ? 1 : 0);
+		if (name.equals("iron_nugget")) return ModItems.NUGGET_IRON.isEnabled() ? ModItems.NUGGET_IRON.newItemStack() : null;
+		String[] nautilusArmor = {"copper", "golden", "iron", "diamond", "netherite"};
+		for (int material = 0; material < nautilusArmor.length; material++) if (name.equals(nautilusArmor[material] + "_nautilus_armor")) return ModItems.NAUTILUS_ARMOR.isEnabled() ? ModItems.NAUTILUS_ARMOR.newItemStack(1, material) : null;
 		if (name.equals("enchanted_golden_apple")) return new ItemStack(Items.golden_apple, 1, 1);
 		if (name.startsWith("music_disc_")) {
 			String record = name.substring("music_disc_".length());
-			ModItems candidate = record.equals("otherside") ? ModItems.OTHERSIDE_RECORD : record.equals("precipice") ? ModItems.PRECIPICE_RECORD : record.equals("creator") ? ModItems.CREATOR_RECORD : record.equals("creator_music_box") ? ModItems.CREATOR_MUSIC_BOX_RECORD : null;
+			ModItems candidate = record.equals("relic") ? ModItems.RELIC_RECORD : record.equals("otherside") ? ModItems.OTHERSIDE_RECORD : record.equals("precipice") ? ModItems.PRECIPICE_RECORD : record.equals("creator") ? ModItems.CREATOR_RECORD : record.equals("creator_music_box") ? ModItems.CREATOR_MUSIC_BOX_RECORD : null;
 			if (candidate != null && candidate.isEnabled()) return candidate.newItemStack();
 			if (record.equals("13")) return new ItemStack(Items.record_13); if (record.equals("cat")) return new ItemStack(Items.record_cat);
 		}

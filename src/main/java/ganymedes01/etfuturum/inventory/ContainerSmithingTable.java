@@ -13,10 +13,13 @@ public class ContainerSmithingTable extends Container {
 	private final World world;
 	private final int tableX, tableY, tableZ;
 	private final boolean tableBound;
-	public final InventoryCrafting inputMatrix = new InventoryCrafting(this, 2, 1);
+	public final InventoryCrafting inputMatrix = new InventoryCrafting(this, 3, 1);
 	private final InventoryCraftResult resultInventory = new InventoryCraftResult();
-	private final Slot applicant = new Slot(inputMatrix, 0, 27, 47);
-	private final Slot ingot = new Slot(inputMatrix, 1, 76, 47);
+	private final Slot template = new Slot(inputMatrix, 2, 8, 47) {
+		@Override public boolean isItemValid(ItemStack stack) { return stack != null && stack.getItem() instanceof ganymedes01.etfuturum.items.ItemSmithingTemplate; }
+	};
+	private final Slot applicant = new Slot(inputMatrix, 0, 48, 47);
+	private final Slot ingot = new Slot(inputMatrix, 1, 88, 47);
 	private final Slot result;
 
 	public ContainerSmithingTable(InventoryPlayer inv, World world) {
@@ -34,9 +37,10 @@ public class ContainerSmithingTable extends Container {
 		tableX = blockX;
 		tableY = blockY;
 		tableZ = blockZ;
+		addSlotToContainer(template);
 		addSlotToContainer(applicant);
 		addSlotToContainer(ingot);
-		result = addSlotToContainer(new SlotSmithingResult(inv.player, inputMatrix, resultInventory, 2, 134, 47));
+		result = addSlotToContainer(new SlotSmithingResult(inv.player, inputMatrix, resultInventory, 0, 142, 47));
 		for (int y = 0; y < 3; y++)
 			for (int x = 0; x < 9; x++) addSlotToContainer(new Slot(inv, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
 		for (int y = 0; y < 9; y++) addSlotToContainer(new Slot(inv, y, 8 + y * 18, 142));
@@ -70,14 +74,14 @@ public class ContainerSmithingTable extends Container {
 		final ItemStack newStack = slot.getStack();
 		final ItemStack oldStack = newStack.copy();
 		boolean merged = false;
-		if (index <= 2) {
-			merged = mergeItemStack(newStack, 3, 39, true);
-		} else if (index < 30) {
-			merged = tryUpper(newStack) || mergeItemStack(newStack, 30, 39, false);
+		if (index <= 3) {
+			merged = mergeItemStack(newStack, 4, 40, true);
+		} else if (index < 31) {
+			merged = tryUpper(newStack) || mergeItemStack(newStack, 31, 40, false);
 		} else {
-			merged = tryUpper(newStack) || mergeItemStack(newStack, 3, 30, false);
+			merged = tryUpper(newStack) || mergeItemStack(newStack, 4, 31, false);
 		}
-		if (!merged) return null;
+		if (!merged || newStack.stackSize == oldStack.stackSize) return null;
 		if (newStack.stackSize == 0) {
 			slot.putStack(null);
 		} else slot.onSlotChanged();
@@ -92,10 +96,13 @@ public class ContainerSmithingTable extends Container {
 	}
 
 	private boolean tryUpper(ItemStack newStack) {
-		return !applicant.getHasStack() && mergeItemStack(newStack, 0, 1, false) || !ingot.getHasStack() && mergeItemStack(newStack, 1, 2, false);
+		if (template.isItemValid(newStack)) return mergeItemStack(newStack, 0, 1, false);
+		SmithingTableRecipes recipes = SmithingTableRecipes.getInstance();
+		if (recipes.isMaterial(newStack) && mergeItemStack(newStack, 2, 3, false)) return true;
+		return recipes.isBase(newStack) && mergeItemStack(newStack, 1, 2, false);
 	}
 
 	public boolean unable() {
-		return (applicant.getHasStack() || ingot.getHasStack()) && !result.getHasStack();
+		return (template.getHasStack() || applicant.getHasStack() || ingot.getHasStack()) && !result.getHasStack();
 	}
 }

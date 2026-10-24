@@ -6,10 +6,12 @@ UAB adapts modern Minecraft content to **Minecraft 1.7.10 with Forge 10.13.4.161
 
 - Building materials and wood families, functional workstations, copper and netherite progression, crops, equipment and modern mob families.
 - Modern surface and ocean biomes within the native world height, optional Nether biomes, outer End islands and End Cities.
-- Saved ocean monuments, bastions, outposts, Ancient Cities and Trial Chambers, with native placement, encounters and loot adaptations.
+- Saved ocean monuments, bastions, outposts, woodland mansions, trail ruins, Ancient Cities and Trial Chambers, with native placement, encounters and loot adaptations.
 - One configuration file organized by the update that introduced each feature. Feature families share controls; individual mobs have their own availability and applicable natural-spawning settings.
 
 Some mechanics are adapted or incomplete. The [content catalog](CONTENT_CATALOG.md), [mob coverage](MOB_COVERAGE.md) and [world-generation reference](WORLD_GENERATION.md) describe those boundaries. Registration or a modern name does not imply complete parity with the modern game.
+
+Operators can find structures with `/uab_locate <structure>`; press Tab for supported names. Searches report saved sites or potential new-terrain locations without generating terrain. See the [world-generation reference](WORLD_GENERATION.md#locating-structures) for coverage and search limits.
 
 ## Installation
 

@@ -46,26 +46,47 @@ public class GuardianRenderer extends RenderLiving {
 		tessellator.draw(); GL11.glPopMatrix(); GL11.glPopAttrib();
 	}
 	private static class Model extends ModelBase {
-		private final ModelRenderer body, tail, fin;
+		private final ModelRenderer body, eye;
+		private final ModelRenderer[] tail = new ModelRenderer[3];
 		private final ModelRenderer[] spikes = new ModelRenderer[12];
+		private static final float[] SPIKE_X = {0, 0, 8, -8, -8, 8, 8, -8, 0, 0, 8, -8};
+		private static final float[] SPIKE_Y = {-8, -8, -8, -8, 0, 0, 0, 0, 8, 8, 8, 8};
+		private static final float[] SPIKE_Z = {8, -8, 0, 0, -8, -8, 8, 8, 8, -8, 0, 0};
 		Model() {
 			textureWidth = 64; textureHeight = 64;
 			body = new ModelRenderer(this, 0, 0); body.addBox(-6, -6, -8, 12, 12, 16); body.setRotationPoint(0, 16, 0);
-			ModelRenderer eye = new ModelRenderer(this, 8, 0); eye.addBox(-1, -3, -8.25F, 2, 2, 1); body.addChild(eye);
+			body.setTextureOffset(0, 28).addBox(-8, -6, -6, 2, 12, 12);
+			body.mirror = true;
+			body.setTextureOffset(0, 28).addBox(6, -6, -6, 2, 12, 12);
+			body.mirror = false;
+			body.setTextureOffset(16, 40).addBox(-6, -8, -6, 12, 2, 12);
+			body.setTextureOffset(16, 40).addBox(-6, 6, -6, 12, 2, 12);
+			eye = new ModelRenderer(this, 8, 0); eye.addBox(-1, -1, 0, 2, 2, 1); eye.setRotationPoint(0, 0, -8.25F); body.addChild(eye);
+			float[] rx = {1.75F, .25F, 0, 0, .5F, .5F, .5F, .5F, 1.25F, .75F, 0, 0};
+			float[] ry = {0, 0, 0, 0, .25F, 1.75F, 1.25F, .75F, 0, 0, 0, 0};
+			float[] rz = {0, 0, .25F, 1.75F, 0, 0, 0, 0, 0, 0, .75F, 1.25F};
 			for (int i = 0; i < spikes.length; i++) {
-				spikes[i] = new ModelRenderer(this, 0, 0); spikes[i].addBox(-1, -5, -1, 2, 6, 2);
-				spikes[i].rotateAngleZ = (float) (i % 4 * Math.PI / 2); spikes[i].rotationPointZ = (i / 4 - 1) * 6;
-				spikes[i].rotationPointX = (float) Math.sin(i % 4 * Math.PI / 2) * 6;
-				spikes[i].rotationPointY = -(float) Math.cos(i % 4 * Math.PI / 2) * 6;
+				spikes[i] = new ModelRenderer(this, 0, 0); spikes[i].addBox(-1, -4.5F, -1, 2, 9, 2);
+				spikes[i].rotateAngleX = rx[i] * (float) Math.PI;
+				spikes[i].rotateAngleY = ry[i] * (float) Math.PI;
+				spikes[i].rotateAngleZ = rz[i] * (float) Math.PI;
 				body.addChild(spikes[i]);
 			}
-			tail = new ModelRenderer(this, 40, 0); tail.addBox(-2, -2, 0, 4, 4, 8); tail.setRotationPoint(0, 0, 8); body.addChild(tail);
-			fin = new ModelRenderer(this, 25, 19); fin.addBox(-.5F, -4.5F, 0, 1, 9, 9); fin.setRotationPoint(0, 0, 7); tail.addChild(fin);
+			tail[0] = new ModelRenderer(this, 40, 0); tail[0].addBox(-2, -2, 0, 4, 4, 8); tail[0].setRotationPoint(0, 0, 7); body.addChild(tail[0]);
+			tail[1] = new ModelRenderer(this, 0, 54); tail[1].addBox(0, 0, 0, 3, 3, 7); tail[1].setRotationPoint(-1.5F, -1.5F, 7); tail[0].addChild(tail[1]);
+			tail[2] = new ModelRenderer(this, 41, 32); tail[2].addBox(0, 0, 0, 2, 2, 6); tail[2].setRotationPoint(.5F, .5F, 6); tail[1].addChild(tail[2]);
+			tail[2].setTextureOffset(25, 19).addBox(1, -3.5F, 3, 1, 9, 9);
 		}
 		@Override public void render(Entity entity, float swing, float amount, float age, float yaw, float pitch, float scale) {
 			body.rotateAngleY = yaw * (float) Math.PI / 180; body.rotateAngleX = pitch * (float) Math.PI / 180;
-			tail.rotateAngleY = (float) Math.sin(age * (((EntityGuardian) entity).isSwimming() ? .5 : .15)) * .35F;
-			fin.rotateAngleY = tail.rotateAngleY; body.render(scale);
+			float retract = ((EntityGuardian) entity).isSwimming() ? .25F : 0;
+			for (int i = 0; i < spikes.length; i++) {
+				float extension = 1 + (float) Math.cos(age * 1.5F + i) * .01F - retract;
+				spikes[i].setRotationPoint(SPIKE_X[i] * extension, SPIKE_Y[i] * extension, SPIKE_Z[i] * extension);
+			}
+			float wave = (float) Math.sin(age * (((EntityGuardian) entity).isSwimming() ? .5 : .15));
+			for (int i = 0; i < tail.length; i++) tail[i].rotateAngleY = wave * (i + 1) * .15F;
+			body.render(scale);
 		}
 	}
 }

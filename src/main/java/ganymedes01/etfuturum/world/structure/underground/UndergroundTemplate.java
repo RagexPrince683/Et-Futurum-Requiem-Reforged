@@ -18,7 +18,7 @@ import java.io.*;
 import java.util.*;
 
 /** Immutable released template, translated at its native block-state boundary. */
-final class UndergroundTemplate {
+public final class UndergroundTemplate {
 	final int sx, sy, sz;
 	final List<NBTTagCompound> connectors = new ArrayList<>();
 	private final List<String> names = new ArrayList<>();
@@ -53,7 +53,7 @@ final class UndergroundTemplate {
 		BlockPos end = rotate(sx - 1, sy - 1, sz - 1, rotation);
 		return new StructureBoundingBox(x + Math.min(0, end.getX()), y, z + Math.min(0, end.getZ()), x + Math.max(0, end.getX()), y + sy - 1, z + Math.max(0, end.getZ()));
 	}
-	static BlockStateContainer state(String id, Map<String, String> original, int rotation) {
+	public static BlockStateContainer state(String id, Map<String, String> original, int rotation) {
 		String name = id.replace("minecraft:", ""); Map<String, String> props = new HashMap<>(original);
 		int bracket = name.indexOf('[');
 		if (bracket >= 0) { for (String part : name.substring(bracket + 1, name.length() - 1).split(",")) { String[] pair = part.split("="); props.put(pair[0], pair[1]); } name = name.substring(0, bracket); }
@@ -73,7 +73,7 @@ final class UndergroundTemplate {
 		else if (name.equals("trial_spawner")) { block = enabled(ModBlocks.TRIAL_SPAWNER); direct = true; }
 		else if (name.equals("vault")) { block = enabled(ModBlocks.VAULT); direct = true; subtype = directionIndex(props.get("facing")) | (Boolean.parseBoolean(props.get("ominous")) ? 4 : 0); }
 		else if (name.endsWith("candle")) { block = enabled(ModBlocks.CANDLE); direct = true; subtype = Boolean.parseBoolean(props.get("lit")) ? 4 : 0; }
-		else if (name.equals("decorated_pot")) { block = enabled(ModBlocks.DECORATED_POT); direct = true; }
+		else if (name.equals("decorated_pot")) { block = enabled(ModBlocks.DECORATED_POT); direct = true; subtype = directionIndex(props.get("facing")); }
 		else if (name.equals("torch")) { block = Blocks.torch; subtype = 5; direct = true; }
 		else if (name.equals("wall_torch")) { block = Blocks.torch; subtype = "east".equals(props.get("facing")) ? 1 : "west".equals(props.get("facing")) ? 2 : "south".equals(props.get("facing")) ? 3 : 4; direct = true; }
 		else if (name.equals("chiseled_deepslate")) { block = enabled(ModBlocks.DEEPSLATE_BRICKS); subtype = 4; }
@@ -135,6 +135,7 @@ final class UndergroundTemplate {
 						for (int j = 0; j < items.tagCount(); j++) { NBTTagCompound item = items.getCompoundTagAt(j); ItemStack stack = UndergroundLoot.item(item.getString("id")); int slot = item.getByte("Slot") & 255; if (stack != null && slot < inventory.getSizeInventory()) { stack.stackSize = Math.max(1, item.getInteger("count")); inventory.setInventorySlotContents(slot, stack); } }
 					}
 				}
+				if (tile instanceof ganymedes01.etfuturum.tileentities.TileEntityDecoratedPot pot) { pot.readDesigns(nbt); pot.markDirty(); world.markBlockForUpdate(wx, wy, wz); }
 				if (tile instanceof TileEntityTrialSpawner trial && nbt.hasKey("normal_config")) trial.configure(nbt.getString("normal_config"));
 			}
 		} finally { UndergroundStructures.endTemplate(previous); }

@@ -70,9 +70,12 @@ public final class MobContentEvents {
 	}
 	@SubscribeEvent public void bonemeal(BonemealEvent event) {
 		if (!ModBlocks.SEAGRASS.isEnabled() || event.block == ModBlocks.SEAGRASS.get()) return; // IGrowable owns tall-seagrass growth.
-		if (event.block.getMaterial() != Material.water || event.world.getBlockMetadata(event.x, event.y, event.z) != 0 || !ModBlocks.SEAGRASS.get().canPlaceBlockAt(event.world, event.x, event.y, event.z)) return;
+		if (!ganymedes01.etfuturum.blocks.BlockAquaticPlant.sourceWater(event.world, event.x, event.y, event.z) || !ModBlocks.SEAGRASS.get().canPlaceBlockAt(event.world, event.x, event.y, event.z)) return;
 		if (!event.world.isRemote) event.world.setBlock(event.x, event.y, event.z, ModBlocks.SEAGRASS.get(), 0, 2);
 		event.setResult(Event.Result.ALLOW);
+	}
+	@SubscribeEvent public void oceanPlantBucket(net.minecraftforge.event.entity.player.FillBucketEvent event) {
+		if (event.target != null && event.world.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ) instanceof ganymedes01.etfuturum.blocks.BlockAquaticPlant) event.setCanceled(true);
 	}
 	@SubscribeEvent public void worldTick(TickEvent.WorldTickEvent event) {
 		if (event.phase != TickEvent.Phase.END || event.world.isRemote) return;

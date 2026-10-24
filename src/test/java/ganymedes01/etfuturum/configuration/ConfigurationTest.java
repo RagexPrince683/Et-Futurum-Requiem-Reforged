@@ -27,7 +27,8 @@ public final class ConfigurationTest {
 		File clean = folder("clean");
 		UabConfiguration config = open(clean, true);
 		check(config.bool("blocksitems", "enableCopper", true), "clean default");
-		check(!config.bool("experiments", "enableSculk", false), "unfinished content remains off");
+		check(config.bool("experiments", "enableSculk", false), "sculk enabled by default for Ancient Cities");
+		check(config.bool("experiments", "netherDimensionProvider", false), "Nether biomes enabled by default for bastions");
 		check(config.bool("experiments", "enableDripstone", true), "ordinary content has no experiments opt-in");
 		config.finish();
 		check(new File(clean, "uab.cfg").isFile(), "single native config generated");
